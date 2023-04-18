@@ -17,7 +17,9 @@ function registerMod(mod_id = "frozen_cookies") {
         init: function () {
             Game.registerHook("reincarnate", function () {
                 // called when the player has reincarnated after an ascension
-                if (!FrozenCookies.autoBulk) return;
+                if (!FrozenCookies.autoBulk) {
+                    return;
+                }
                 if (FrozenCookies.autoBulk == 1) {
                     document.getElementById("storeBulk10").click();
                 }
@@ -102,7 +104,9 @@ function registerMod(mod_id = "frozen_cookies") {
             });
             Game.registerHook("reset", function (hard) {
                 // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
-                if (hard) emptyCaches();
+                if (hard) {
+                    emptyCaches();
+                }
                 // if the user is starting fresh, code will likely need to be called to reinitialize some historical data here as well
             });
             /*  other hooks that can be used
@@ -130,7 +134,9 @@ function registerMod(mod_id = "frozen_cookies") {
 
     // If Frozen Cookies was loaded and there was previous Frozen Cookies data in the game save, the "load" hook ran so the setOverrides function was called and things got initialized.
     // However, if there wasn't previous Frozen Cookies data in the game save, the "load" hook wouldn't have been called. So, we have to manually call setOverrides here to start Frozen Cookies.
-    if (!FrozenCookies.loadedData) setOverrides();
+    if (!FrozenCookies.loadedData) {
+        setOverrides();
+    }
     logEvent(
         "Load",
         "Initial Load of Frozen Cookies v " +
@@ -209,10 +215,14 @@ function setOverrides(gameSaveData) {
     //Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;
 
-    if (!blacklist[FrozenCookies.blacklist]) FrozenCookies.blacklist = 0;
+    if (!blacklist[FrozenCookies.blacklist]) {
+        FrozenCookies.blacklist = 0;
+    }
 
     // Set `App`, on older version of CC it's not set to anything, so default it to `undefined`
-    if (!window.App) window.App = undefined;
+    if (!window.App) {
+        window.App = undefined;
+    }
 
     Beautify = fcBeautify;
     Game.sayTime = function (time) {
@@ -255,7 +265,9 @@ function setOverrides(gameSaveData) {
     );
 
     // Give free achievements!
-    if (!Game.HasAchiev("Third-party")) Game.Win("Third-party");
+    if (!Game.HasAchiev("Third-party")) {
+        Game.Win("Third-party");
+    }
 
     function loadFCData() {
         // Set all cycleable preferences
@@ -553,7 +565,10 @@ function fcReset() {
             BANK_GAME.sellGood(i, 10000);
         } // sell all stock
     }
-    if (GARDEN_GAME) GARDEN_GAME.harvestAll(); // harvest all plants
+    if (GARDEN_GAME) {
+        GARDEN_GAME.harvestAll();
+        // harvest all plants
+    }
     if (
         Game.dragonLevel > 5 &&
         !Game.hasAura("Earth Shatterer") &&
@@ -662,14 +677,22 @@ document.addEventListener("keydown", function (event) {
             Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
             toggleFrozen("autoBuy");
         }
-        if (event.key == "b") copyToClipboard(getBuildingSpread());
+        if (event.key == "b") {
+            copyToClipboard(getBuildingSpread());
+        }
         if (event.key == "c") {
             Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
             toggleFrozen("autoGC");
         }
-        if (event.key == "e") copyToClipboard(Game.WriteSave(true));
-        if (event.key == "r") Game.Reset();
-        if (event.key == "s") Game.WriteSave();
+        if (event.key == "e") {
+            copyToClipboard(Game.WriteSave(true));
+        }
+        if (event.key == "r") {
+            Game.Reset();
+        }
+        if (event.key == "s") {
+            Game.WriteSave();
+        }
         if (event.key == "w") {
             Game.Notify(
                 "Wrinkler Info",
@@ -696,7 +719,9 @@ function userInputPrompt(title, description, existingValue, callback) {
 }
 
 function validateNumber(value, minValue = null, maxValue = null) {
-    if (typeof value == "undefined" || value == null) return false;
+    if (typeof value == "undefined" || value == null) {
+        return false;
+    }
     const numericValue = Number(value);
     return (
         !isNaN(numericValue) &&
@@ -707,7 +732,9 @@ function validateNumber(value, minValue = null, maxValue = null) {
 
 function storeNumberCallback(base, min, max) {
     return (result) => {
-        if (!validateNumber(result, min, max)) result = FrozenCookies[base];
+        if (!validateNumber(result, min, max)) {
+            result = FrozenCookies[base];
+        }
         FrozenCookies[base] = Number(result);
         FCStart();
     };
@@ -868,7 +895,9 @@ function swapIn(godId, targetSlot) {
     }
 
     //mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
-    if (TEMPLE_GAME.swaps == 0) return;
+    if (TEMPLE_GAME.swaps == 0) {
+        return;
+    }
     TEMPLE_GAME.useSwap(1);
     TEMPLE_GAME.lastSwapT = 0;
     let prev = TEMPLE_GAME.slot[targetSlot]; //id of God currently in slot
@@ -876,9 +905,9 @@ function swapIn(godId, targetSlot) {
         //when something's in there already
         prev = TEMPLE_GAME.godsById[prev]; //prev becomes god object
         const prevDiv = l("templeGod" + prev.id);
-        if (TEMPLE_GAME.godsById[godId].slot != -1)
+        if (TEMPLE_GAME.godsById[godId].slot != -1) {
             l("templeSlot" + TEMPLE_GAME.godsById[godId].slot).appendChild(prevDiv);
-        else {
+        } else {
             const other = l("templeGodPlaceholder" + prev.id);
             other.parentNode.insertBefore(prevDiv, other);
         }
@@ -894,14 +923,20 @@ function swapIn(godId, targetSlot) {
 }
 
 function autoRigidel() {
-    if (!TEMPLE_GAME) return; //Exit if pantheon doesnt even exist
+    if (!TEMPLE_GAME) {
+        //Exit if pantheon doesnt even exist
+        return;
+    }
     const timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - Game.lumpT)) / 60000; //Minutes until sugar lump ripens
     const started = Game.lumpT;
     const ripeAge = Math.ceil(Game.lumpRipeAge);
     const orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
     switch (orderLvl) {
         case 0: //Rigidel isn't in a slot
-            if (TEMPLE_GAME.swaps < 2 || (TEMPLE_GAME.swaps == 1 && TEMPLE_GAME.slot[0] == -1)) return; //Don't do anything if we can't swap Rigidel in
+            if (TEMPLE_GAME.swaps < 2 || (TEMPLE_GAME.swaps == 1 && TEMPLE_GAME.slot[0] == -1)) {
+                //Don't do anything if we can't swap Rigidel in
+                return;
+            }
             if (timeToRipe < 60) {
                 const prev = TEMPLE_GAME.slot[0]; //cache whatever god you have equipped
                 swapIn(10, 0); //swap in rigidel
@@ -914,7 +949,10 @@ function autoRigidel() {
                     } else {
                         Game.clickLump();
                     }
-                    if (prev != -1) swapIn(prev, 0); //put the old one back
+                    if (prev != -1) {
+                        //put the old one back
+                        swapIn(prev, 0);
+                    }
                     logEvent("autoRigidel", "Sugar lump harvested early");
                 }
             }
@@ -962,7 +1000,9 @@ function autoRigidel() {
 
 function autoDragonsCurve() {
     //Swap dragon auras to try for unusual lumps
-    if (Game.dragonLevel < 21 || FrozenCookies.dragonsCurve < 1) return;
+    if (Game.dragonLevel < 21 || FrozenCookies.dragonsCurve < 1) {
+        return;
+    }
 
     if (FrozenCookies.autoDragonToggle == 1) {
         autoDragonsCurve.autodragonyes = 1;
@@ -1006,25 +1046,43 @@ function autoDragonsCurve() {
 }
 
 function autoTicker() {
-    if (Game.TickerEffect && Game.TickerEffect.type == "fortune") Game.tickerL.click();
+    if (Game.TickerEffect && Game.TickerEffect.type == "fortune") {
+        Game.tickerL.click();
+    }
 }
 
 // Used in autoCast() for some maths in the smart Force The Hand of Fate subroutine
 function BuffTimeFactor() {
     let DurMod = 1;
-    if (Game.Has("Get lucky")) DurMod *= 2;
-    if (Game.Has("Lasting fortune")) DurMod *= 1.1;
-    if (Game.Has("Lucky digit")) DurMod *= 1.01;
-    if (Game.Has("Lucky number")) DurMod *= 1.01;
-    if (Game.Has("Green yeast digestives")) DurMod *= 1.01;
-    if (Game.Has("Lucky payout")) DurMod *= 1.01;
+    if (Game.Has("Get lucky")) {
+        DurMod *= 2;
+    }
+    if (Game.Has("Lasting fortune")) {
+        DurMod *= 1.1;
+    }
+    if (Game.Has("Lucky digit")) {
+        DurMod *= 1.01;
+    }
+    if (Game.Has("Lucky number")) {
+        DurMod *= 1.01;
+    }
+    if (Game.Has("Green yeast digestives")) {
+        DurMod *= 1.01;
+    }
+    if (Game.Has("Lucky payout")) {
+        DurMod *= 1.01;
+    }
     DurMod *= 1 + Game.auraMult("Epoch Manipulator") * 0.05;
 
     if (Game.hasGod) {
         const godLvl = Game.hasGod("decadence");
-        if (godLvl == 1) DurMod *= 1.07;
-        else if (godLvl == 2) DurMod *= 1.05;
-        else if (godLvl == 3) DurMod *= 1.02;
+        if (godLvl == 1) {
+            DurMod *= 1.07;
+        } else if (godLvl == 2) {
+            DurMod *= 1.05;
+        } else if (godLvl == 3) {
+            DurMod *= 1.02;
+        }
     }
 
     return DurMod;
@@ -1045,8 +1103,9 @@ function remainsClickFrenzy(factor) {
 }
 
 function autoCast() {
-    if (!TOWER_GAME) return;
-    if (FrozenCookies.autoSpell == 0) return;
+    if (!TOWER_GAM || FrozenCookies.autoSpell == 0) {
+        return;
+    }
 
     if (
         FrozenCookies.autoFTHOFCombo == 1 ||
@@ -1431,8 +1490,9 @@ function autoFTHOFComboAction() {
     const BUILD_AND_BUILD = 2;
     const OFF_AUTO_BUY_NOT_SELL = 3;
 
-    if (!TOWER_GAME) return;
-    if (FrozenCookies.autoFTHOFCombo == 0) return;
+    if (!TOWER_GAME || FrozenCookies.autoFTHOFCombo == 0) {
+        return;
+    }
 
     // Prereqs check
     if (Game.Objects["Wizard tower"].level > 10) {
@@ -1450,8 +1510,12 @@ function autoFTHOFComboAction() {
         FrozenCookies.autoFTHOFCombo = 0;
     }
 
-    if (typeof autoFTHOFComboAction.state == "undefined") autoFTHOFComboAction.state = IDLE;
-    if (typeof autoFTHOFComboAction.count == "undefined") autoFTHOFComboAction.count = 0;
+    if (typeof autoFTHOFComboAction.state == "undefined") {
+        autoFTHOFComboAction.state = IDLE;
+    }
+    if (typeof autoFTHOFComboAction.count == "undefined") {
+        autoFTHOFComboAction.count = 0;
+    }
 
     if (
         autoFTHOFComboAction.state > OFF_AUTO_BUY_NOT_SELL ||
@@ -1654,7 +1718,9 @@ function autoFTHOFComboAction() {
             } else {
                 autoFTHOFComboAction.autobuyyes = 0;
             }
-            if (Game.buyMode == -1) Game.buyMode = 1;
+            if (Game.buyMode == -1) {
+                Game.buyMode = 1;
+            }
             Game.Objects["Wizard tower"].sell(autoFTHOFComboAction.count);
             TOWER_GAME.computeMagicM(); //Recalc max after selling
             TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
@@ -1687,9 +1753,13 @@ function autoFTHOFComboAction() {
 }
 
 function auto100ConsistencyComboAction() {
-    if (!TOWER_GAME) return;
-    if (!GARDEN_GAME) return;
-    if (FrozenCookies.auto100ConsistencyCombo == 0) return;
+    if (
+        !TOWER_GAME ||
+        !GARDEN_GAME ||
+        FrozenCookies.auto100ConsistencyCombo == 0
+    ) {
+        return;
+    }
 
     // Prereqs check
     if (
@@ -1701,7 +1771,9 @@ function auto100ConsistencyComboAction() {
     }
 
     // Autosweet overrides
-    if (FrozenCookies.autoSweet == 1) FrozenCookies.auto100ConsistencyCombo = 0;
+    if (FrozenCookies.autoSweet == 1) {
+        FrozenCookies.auto100ConsistencyCombo = 0;
+    }
 
     // Not currently possible to do the combo
     if (
@@ -1711,26 +1783,36 @@ function auto100ConsistencyComboAction() {
         return;
     }
 
-    if (typeof auto100ConsistencyComboAction.state == "undefined")
+    if (typeof auto100ConsistencyComboAction.state == "undefined") {
         auto100ConsistencyComboAction.state = 0;
-    if (typeof auto100ConsistencyComboAction.countFarm == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countFarm == "undefined") {
         auto100ConsistencyComboAction.countFarm = 0;
-    if (typeof auto100ConsistencyComboAction.countMine == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countMine == "undefined") {
         auto100ConsistencyComboAction.countMine = 0;
-    if (typeof auto100ConsistencyComboAction.countFactory == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countFactory == "undefined") {
         auto100ConsistencyComboAction.countFactory = 0;
-    if (typeof auto100ConsistencyComboAction.countBank == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countBank == "undefined") {
         auto100ConsistencyComboAction.countBank = 0;
-    if (typeof auto100ConsistencyComboAction.countTemple == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countTemple == "undefined") {
         auto100ConsistencyComboAction.countTemple = 0;
-    if (typeof auto100ConsistencyComboAction.countWizard == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countWizard == "undefined") {
         auto100ConsistencyComboAction.countWizard = 0;
-    if (typeof auto100ConsistencyComboAction.countShipment == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countShipment == "undefined") {
         auto100ConsistencyComboAction.countShipment = 0;
-    if (typeof auto100ConsistencyComboAction.countAlchemy == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countAlchemy == "undefined") {
         auto100ConsistencyComboAction.countAlchemy = 0;
-    if (typeof auto100ConsistencyComboAction.countTimeMach == "undefined")
+    }
+    if (typeof auto100ConsistencyComboAction.countTimeMach == "undefined") {
         auto100ConsistencyComboAction.countTimeMach = 0;
+    }
 
     if (
         auto100ConsistencyComboAction.state > 20 ||
@@ -2023,7 +2105,9 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 13: // sell buildings for first Devastation boost
-            if (!Game.hasGod("ruin") && TEMPLE_GAME.swaps >= 1) swapIn(2, 0);
+            if (!Game.hasGod("ruin") && TEMPLE_GAME.swaps >= 1) {
+                swapIn(2, 0);
+            }
             Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
             Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
             Game.Objects["Factory"].sell(auto100ConsistencyComboAction.countFactory);
@@ -2038,7 +2122,9 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 14: // Swap Mokalsium to ruby slot
-            if (!Game.hasGod("mother") && TEMPLE_GAME.swaps >= 1) swapIn(8, 1);
+            if (!Game.hasGod("mother") && TEMPLE_GAME.swaps >= 1) {
+                swapIn(8, 1);
+            }
             auto100ConsistencyComboAction.state = 15;
             return;
 
@@ -2220,7 +2306,9 @@ function auto100ConsistencyComboAction() {
                 FrozenCookies.autobuyCount += 1;
             }
 
-            if (!hasClickBuff()) auto100ConsistencyComboAction.state = 18;
+            if (!hasClickBuff()) {
+                auto100ConsistencyComboAction.state = 18;
+            }
             return;
 
         case 18: // Once click frenzy buff and GCs are gone, turn autoGC on if it were on previously
@@ -2350,7 +2438,9 @@ function auto100ConsistencyComboAction() {
 }
 
 function autoSweetAction() {
-    if (!FrozenCookies.autoSweet) return;
+    if (!FrozenCookies.autoSweet) {
+        return;
+    }
 
     if (FrozenCookies.autoBuy == 1) {
         autoSweetAction.autobuyyes = 1;
@@ -2360,7 +2450,9 @@ function autoSweetAction() {
     }
 
     if (typeof Game.ready !== "undefined" && Game.ready) {
-        if (typeof autoSweetAction.state == "undefined") autoSweetAction.state = 0;
+        if (typeof autoSweetAction.state == "undefined") {
+            autoSweetAction.state = 0;
+        }
 
         if (!autoSweetAction.state) {
             if (
@@ -2413,8 +2505,9 @@ function autoSweetAction() {
                         TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                         autoSweetAction.state = 0;
                         logEvent("autoSweet", "Sugar Lump Get! Disabling Auto Sweet");
-                        if (autoSweetAction.manaPrev != -1)
+                        if (autoSweetAction.manaPrev != -1) {
                             FrozenCookies.manaMax = autoSweetAction.manaPrev;
+                        }
                         if (autoSweetAction.autobuyyes == 1) {
                             FrozenCookies.autoBuy = 1;
                             autoSweetAction.autobuyyes = 0;
@@ -2476,7 +2569,9 @@ function autoBlacklistOff() {
 }
 
 function autoBankAction() {
-    if (!BANK_GAME || hasClickBuff()) return;
+    if (!BANK_GAME || hasClickBuff()) {
+        return;
+    }
 
     //Upgrade bank level
     const currentOffice = BANK_GAME.offices[BANK_GAME.officeLevel];
@@ -2496,7 +2591,10 @@ function autoBankAction() {
 }
 
 function autoBrokerAction() {
-    if (!BANK_GAME) return; // Just leave if you don't have the stock market
+    if (!BANK_GAME) {
+        // Just leave if you don't have the stock market
+        return;
+     }
 
     //Hire brokers
     const delay = delayAmount(); //GC or harvest bank
@@ -2517,12 +2615,20 @@ function autoBrokerAction() {
 }
 
 function autoLoanBuy() {
-    if (!BANK_GAME || BANK_GAME.officelevel < 2) return;
+    if (!BANK_GAME || BANK_GAME.officelevel < 2) {
+        return;
+    }
 
     if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
-        if (BANK_GAME.officeLevel >= 2) BANK_GAME.takeLoan(1);
-        if (BANK_GAME.officeLevel >= 4) BANK_GAME.takeLoan(2);
-        if (BANK_GAME.officeLevel >= 5 && FrozenCookies.autoLoan == 2) BANK_GAME.takeLoan(3);
+        if (BANK_GAME.officeLevel >= 2) {
+            BANK_GAME.takeLoan(1);
+        }
+        if (BANK_GAME.officeLevel >= 4) {
+            BANK_GAME.takeLoan(2);
+        }
+        if (BANK_GAME.officeLevel >= 5 && FrozenCookies.autoLoan == 2) {
+            BANK_GAME.takeLoan(3);
+        }
     }
 }
 
@@ -2542,7 +2648,9 @@ function autoDragonAction() {
     ) {
         Game.specialTab = "dragon";
         Game.UpgradeDragon();
-        if (Game.dragonLevel + 1 >= Game.dragonLevels.length) Game.ToggleSpecialMenu();
+        if (Game.dragonLevel + 1 >= Game.dragonLevels.length) {
+            Game.ToggleSpecialMenu();
+        }
         logEvent("autoDragon", "Upgraded the dragon to level " + Game.dragonLevel);
     }
 }
@@ -2725,7 +2833,9 @@ function autoWorship0Action() {
         return;
     }
 
-    if (TEMPLE_GAME.swaps > 0) swapIn(FrozenCookies.autoWorship0, 0);
+    if (TEMPLE_GAME.swaps > 0) {
+        swapIn(FrozenCookies.autoWorship0, 0);
+    }
 }
 
 function autoWorship1Action() {
@@ -2746,7 +2856,9 @@ function autoWorship1Action() {
         return;
     }
 
-    if (TEMPLE_GAME.swaps > 0) swapIn(FrozenCookies.autoWorship1, 1);
+    if (TEMPLE_GAME.swaps > 0) {
+        swapIn(FrozenCookies.autoWorship1, 1);
+    }
 }
 
 function autoWorship2Action() {
@@ -2772,7 +2884,9 @@ function autoWorship2Action() {
         return;
     }
 
-    if (TEMPLE_GAME.swaps > 0) swapIn(FrozenCookies.autoWorship2, 2);
+    if (TEMPLE_GAME.swaps > 0) {
+        swapIn(FrozenCookies.autoWorship2, 2);
+    }
 }
 
 function buyOtherUpgrades() {
@@ -2887,7 +3001,13 @@ function autoCycliusAction() {
     const AUTO_RUBY_JADE = 1;
     const AUTO_ALL = 2;
 
-    if (!TEMPLE_GAME || TEMPLE_GAME.swaps < 1 || FrozenCookies.autoCyclius == AUTO_OFF) return;
+    if (
+        !TEMPLE_GAME ||
+        TEMPLE_GAME.swaps < 1 ||
+        FrozenCookies.autoCyclius == AUTO_OFF
+    ) {
+        return;
+    }
 
     if (FrozenCookies.autoWorshipToggle == 1) {
         FrozenCookies.autoWorshipToggle = 0;
@@ -3306,7 +3426,9 @@ function clickBuffBonus() {
 function cpsBonus() {
     let ret = 1;
     for (const i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined") ret *= Game.buffs[i].multCpS;
+        if (typeof Game.buffs[i].multCpS != "undefined") {
+            ret *= Game.buffs[i].multCpS;
+        }
     }
     return ret;
 }
@@ -3319,9 +3441,13 @@ function hasClickBuff() {
 function baseCps() {
     let buffMod = 1;
     for (const i in Game.buffs) {
-        if (typeof Game.buffs[i].multCpS != "undefined") buffMod *= Game.buffs[i].multCpS;
+        if (typeof Game.buffs[i].multCpS != "undefined") {
+            buffMod *= Game.buffs[i].multCpS;
+        }
     }
-    if (buffMod === 0) return FrozenCookies.lastBaseCPS;
+    if (buffMod === 0) {
+        return FrozenCookies.lastBaseCPS;
+    }
     const baseCPS = Game.cookiesPs / buffMod;
     FrozenCookies.lastBaseCPS = baseCPS;
     return baseCPS;
@@ -3338,7 +3464,9 @@ function effectiveCps(delay, wrathValue, wrinklerCount) {
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
     wrinklerCount = wrinklerCount != null ? wrinklerCount : wrathValue ? 10 : 0;
     const wrinkler = wrinklerMod(wrinklerCount);
-    if (delay == null) delay = delayAmount();
+    if (delay == null) {
+        delay = delayAmount();
+    }
     return (
         baseCps() * wrinkler +
         gcPs(cookieValue(delay, wrathValue, wrinklerCount)) +
@@ -3564,7 +3692,9 @@ function chocolateValue(bankAmount, earthShatter) {
         sellRatio = 0.5;
         if (!Game.hasAura("Earth Shatterer")) {
             for (const i in Game.Objects) {
-                if (Game.Objects[i].amount > 0) highestBuilding = Game.Objects[i];
+                if (Game.Objects[i].amount > 0) {
+                    highestBuilding = Game.Objects[i];
+                }
             }
         }
     }
@@ -3615,12 +3745,16 @@ function estimatedTimeRemaining(cookies) {
 }
 
 function canCastSE() {
-    if (TOWER_GAME.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) return 1;
+    if (TOWER_GAME.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) {
+        return 1;
+    }
     return 0;
 }
 
 function edificeBank() {
-    if (!canCastSE) return 0;
+    if (!canCastSE) {
+        return 0;
+    }
     const cmCost = Game.Objects["Cortex baker"].price;
     return Game.hasBuff("everything must go") ? (cmCost * (100 / 95)) / 2 : cmCost / 2;
 }
@@ -3654,7 +3788,9 @@ function chainBank() {
 }
 
 function harvestBank() {
-    if (!FrozenCookies.setHarvestBankPlant) return 0;
+    if (!FrozenCookies.setHarvestBankPlant) {
+        return 0;
+    }
 
     FrozenCookies.harvestMinutes = 0;
     FrozenCookies.harvestMaxPercent = 0;
@@ -3662,8 +3798,9 @@ function harvestBank() {
     FrozenCookies.harvestBuilding = 1;
     FrozenCookies.harvestPlant = "";
 
-    if (FrozenCookies.setHarvestBankType == 1 || FrozenCookies.setHarvestBankType == 3)
+    if (FrozenCookies.setHarvestBankType == 1 || FrozenCookies.setHarvestBankType == 3) {
         FrozenCookies.harvestFrenzy = 7;
+    }
 
     if (FrozenCookies.setHarvestBankType == 2 || FrozenCookies.setHarvestBankType == 3) {
         const harvestBuildingArray = [
@@ -3744,7 +3881,9 @@ function harvestBank() {
             break;
     }
 
-    if (!FrozenCookies.maxSpecials) FrozenCookies.maxSpecials = 1;
+    if (!FrozenCookies.maxSpecials) {
+        FrozenCookies.maxSpecials = 1;
+    }
 
     return (
         (baseCps() *
@@ -3789,8 +3928,9 @@ function bestBank(minEfficiency) {
             return (bank.efficiency >= 0 && bank.efficiency <= minEfficiency) ||
                 FrozenCookies.setHarvestBankPlant;
         });
-    if (bankLevel.cost > edifice || FrozenCookies.setHarvestBankPlant)
+    if (bankLevel.cost > edifice || FrozenCookies.setHarvestBankPlant) {
         return bankLevel;
+    }
     return {
         cost: edifice,
         efficiency: 1,
@@ -3857,7 +3997,9 @@ function gcPs(gcValue) {
 }
 
 function gcEfficiency() {
-    if (gcPs(weightedCookieValue()) <= 0) return Number.MAX_VALUE;
+    if (gcPs(weightedCookieValue()) <= 0) {
+        return Number.MAX_VALUE;
+    }
     const cost = Math.max(0, maxLuckyValue() * 10 - Game.cookies);
     const deltaCps = gcPs(weightedCookieValue() - weightedCookieValue(true));
     return divCps(cost, deltaCps);
@@ -3934,7 +4076,9 @@ function recommendationList(recalculate) {
                         : a.cost - b.cost;
                 })
         );
-        if (FrozenCookies.pastemode) FrozenCookies.caches.recommendationList.reverse();
+        if (FrozenCookies.pastemode) {
+            FrozenCookies.caches.recommendationList.reverse();
+        }
         FrozenCookies.showAchievements = true;
     }
     return FrozenCookies.caches.recommendationList;
@@ -4033,8 +4177,13 @@ function buildingStats(recalculate) {
             )
                 buildingBlacklist.push(18);
             //Stop buying wizard towers at max Mana if enabled
-            if (TOWER_GAME && FrozenCookies.towerLimit && TOWER_GAME.magicM >= FrozenCookies.manaMax)
+            if (
+                TOWER_GAME &&
+                FrozenCookies.towerLimit &&
+                TOWER_GAME.magicM >= FrozenCookies.manaMax
+            ) {
                 buildingBlacklist.push(7);
+            }
             //Stop buying Mines if at set limit
             if (
                 FrozenCookies.mineLimit &&
@@ -4057,7 +4206,9 @@ function buildingStats(recalculate) {
             FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
                 current
             ) {
-                if (_.contains(buildingBlacklist, current.id)) return null;
+                if (_.contains(buildingBlacklist, current.id)) {
+                    return null;
+                }
                 const currentBank = bestBank(0).cost;
                 const baseCpsOrig = baseCps();
                 const cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
@@ -4165,14 +4316,19 @@ function upgradeStats(recalculate) {
 
 function isUnavailable(upgrade, upgradeBlacklist) {
     // should we even recommend upgrades at all?
-    if (upgradeBlacklist === true) return true;
+    if (upgradeBlacklist === true) {
+        return true;
+    }
 
     // check if the upgrade is in the selected blacklist, or is an upgrade that shouldn't be recommended
-    if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id))
+    if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id)) {
         return true;
+    }
 
     // Is it vaulted?
-    if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id)) return true;
+    if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id)) {
+        return true;
+    }
 
     // Don't pledge if Easter or Halloween not complete
     if (
@@ -4184,13 +4340,19 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     }
 
     // Don't pledge if we want to protect Shiny Wrinklers
-    if (upgrade.id == 74 && FrozenCookies.shinyPop == 1) return true;
+    if (upgrade.id == 74 && FrozenCookies.shinyPop == 1) {
+        return true;
+    }
 
     // Web cookies are only on Browser
-    if (App && upgrade.id == 816) return true;
+    if (App && upgrade.id == 816) {
+        return true;
+    }
 
     // Steamed cookies are only on Steam
-    if (!App && upgrade.id == 817) return true;
+    if (!App && upgrade.id == 817) {
+        return true;
+    }
 
     // Don't leave base season if it's desired
     if (
@@ -4290,20 +4452,43 @@ function defaultPurchase() {
 function totalDiscount(building) {
     let price = 1;
     if (building) {
-        if (Game.Has("Season savings")) price *= 0.99;
-        if (Game.Has("Santa's dominion")) price *= 0.99;
-        if (Game.Has("Faberge egg")) price *= 0.99;
-        if (Game.Has("Divine discount")) price *= 0.99;
-        if (Game.hasAura("Fierce Hoarder")) price *= 0.98;
-        if (Game.hasBuff("Everything must go")) price *= 0.95;
+        if (Game.Has("Season savings")) {
+            price *= 0.99;
+        }
+        if (Game.Has("Santa's dominion")) {
+            price *= 0.99;
+        }
+        if (Game.Has("Faberge egg")) {
+            price *= 0.99;
+        }
+        if (Game.Has("Divine discount")) {
+            price *= 0.99;
+        }
+        if (Game.hasAura("Fierce Hoarder")) {
+            price *= 0.98;
+        }
+        if (Game.hasBuff("Everything must go")) {
+            price *= 0.95;
+        }
     } else {
-        if (Game.Has("Toy workshop")) price *= 0.95;
-        if (Game.Has("Five-finger discount"))
+        if (Game.Has("Toy workshop")) {
+            price *= 0.95;
+        }
+        if (Game.Has("Five-finger discount")) {
             price *= Math.pow(0.99, Game.Objects["Cursor"].amount / 100);
-        if (Game.Has("Santa's dominion")) price *= 0.98;
-        if (Game.Has("Faberge egg")) price *= 0.99;
-        if (Game.Has("Divine sales")) price *= 0.99;
-        if (Game.hasAura("Master of the Armory")) price *= 0.98;
+        }
+        if (Game.Has("Santa's dominion")) {
+            price *= 0.98;
+        }
+        if (Game.Has("Faberge egg")) {
+            price *= 0.99;
+        }
+        if (Game.Has("Divine sales")) {
+            price *= 0.99;
+        }
+        if (Game.hasAura("Master of the Armory")) {
+            price *= 0.98;
+        }
     }
     return price;
 }
@@ -4337,7 +4522,9 @@ function cumulativeSantaCost(amount) {
 
 function upgradePrereqCost(upgrade, full) {
     let cost = upgrade.getPrice();
-    if (upgrade.unlocked) return cost;
+    if (upgrade.unlocked) {
+        return cost;
+    }
     const prereqs = upgradeJson[upgrade.id];
     if (!prereqs) {
         return cost;
@@ -4353,7 +4540,9 @@ function upgradePrereqCost(upgrade, full) {
     }, 0);
     cost += prereqs.upgrades.reduce(function (sum, item) {
         const reqUpgrade = Game.UpgradesById[item];
-        if (!upgrade.bought || full) sum += upgradePrereqCost(reqUpgrade, full);
+        if (!upgrade.bought || full) {
+            sum += upgradePrereqCost(reqUpgrade, full);
+        }
         return sum;
     }, 0);
     cost += cumulativeSantaCost(prereqs.santa);
@@ -4361,7 +4550,9 @@ function upgradePrereqCost(upgrade, full) {
 }
 
 function unfinishedUpgradePrereqs(upgrade) {
-    if (upgrade.unlocked) return null;
+    if (upgrade.unlocked) {
+        return null;
+    }
     const prereqs = upgradeJson[upgrade.id];
     if (!prereqs) {
         return null;
@@ -4485,16 +4676,24 @@ function buildingToggle(building, achievements) {
         achievements.forEach(function (won, index) {
             const achievement = Game.AchievementsById[index];
             achievement.won = won;
-            if (won && achievement.pool != "shadow") Game.AchievementsOwned += 1;
+            if (won && achievement.pool != "shadow") {
+                Game.AchievementsOwned += 1;
+            }
         });
     }
 }
 
 function buyFunctionToggle(upgrade) {
-    if (!upgrade) { return null; }
-    if (upgrade.id == 452) return null;
+    if (!upgrade) {
+        return null;
+    }
+    if (upgrade.id == 452) {
+        return null;
+    }
     if (!upgrade.length) {
-        if (!upgrade.buyFunction) return null;
+        if (!upgrade.buyFunction) {
+            return null;
+        }
 
         const IGNORE_FUNCTIONS = [
             /Game\.Earn\('.*\)/,
@@ -4543,7 +4742,9 @@ function buyFunctionToggle(upgrade) {
                 return a != "";
             });
 
-        if (buyFunctions.length == 0) return null;
+        if (buyFunctions.length == 0) {
+            return null;
+        }
 
         const reversedFunctions = buyFunctions.map(function (a) {
             const achievementMatch = /Game\.Win\('(.*)'\)/.exec(a);
@@ -4589,7 +4790,9 @@ function buyFunctionToggle(upgrade) {
 function buySanta() {
     Game.specialTab = "santa";
     Game.UpgradeSanta();
-    if (Game.santaLevel + 1 >= Game.santaLevels.length) Game.ToggleSpecialMenu();
+    if (Game.santaLevel + 1 >= Game.santaLevels.length) {
+        Game.ToggleSpecialMenu();
+    }
 }
 
 function statSpeed() {
@@ -4639,7 +4842,9 @@ function viewStatGraphs() {
                   width: $(window).width() * 0.8,
                   height: $(window).height() * 0.8,
               });
-    if (containerDiv.is(":hidden")) containerDiv.dialog();
+    if (containerDiv.is(":hidden")) {
+        containerDiv.dialog();
+    }
     if (
         FrozenCookies.trackedStats.length > 0 &&
         Date.now() - FrozenCookies.lastGraphDraw > 1000
@@ -4789,10 +4994,13 @@ function fcWin(what) {
                             "</div>",
                         Game.Achievements[what].icon
                     );
-                    if (App && Game.Achievements[what].vanilla)
+                    if (App && Game.Achievements[what].vanilla) {
                         App.gotAchiev(Game.Achievements[what].id);
+                    }
                 }
-                if (Game.Achievements[what].pool != "shadow") Game.AchievementsOwned++;
+                if (Game.Achievements[what].pool != "shadow") {
+                    Game.AchievementsOwned++;
+                }
                 Game.recalculateGains = 1;
             }
         }
@@ -4807,8 +5015,12 @@ function fcWin(what) {
 function logEvent(event, text, popup) {
     const time = "[" + timeDisplay((Date.now() - Game.startDate) / 1000) + "]";
     const output = time + " " + event + ": " + text;
-    if (FrozenCookies.logging) console.log(output);
-    if (popup) Game.Popup(text);
+    if (FrozenCookies.logging) {
+        console.log(output);
+    }
+    if (popup) {
+        Game.Popup(text);
+    }
 }
 
 function inRect(x, y, rect) {
@@ -4853,8 +5065,9 @@ function smartTrackingStats(delay) {
 // Unused
 function shouldClickGC() {
     for (const i in Game.shimmers) {
-        if (Game.shimmers[i].type == "golden")
+        if (Game.shimmers[i].type == "golden") {
             return Game.shimmers[i].life > 0 && FrozenCookies.autoGC;
+        }
     }
 }
 
@@ -4874,10 +5087,16 @@ function wrinklerMod(num) {
 
 function popValue(w) {
     let toSuck = 1.1;
-    if (Game.Has("Sacrilegious corruption")) toSuck *= 1.05;
-    if (w.type == 1) toSuck *= 3; //shiny wrinklers are an elusive, profitable breed
+    if (Game.Has("Sacrilegious corruption")) {
+        toSuck *= 1.05;
+    }
+    if (w.type == 1) {
+        toSuck *= 3; //shiny wrinklers are an elusive, profitable breed
+    }
     let sucked = w.sucked * toSuck; //cookie dough does weird things inside wrinkler digestive tracts
-    if (Game.Has("Wrinklerspawn")) sucked *= 1.05;
+    if (Game.Has("Wrinklerspawn")) {
+        sucked *= 1.05;
+    }
     return sucked;
 }
 
@@ -4979,7 +5198,9 @@ function safeBuy(bldg, count) {
 }
 
 function autoGodzamokAction() {
-    if (!TEMPLE_GAME) return;
+    if (!TEMPLE_GAME) {
+        return;
+    }
 
     // if Godz is here and autoGodzamok is set
     if (Game.hasGod("ruin") && FrozenCookies.autoGodzamok) {
@@ -5021,21 +5242,26 @@ function autoGodzamokAction() {
 
 function goldenCookieLife() {
     for (const i in Game.shimmers) {
-        if (Game.shimmers[i].type == "golden") return Game.shimmers[i].life;
+        if (Game.shimmers[i].type == "golden") {
+            return Game.shimmers[i].life;
+        }
     }
     return null;
 }
 
 function reindeerLife() {
     for (const i in Game.shimmers) {
-        if (Game.shimmers[i].type == "reindeer") return Game.shimmers[i].life;
+        if (Game.shimmers[i].type == "reindeer") {
+            return Game.shimmers[i].life;
+        }
     }
     return null;
 }
 
 function fcClickCookie() {
-    if (!Game.OnAscend && !Game.AscendTimer && !Game.specialTabHovered)
+    if (!Game.OnAscend && !Game.AscendTimer && !Game.specialTabHovered) {
         Game.ClickCookie();
+    }
 }
 
 function autoCookie() {
@@ -5078,7 +5304,9 @@ function autoCookie() {
                 Game.clickLump();
             }
         }
-        if (FrozenCookies.autoSL == 2) autoRigidel();
+        if (FrozenCookies.autoSL == 2) {
+            autoRigidel();
+        }
         if (FrozenCookies.autoWrinkler == 1) {
             let popCount = 0;
             const popList = shouldPopWrinklers();
@@ -5092,8 +5320,9 @@ function autoCookie() {
                         popCount += 1;
                     }
                 });
-                if (popCount > 0)
+                if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                }
             } else {
                 _.filter(Game.wrinklers, function (w) {
                     return _.contains(popList, w.id);
@@ -5101,8 +5330,9 @@ function autoCookie() {
                     w.hp = 0;
                     popCount += 1;
                 });
-                if (popCount > 0)
+                if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                }
             }
         }
         if (FrozenCookies.autoWrinkler == 2) {
@@ -5115,8 +5345,9 @@ function autoCookie() {
                         popCount += 1;
                     }
                 });
-                if (popCount > 0)
+                if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                }
             } else {
                 popList.forEach(function (w) {
                     if (w.close == true) {
@@ -5124,8 +5355,9 @@ function autoCookie() {
                         popCount += 1;
                     }
                 });
-                if (popCount > 0)
+                if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
+                }
             }
         }
 
@@ -5285,21 +5517,28 @@ function autoCookie() {
             "5",
             "10",
         ];
-        if (parseInt(FPS_AMOUNTS[FrozenCookies["fpsModifier"]]) != Game.fps)
+        if (parseInt(FPS_AMOUNTS[FrozenCookies["fpsModifier"]]) != Game.fps) {
             Game.fps = parseInt(FPS_AMOUNTS[FrozenCookies["fpsModifier"]]);
+        }
 
         // This apparently *has* to stay here, or else fast purchases will multi-click it.
         if (goldenCookieLife() && FrozenCookies.autoGC) {
             for (const i in Game.shimmers) {
-                if (Game.shimmers[i].type == "golden") Game.shimmers[i].pop();
+                if (Game.shimmers[i].type == "golden") {
+                    Game.shimmers[i].pop();
+                }
             }
         }
         if (reindeerLife() > 0 && FrozenCookies.autoReindeer) {
             for (const i in Game.shimmers) {
-                if (Game.shimmers[i].type == "reindeer") Game.shimmers[i].pop();
+                if (Game.shimmers[i].type == "reindeer") {
+                    Game.shimmers[i].pop();
+                }
             }
         }
-        if (FrozenCookies.autoBlacklistOff) autoBlacklistOff();
+        if (FrozenCookies.autoBlacklistOff) {
+            autoBlacklistOff();
+        }
         const currentFrenzy = cpsBonus() * clickBuffBonus();
         if (currentFrenzy != FrozenCookies.last_gc_state) {
             if (FrozenCookies.last_gc_state != 1 && currentFrenzy == 1) {
@@ -5344,8 +5583,9 @@ function autoCookie() {
                         currentFrenzy
                 );
             }
-            if (FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] == null)
+            if (FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] == null) {
                 FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] = 0;
+            }
             FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] +=
                 Date.now() - FrozenCookies.last_gc_time;
             FrozenCookies.last_gc_state = currentFrenzy;
