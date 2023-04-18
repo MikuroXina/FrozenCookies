@@ -110,7 +110,7 @@ function registerMod(mod_id = "frozen_cookies") {
                   });
                   Game.registerHook('reincarnate', function () {
                   });
-                  Game.registerHook('check', function () {   // called every few seconds when we check for upgrade/achiev unlock conditions; you can also use this for other checks that you don't need happening every logic frame. called about every five seconds?
+                  Game.registerHook('check', function () {   // called every few seconds when we check for upgrade/achieve unlock conditions; you can also use this for other checks that you don't need happening every logic frame. called about every five seconds?
                   });
                   Game.registerHook('cps', function (cps) { // called when determining the CpS; parameter is the current CpS; should return the modified CpS. called on change or about every ten seconds
                       return cps;
@@ -128,7 +128,7 @@ function registerMod(mod_id = "frozen_cookies") {
         load: setOverrides, // called whenever a game save is loaded. If the mod has data in the game save when the mod is initially registered, this hook is also called at that time as well.
     });
 
-    // If Frozen Cookes was loaded and there was previous Frozen Cookies data in the game save, the "load" hook ran so the setOverrides function was called and things got initialized.
+    // If Frozen Cookies was loaded and there was previous Frozen Cookies data in the game save, the "load" hook ran so the setOverrides function was called and things got initialized.
     // However, if there wasn't previous Frozen Cookies data in the game save, the "load" hook wouldn't have been called. So, we have to manually call setOverrides here to start Frozen Cookies.
     if (!FrozenCookies.loadedData) setOverrides();
     logEvent(
@@ -210,7 +210,7 @@ function setOverrides(gameSaveData) {
     if (!window.App) window.App = undefined;
 
     Beautify = fcBeautify;
-    Game.sayTime = function (time, detail) {
+    Game.sayTime = function (time) {
         return timeDisplay(time / Game.fps);
     };
     if (typeof Game.tooltip.oldDraw != "function") {
@@ -675,10 +675,6 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
-function writeFCButton(setting) {
-    var current = FrozenCookies[setting];
-}
-
 function userInputPrompt(title, description, existingValue, callback) {
     Game.Prompt(
         `<h3>${title}</h3><div class="block" style="text-align:center;">${description}</div><div class="block"><input type="text" style="text-align:center;width:100%;" id="fcGenericInput" value="${existingValue}"/></div>`,
@@ -860,7 +856,6 @@ function swapIn(godId, targetSlot) {
     if (!T.swaps) return;
     T.useSwap(1);
     T.lastSwapT = 0;
-    var div = l("templeGod" + godId);
     var prev = T.slot[targetSlot]; //id of God currently in slot
     if (prev != -1) {
         //when something's in there already
@@ -993,7 +988,6 @@ function autoDragonsCurve() {
         FrozenCookies.autoDragonToggle = 1;
         autoDragonsCurve.autodragonyes = 0;
     }
-    return;
 }
 
 function autoTicker() {
@@ -1824,7 +1818,6 @@ function autoFTHOFComboAction() {
             autoFTHOFComboAction.state = 0;
             return;
     }
-    return;
 }
 
 function auto100ConsistencyComboAction() {
@@ -2488,7 +2481,6 @@ function auto100ConsistencyComboAction() {
             auto100ConsistencyComboAction.state = 0;
             return;
     }
-    return;
 }
 
 function autoSweetAction() {
@@ -2801,7 +2793,7 @@ function autoDragonOrbsAction() {
     }
 
     var buffsN = 0;
-    for (var ii in Game.buffs) {
+    for (var _ii in Game.buffs) {
         buffsN++;
     }
     if (!goldenCookieLife() && Game.hasAura("Dragon Orbs") && !buffsN) {
@@ -3871,19 +3863,17 @@ function getProbabilityList(listType) {
 }
 
 function getProbabilityModifiers(listType) {
-    var result;
     switch (listType) {
         case "golden":
-            result =
+            return (
                 (Game.Has("Lucky day") ? 0.5 : 1) *
                 (Game.Has("Serendipity") ? 0.5 : 1) *
-                (Game.Has("Golden goose egg") ? 0.95 : 1);
-            break;
+                (Game.Has("Golden goose egg") ? 0.95 : 1)
+            );
         case "reindeer":
-            result = Game.Has("Reindeer baking grounds") ? 0.5 : 1;
-            break;
+            return Game.Has("Reindeer baking grounds") ? 0.5 : 1;
     }
-    return result;
+    return 1;
 }
 
 function cumulativeProbability(listType, start, stop) {
@@ -4060,7 +4050,6 @@ function cookieStats(bankAmount, wrathValue, wrinklerCount) {
         ? baseClickingCps(FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed)
         : clickCps;
     var luckyMod = Game.Has("Get lucky") ? 2 : 1;
-    var clickFrenzyMod = clickBuffBonus();
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
     wrinklerCount = wrinklerCount != null ? wrinklerCount : wrathValue ? 10 : 0;
     var wrinkler = wrinklerMod(wrinklerCount);
@@ -4394,7 +4383,6 @@ function cookieEfficiency(startingPoint, bankAmount) {
 }
 
 function bestBank(minEfficiency) {
-    var results = {};
     var edifice =
         FrozenCookies.autoSpell == 3 || FrozenCookies.holdSEBank ? edificeBank() : 0;
     var bankLevels = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
@@ -4534,7 +4522,7 @@ function checkPrices(currentUpgrade) {
 }
 
 // Use this for changes to future efficiency calcs
-function purchaseEfficiency(price, deltaCps, baseDeltaCps, currentCps) {
+function purchaseEfficiency(price, deltaCps, _baseDeltaCps, currentCps) {
     var efficiency = Number.POSITIVE_INFINITY;
     if (deltaCps > 0) {
         efficiency =
@@ -4589,9 +4577,9 @@ function addScores(recommendations) {
             }
         });
     } else {
-        recommendations.forEach(function (purchaseRec, index) {
-            recommendations[index].efficiencyScore = 0;
-        });
+        for (var i = 0; recommendations.length; ++i) {
+            recommendations[i].efficiencyScore = 0;
+        }
     }
     return recommendations;
 }
@@ -4676,15 +4664,14 @@ function buildingStats(recalculate) {
             )
                 buildingBlacklist.push(18);
             FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
-                current,
-                index
+                current
             ) {
                 if (_.contains(buildingBlacklist, current.id)) return null;
                 var currentBank = bestBank(0).cost;
                 var baseCpsOrig = baseCps();
                 var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
                 var existingAchievements = Object.values(Game.AchievementsById).map(
-                    function (item, i) {
+                    function (item) {
                         return item.won;
                     }
                 );
@@ -5277,7 +5264,7 @@ function viewStatGraphs() {
     ) {
         FrozenCookies.lastGraphDraw = Date.now();
         $("#statGraphs").empty();
-        var graphs = $.jqplot(
+        $.jqplot(
             "statGraphs",
             transpose(
                 FrozenCookies.trackedStats.map(function (s) {
@@ -5300,7 +5287,7 @@ function viewStatGraphs() {
                             angle: -30,
                             fontSize: "10pt",
                             showGridline: false,
-                            formatter: function (ah, ai) {
+                            formatter: function (_ah, ai) {
                                 return timeDisplay(ai);
                             },
                         },
@@ -5310,7 +5297,7 @@ function viewStatGraphs() {
                         renderer: $.jqplot.LogAxisRenderer,
                         tickDistribution: "even",
                         tickOptions: {
-                            formatter: function (ah, ai) {
+                            formatter: function (_ah, ai) {
                                 return Beautify(ai);
                             },
                         },
@@ -5319,7 +5306,7 @@ function viewStatGraphs() {
                         padMin: 0,
                         tickOptions: {
                             showGridline: false,
-                            formatter: function (ah, ai) {
+                            formatter: function (_ah, ai) {
                                 return Beautify(ai);
                             },
                         },
