@@ -4604,16 +4604,16 @@ function nextPurchase(recalculate) {
         var target = null;
         for (var i = 0; i < recList.length; i++) {
             target = recList[i];
+            var unfinished = unfinishedUpgradePrereqs(Game.UpgradesById[target.id]);
             if (
                 target.type == "upgrade" &&
-                unfinishedUpgradePrereqs(Game.UpgradesById[target.id])
+                unfinished
             ) {
-                var prereqList = unfinishedUpgradePrereqs(Game.UpgradesById[target.id]);
-                purchase = recList.filter(function (a) {
-                    return prereqList.some(function (b) {
-                        return b.id == a.id && b.type == a.type;
-                    });
-                })[0];
+                var unfinishedTypes = new Set(unfinished.map(({ type }) => type));
+                var unfinishedIds = new Set(unfinished.map(({ id }) => id));
+                purchase = recList.find(function (a) {
+                    return unfinishedTypes.has(a.type) && unfinishedIds.has(a.id);
+                });
             } else {
                 purchase = target;
             }
@@ -6128,7 +6128,7 @@ function FCStart() {
 
     /*if (FrozenCookies.autoGC) {
           FrozenCookies.goldenCookieBot = setInterval(
-            autoGoldenCookie, 
+            autoGoldenCookie,
             FrozenCookies.frequency
           );
       }*/
