@@ -4507,15 +4507,15 @@ function buyFunctionToggle(upgrade) {
             /Game\.Objects\['.*'\]\.redraw\(\)/,
             /Game\.SetResearch\('.*'\)/,
             /Game\.Upgrades\['.*'\]\.basePrice=.*/,
-            /Game\.CollectWrinklers\(\)/,
-            /Game\.RefreshBuildings\(\)/,
-            /Game\.storeToRefresh=1/,
-            /Game\.upgradesToRebuild=1/,
+            "Game.CollectWrinklers()",
+            "Game.RefreshBuildings()",
+            "Game.storeToRefresh=1",
+            "Game.upgradesToRebuild=1",
             /Game\.Popup\(.*\)/,
             /Game\.Notify\(.*\)/,
             /var\s+.+\s*=.+/,
-            /Game\.computeSeasonPrices\(\)/,
-            /Game\.seasonPopup\.reset\(\)/,
+            "Game.computeSeasonPrices()",
+            "Game.seasonPopup.reset()",
             /\S/,
         ];
         var buyFunctions = upgrade.buyFunction
@@ -4534,16 +4534,15 @@ function buyFunctionToggle(upgrade) {
             .replace("--", "-=1")
             .split(";")
             .map(function (a) {
-                a = a.trim();
-                for (let i = 0; i < ignoreFunctions.length; ++i) {
+                return a.trim();
+            })
+            .filter(function (a) {
+                for (const ignoreFunction of ignoreFunctions) {
                     if (a === "") {
                         break;
                     }
-                    a = a.replace(ignoreFunctions[i], "");
+                    a = a.replace(ignoreFunction, "");
                 }
-                return a;
-            })
-            .filter(function (a) {
                 return a != "";
             });
 
