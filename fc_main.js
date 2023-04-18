@@ -4457,14 +4457,13 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
         upgrade.bought = 0;
         Game.UpgradesOwned -= 1;
         buyFunctionToggle(reverseFunctions.current);
-        Game.AchievementsOwned = 0;
-        achievements.forEach(function (won, index) {
-            var achievement = Game.AchievementsById[index];
-            achievement.won = won;
-            if (won && achievement.pool != "shadow") {
-                Game.AchievementsOwned += 1;
-            }
-        });
+        const achievementsLen = achievements.length;
+        for (let index = 0; index < achievementsLen; ++index) {
+            Game.AchievementsById[index].won = achievements[index];
+        }
+        Game.AchievementsOwned = achievements.filter(function (won, index) {
+            return won && Game.AchievementsById[index].pool != "shadow";
+        }).length;
     }
     return reverseFunctions;
 }
