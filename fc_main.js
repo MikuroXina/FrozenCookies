@@ -650,19 +650,19 @@ function getBuildingSpread() {
 // Press 'w' to display a wrinkler-info window
 document.addEventListener("keydown", function (event) {
     if (!Game.promptOn && FrozenCookies.FCshortcuts) {
-        if (event.keyCode == 65) {
+        if (event.key == "a") {
             Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
             toggleFrozen("autoBuy");
         }
-        if (event.keyCode == 66) copyToClipboard(getBuildingSpread());
-        if (event.keyCode == 67) {
+        if (event.key == "b") copyToClipboard(getBuildingSpread());
+        if (event.key == "c") {
             Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
             toggleFrozen("autoGC");
         }
-        if (event.keyCode == 69) copyToClipboard(Game.WriteSave(true));
-        if (event.keyCode == 82) Game.Reset();
-        if (event.keyCode == 83) Game.WriteSave();
-        if (event.keyCode == 87) {
+        if (event.key == "e") copyToClipboard(Game.WriteSave(true));
+        if (event.key == "r") Game.Reset();
+        if (event.key == "s") Game.WriteSave();
+        if (event.key == "w") {
             Game.Notify(
                 "Wrinkler Info",
                 "Popping all wrinklers will give you " +
