@@ -1411,6 +1411,11 @@ function autoCastForceHandFateClickSpecialsOnly() {
 
 // Thank goodness for static variables otherwise this function would not have worked as intended.
 function autoFTHOFComboAction() {
+    const IDLE = 0;
+    const CLICK_AND_BUILD = 1;
+    const BUILD_AND_BUILD = 2;
+    const OFF_AUTO_BUY_NOT_SELL = 3;
+
     if (!M) return;
     if (FrozenCookies.autoFTHOFCombo == 0) return;
 
@@ -1430,13 +1435,13 @@ function autoFTHOFComboAction() {
         FrozenCookies.autoFTHOFCombo = 0;
     }
 
-    if (typeof autoFTHOFComboAction.state == "undefined") autoFTHOFComboAction.state = 0;
+    if (typeof autoFTHOFComboAction.state == "undefined") autoFTHOFComboAction.state = IDLE;
     if (typeof autoFTHOFComboAction.count == "undefined") autoFTHOFComboAction.count = 0;
 
     if (
-        autoFTHOFComboAction.state > 3 ||
+        autoFTHOFComboAction.state > OFF_AUTO_BUY_NOT_SELL ||
         // Combo started but failed
-        (autoFTHOFComboAction.state > 2 &&
+        (autoFTHOFComboAction.state > BUILD_AND_BUILD &&
             ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
                 (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
             !Game.hasBuff("Click frenzy") &&
@@ -1447,30 +1452,30 @@ function autoFTHOFComboAction() {
             FrozenCookies.autoBuy = 1;
             autoFTHOFComboAction.autobuyyes = 0;
         }
-        autoFTHOFComboAction.state = 0;
+        autoFTHOFComboAction.state = IDLE;
         logEvent("autoFTHOFCombo", "Soft fail, spell combo is gone");
     }
 
     if (
-        !autoFTHOFComboAction.state &&
+        autoFTHOFComboAction.state == IDLE &&
         ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
                 nextSpellName(0) == "Building Special") ||
             (nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Elder Frenzy") ||
             (nextSpellName(1) == "Click Frenzy" && nextSpellName(0) == "Elder Frenzy"))
     ) {
-        autoFTHOFComboAction.state = 1;
+        autoFTHOFComboAction.state = CLICK_AND_BUILD;
     }
     if (
-        !autoFTHOFComboAction.state &&
+        autoFTHOFComboAction.state == IDLE &&
         nextSpellName(0) == "Building Special" &&
         nextSpellName(1) == "Building Special"
     ) {
-        autoFTHOFComboAction.state = 2;
+        autoFTHOFComboAction.state = BUILD_AND_BUILD;
     }
 
     if (
-        !autoFTHOFComboAction.state &&
+        autoFTHOFComboAction.state == IDLE &&
         ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
             (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1))
     ) {
@@ -1491,324 +1496,142 @@ function autoFTHOFComboAction() {
     }
 
     var SugarLevel = Game.Objects["Wizard tower"].level;
+    if (SugarLevel == 0) {
+        return;
+    }
+
+    // Calculated with https://lookas123.github.io/CCGrimoireCalculator/
+    const CONDITIONS = {
+        1: {
+            cost: 81,
+            towers: 21,
+        },
+        2: {
+            cost: 81,
+            towers: 14,
+        },
+        3: {
+            cost: 81,
+            towers: 8,
+        },
+        4: {
+            cost: 81,
+            towers: 3,
+        },
+        5: {
+            cost: 83,
+            towers: 1,
+        },
+        6: {
+            cost: 88,
+            towers: 1,
+        },
+        7: {
+            cost: 91,
+            towers: 1,
+        },
+        8: {
+            cost: 93,
+            towers: 1,
+        },
+        9: {
+            cost: 96,
+            towers: 1,
+        },
+        10: {
+            cost: 98,
+            towers: 1,
+        },
+    };
 
     switch (autoFTHOFComboAction.state) {
-        case 0:
+        case IDLE:
             return;
-        case 1:
+        case CLICK_AND_BUILD:
             if (
                 !nextSpellName(0) == "Click Frenzy" &&
                 !nextSpellName(1) == "Click Frenzy"
             ) {
-                autoFTHOFComboAction.state = 0;
+                autoFTHOFComboAction.state = IDLE;
                 return;
             }
             if (
-                ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
+                (
+                    (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
+                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                ) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
-                (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
-                    Game.hasBuff("Dragon Harvest") &&
-                    Game.hasBuff("Frenzy") &&
-                    Game.hasBuff("Dragon Harvest").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                    Game.hasBuff("Frenzy").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                    (!Game.hasAura("Reaper of Fields") &&
+                (
+                    (
+                        (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                        Game.hasBuff("Dragon Harvest") &&
+                        Game.hasBuff("Frenzy") &&
+                        remainsDragonHarvest(13) &&
+                        remainsFrenzy(13)
+                    ) ||
+                    (
+                        !Game.hasAura("Reaper of Fields") &&
                         (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
-                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                            Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                        (remainsDragonHarvest(13) || remainsFrenzy(13))
+                    )
+                ) &&
                 BuildingSpecialBuff() == 1 &&
                 BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
             ) {
-                switch (SugarLevel) {
-                    case 0:
-                        return;
-                    // Calculated with https://lookas123.github.io/CCGrimoireCalculator/
-                    case 1:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 21;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 2:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 14;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 3:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 8;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 4:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 3;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 5:
-                        if (M.magic >= 83) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 6:
-                        if (M.magic >= 88) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 7:
-                        if (M.magic >= 91) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 8:
-                        if (M.magic >= 93) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 9:
-                        if (M.magic >= 96) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 10:
-                        if (M.magic >= 98) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
+                if (M.magic >= CONDITIONS[SugarLevel].cost) {
+                    autoFTHOFComboAction.count = Game.Objects["Wizard tower"].amount - CONDITIONS[SugarLevel].towers;
+                    M.castSpell(M.spellsById[1]);
+                    logEvent(
+                        "autoFTHOFCombo",
+                        "Cast first Force the Hand of Fate"
+                    );
+                    autoFTHOFComboAction.state = OFF_AUTO_BUY_NOT_SELL;
                 }
             }
             return;
-        case 2:
+        case BUILD_AND_BUILD:
             if (
                 !nextSpellName(0) == "Building Special" &&
                 !nextSpellName(1) == "Building Special"
             ) {
-                autoFTHOFComboAction.state = 0;
+                autoFTHOFComboAction.state = IDLE;
                 return;
             }
             if (
-                ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
+                (
+                    (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
+                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                ) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
-                (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
-                    Game.hasBuff("Dragon Harvest") &&
-                    Game.hasBuff("Frenzy") &&
-                    Game.hasBuff("Dragon Harvest").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                    Game.hasBuff("Frenzy").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                    (!Game.hasAura("Reaper of Fields") &&
+                (
+                    (
+                        (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                        Game.hasBuff("Dragon Harvest") &&
+                        Game.hasBuff("Frenzy") &&
+                        remainsDragonHarvest(13) &&
+                        remainsFrenzy(13)
+                    ) ||
+                    (
+                        !Game.hasAura("Reaper of Fields") &&
                         (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
-                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                            Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                        (remainsDragonHarvest(13) || remainsFrenzy(13))
+                    )
+                ) &&
                 (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
-                (Game.hasBuff("Click frenzy").time / 30 >=
-                    Math.ceil(10 * BuffTimeFactor()) - 1 ||
-                    Game.hasBuff("Dragonflight").time / 30 >=
-                        Math.ceil(6 * BuffTimeFactor()) - 1)
+                (remainsClickFrenzy(10) || remainsDragonflight(6))
             ) {
-                switch (SugarLevel) {
-                    case 0:
-                        return;
-                    // Calculated with https://lookas123.github.io/CCGrimoireCalculator/
-                    case 1:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 21;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 2:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 14;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 3:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 8;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 4:
-                        if (M.magic >= 81) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 3;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 5:
-                        if (M.magic >= 83) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 6:
-                        if (M.magic >= 88) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 7:
-                        if (M.magic >= 91) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 8:
-                        if (M.magic >= 93) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 9:
-                        if (M.magic >= 96) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
-                    case 10:
-                        if (M.magic >= 98) {
-                            autoFTHOFComboAction.count =
-                                Game.Objects["Wizard tower"].amount - 1;
-                            M.castSpell(M.spellsById[1]);
-                            logEvent(
-                                "autoFTHOFCombo",
-                                "Cast first Force the Hand of Fate"
-                            );
-                            autoFTHOFComboAction.state = 3;
-                        }
-                        return;
+                if (M.magic >= CONDITIONS[SugarLevel].cost) {
+                    autoFTHOFComboAction.count = Game.Objects["Wizard tower"].amount - CONDITIONS[SugarLevel].towers;
+                    M.castSpell(M.spellsById[1]);
+                    logEvent(
+                        "autoFTHOFCombo",
+                        "Cast first Force the Hand of Fate"
+                    );
+                    autoFTHOFComboAction.state = OFF_AUTO_BUY_NOT_SELL;
                 }
             }
             return;
-        case 3:
+        case OFF_AUTO_BUY_NOT_SELL:
             // Turn off autoBuy and make sure we're not in sell mode
             if (FrozenCookies.autoBuy == 1) {
                 autoFTHOFComboAction.autobuyyes = 1;
@@ -1843,7 +1666,7 @@ function autoFTHOFComboAction() {
                 autoFTHOFComboAction.autobuyyes = 0;
             }
             autoFTHOFComboAction.count = 0;
-            autoFTHOFComboAction.state = 0;
+            autoFTHOFComboAction.state = IDLE;
             return;
     }
 }
