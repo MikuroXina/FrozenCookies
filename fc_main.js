@@ -4099,6 +4099,11 @@ function upgradeStats(recalculate) {
             FrozenCookies.caches.upgrades = [];
         } else {
             var upgradeBlacklist = blacklist[FrozenCookies.blacklist].upgrades;
+            const existingAchievements = Object.values(
+                Game.AchievementsById
+            ).map(function (item) {
+                return item.won;
+            });
             FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
                 .filter(function (current) {
                     return !(current.bought || isUnavailable(current, upgradeBlacklist));
@@ -4108,11 +4113,6 @@ function upgradeStats(recalculate) {
                     var cost = upgradePrereqCost(current);
                     var baseCpsOrig = baseCps();
                     var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank));
-                    var existingAchievements = Object.values(
-                        Game.AchievementsById
-                    ).map(function (item) {
-                        return item.won;
-                    });
                     var existingWrath = Game.elderWrath;
                     var discounts = totalDiscount() + totalDiscount(true);
                     var reverseFunctions = upgradeToggle(current);
