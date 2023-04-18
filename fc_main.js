@@ -141,6 +141,11 @@ function registerMod(mod_id = "frozen_cookies") {
     );
 }
 
+const GARDEN_GAME = Game.Objects["Farm"].minigame;
+const BANK_GAME = Game.Objects["Bank"].minigame;
+const TEMPLE_GAME = Game.Objects["Temple"].minigame;
+const TOWER_GAME = Game.Objects["Wizard tower"].minigame;
+
 function setOverrides(gameSaveData) {
     // load settings and initialize variables
     // If gameSaveData wasn't passed to this function, it means that there was nothing for this mod in the game save when the mod was loaded
@@ -538,12 +543,12 @@ function fcDraw(from, text, origin) {
 
 function fcReset() {
     Game.CollectWrinklers();
-    if (B) {
-        for (let i = 0; i < B.goodsById.length; i++) {
-            B.sellGood(i, 10000);
+    if (BANK_GAME) {
+        for (let i = 0; i < BANK_GAME.goodsById.length; i++) {
+            BANK_GAME.sellGood(i, 10000);
         } // sell all stock
     }
-    if (G) G.harvestAll(); // harvest all plants
+    if (GARDEN_GAME) GARDEN_GAME.harvestAll(); // harvest all plants
     if (
         Game.dragonLevel > 5 &&
         !Game.hasAura("Earth Shatterer") &&
@@ -827,11 +832,6 @@ function toggleFrozen(setting) {
     FCStart();
 }
 
-var G = Game.Objects["Farm"].minigame; //Garden
-var B = Game.Objects["Bank"].minigame; //Stock Market
-var T = Game.Objects["Temple"].minigame; //Pantheon
-var M = Game.Objects["Wizard tower"].minigame; //Grimoire
-
 function rigiSell() {
     //Sell enough of the cheapest building to enable Rigidels effect
     if (Game.BuildingsOwned % 10) {
@@ -858,28 +858,28 @@ function lumpIn(mins) {
  * @param {number} targetSlot - Destination slot to be set.
  */
 function swapIn(godId, targetSlot) {
-    if (T.slot[targetSlot] == godId) {
+    if (TEMPLE_GAME.slot[targetSlot] == godId) {
         return;
     }
 
     //mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
-    if (T.swaps == 0) return;
-    T.useSwap(1);
-    T.lastSwapT = 0;
-    var prev = T.slot[targetSlot]; //id of God currently in slot
+    if (TEMPLE_GAME.swaps == 0) return;
+    TEMPLE_GAME.useSwap(1);
+    TEMPLE_GAME.lastSwapT = 0;
+    var prev = TEMPLE_GAME.slot[targetSlot]; //id of God currently in slot
     if (prev != -1) {
         //when something's in there already
-        prev = T.godsById[prev]; //prev becomes god object
+        prev = TEMPLE_GAME.godsById[prev]; //prev becomes god object
         var prevDiv = l("templeGod" + prev.id);
-        if (T.godsById[godId].slot != -1)
-            l("templeSlot" + T.godsById[godId].slot).appendChild(prevDiv);
+        if (TEMPLE_GAME.godsById[godId].slot != -1)
+            l("templeSlot" + TEMPLE_GAME.godsById[godId].slot).appendChild(prevDiv);
         else {
             var other = l("templeGodPlaceholder" + prev.id);
             other.parentNode.insertBefore(prevDiv, other);
         }
     }
     l("templeSlot" + targetSlot).appendChild(l("templeGod" + godId));
-    T.slotGod(T.godsById[godId], targetSlot);
+    TEMPLE_GAME.slotGod(TEMPLE_GAME.godsById[godId], targetSlot);
 
     PlaySound("snd/tick.mp3");
     PlaySound("snd/spirit.mp3");
@@ -889,16 +889,16 @@ function swapIn(godId, targetSlot) {
 }
 
 function autoRigidel() {
-    if (!T) return; //Exit if pantheon doesnt even exist
+    if (!TEMPLE_GAME) return; //Exit if pantheon doesnt even exist
     var timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - Game.lumpT)) / 60000; //Minutes until sugar lump ripens
     var started = Game.lumpT;
     var ripeAge = Math.ceil(Game.lumpRipeAge);
     var orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
     switch (orderLvl) {
         case 0: //Rigidel isn't in a slot
-            if (T.swaps < 2 || (T.swaps == 1 && T.slot[0] == -1)) return; //Don't do anything if we can't swap Rigidel in
+            if (TEMPLE_GAME.swaps < 2 || (TEMPLE_GAME.swaps == 1 && TEMPLE_GAME.slot[0] == -1)) return; //Don't do anything if we can't swap Rigidel in
             if (timeToRipe < 60) {
-                var prev = T.slot[0]; //cache whatever god you have equipped
+                var prev = TEMPLE_GAME.slot[0]; //cache whatever god you have equipped
                 swapIn(10, 0); //swap in rigidel
                 Game.computeLumpTimes();
                 rigiSell(); //Meet the %10 condition
@@ -1040,7 +1040,7 @@ function remainsClickFrenzy(factor) {
 }
 
 function autoCast() {
-    if (!M) return;
+    if (!TOWER_GAME) return;
     if (FrozenCookies.autoSpell == 0) return;
 
     if (
@@ -1052,30 +1052,30 @@ function autoCast() {
     }
 
     if (
-        !((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-        (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1))
+        !((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+        (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1))
     ) {
         return;
     }
 
     // Free lump!
     if (
-        M.magicM >=
+        TOWER_GAME.magicM >=
             Math.floor(
-                M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+                TOWER_GAME.spellsById[1].costMin + TOWER_GAME.spellsById[1].costPercent * TOWER_GAME.magicM
             ) &&
         nextSpellName(0) == "Sugar Lump"
     ) {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate for a free lump");
         return;
     }
 
     // Can we shorten a negative buff with a backfire?
     if (
-        M.magicM >=
+        TOWER_GAME.magicM >=
             Math.floor(
-                M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM
+                TOWER_GAME.spellsById[2].costMin + TOWER_GAME.spellsById[2].costPercent * TOWER_GAME.magicM
             ) &&
         ((cpsBonus() < 7 &&
             (Game.hasBuff("Loan 1 (interest)") ||
@@ -1084,21 +1084,21 @@ function autoCast() {
             cpsBonus() < 1) &&
         (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
     ) {
-        M.castSpell(M.spellsById[2]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[2]);
         logEvent("AutoSpell", "Cast Stretch Time to shorten debuff");
         return;
     }
 
     // Will it backfire?
     if (
-        M.magicM >=
+        TOWER_GAME.magicM >=
             Math.floor(
-                M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+                TOWER_GAME.spellsById[4].costMin + TOWER_GAME.spellsById[4].costPercent * TOWER_GAME.magicM
             ) &&
         cpsBonus() >= FrozenCookies.minCpSMult &&
         (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
     ) {
-        M.castSpell(M.spellsById[4]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
         logEvent("AutoSpell", "Cast Haggler's Charm to avoid backfire");
         return;
     }
@@ -1128,22 +1128,22 @@ function autoCast() {
 
 function autoCastConjureBakedGoods() {
     if (
-        M.magicM <
+        TOWER_GAME.magicM <
         Math.floor(
-            M.spellsById[0].costMin + M.spellsById[0].costPercent * M.magicM
+            TOWER_GAME.spellsById[0].costMin + TOWER_GAME.spellsById[0].costPercent * TOWER_GAME.magicM
         )
     ) {
         return;
     }
-    M.castSpell(M.spellsById[0]);
+    TOWER_GAME.castSpell(TOWER_GAME.spellsById[0]);
     logEvent("AutoSpell", "Cast Conjure Baked Goods");
 }
 
 function autoCastForceHandFate() {
     if (
-        M.magicM <
+        TOWER_GAME.magicM <
         Math.floor(
-            M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+            TOWER_GAME.spellsById[1].costMin + TOWER_GAME.spellsById[1].costPercent * TOWER_GAME.magicM
         )
     ) {
         return;
@@ -1154,7 +1154,7 @@ function autoCastForceHandFate() {
         (nextSpellName(0) == "Blab" ||
             nextSpellName(0) == "Cookie Storm (Drop)")
     ) {
-        M.castSpell(M.spellsById[4]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
         logEvent(
             "AutoSpell",
             "Cast Haggler's Charm instead of Force the Hand of Fate"
@@ -1166,7 +1166,7 @@ function autoCastForceHandFate() {
         return;
     }
     if (!Game.hasBuff("Dragonflight") && nextSpellName(0) == "Lucky") {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
     }
 
@@ -1176,7 +1176,7 @@ function autoCastForceHandFate() {
         nextSpellName(0) == "Frenzy" ||
         nextSpellName(0) == "Building Special"
     ) {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
         return;
     }
@@ -1200,7 +1200,7 @@ function autoCastForceHandFate() {
         BuildingSpecialBuff() == 1 &&
         BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
     ) {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
         return;
     }
@@ -1211,7 +1211,7 @@ function autoCastForceHandFate() {
                 (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
                 (remainsClickFrenzy(6) || remainsDragonflight(6))
             ) {
-                M.castSpell(M.spellsById[1]);
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("AutoSpell", "Cast Force the Hand of Fate");
             }
             return;
@@ -1235,7 +1235,7 @@ function autoCastForceHandFate() {
                 (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
                 (remainsClickFrenzy(6) || remainsDragonflight(6))
             ) {
-                M.castSpell(M.spellsById[1]);
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("AutoSpell", "Cast Force the Hand of Fate");
             }
         }
@@ -1247,7 +1247,7 @@ function autoCastForceHandFate() {
         (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
         (remainsClickFrenzy(10) || remainsDragonflight(6))
     ) {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
         return;
     }
@@ -1257,10 +1257,10 @@ function autoCastSpontaneousEdifice() {
     // If you don't have any Cortex baker yet, or can't cast SE, just give up.
     if (
         Game.Objects["Cortex baker"].amount == 0 ||
-        M.magicM <
+        TOWER_GAME.magicM <
             Math.floor(
-                M.spellsById[3].costMin +
-                    M.spellsById[3].costPercent * M.magicM
+                TOWER_GAME.spellsById[3].costMin +
+                    TOWER_GAME.spellsById[3].costPercent * TOWER_GAME.magicM
             )
     ) {
         return;
@@ -1283,28 +1283,28 @@ function autoCastSpontaneousEdifice() {
                     " cookies")
         );
     }
-    M.castSpell(M.spellsById[3]);
+    TOWER_GAME.castSpell(TOWER_GAME.spellsById[3]);
     logEvent("AutoSpell", "Cast Spontaneous Edifice");
 }
 
 function autoCastHagglersCharm() {
     if (
-        M.magicM <
+        TOWER_GAME.magicM <
         Math.floor(
-            M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+            TOWER_GAME.spellsById[4].costMin + TOWER_GAME.spellsById[4].costPercent * TOWER_GAME.magicM
         )
     ) {
         return;
     }
-    M.castSpell(M.spellsById[4]);
+    TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
     logEvent("AutoSpell", "Cast Haggler's Charm");
 }
 
 function autoCastForceHandFateClickSpecialsOnly() {
     if (
-        M.magicM <
+        TOWER_GAME.magicM <
         Math.floor(
-            M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+            TOWER_GAME.spellsById[1].costMin + TOWER_GAME.spellsById[1].costPercent * TOWER_GAME.magicM
         )
     ) {
         return;
@@ -1321,7 +1321,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
             "Lucky",
         ].includes(nextSpellName(0))
     ) {
-        M.castSpell(M.spellsById[4]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
         logEvent(
             "AutoSpell",
             "Cast Haggler's Charm instead of Force the Hand of Fate"
@@ -1333,7 +1333,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
     }
 
     if (nextSpellName(0) == "Building Special") {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
         return;
     }
@@ -1364,7 +1364,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
         BuildingSpecialBuff() == 1 &&
         BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
     ) {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
         return;
     }
@@ -1377,7 +1377,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
                 (remainsClickFrenzy(6) ||
                     remainsDragonflight(6))
             ) {
-                M.castSpell(M.spellsById[1]);
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("AutoSpell", "Cast Force the Hand of Fate");
             }
             return;
@@ -1401,7 +1401,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
                 (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
                 (remainsClickFrenzy(6) || remainsDragonflight(6))
             ) {
-                M.castSpell(M.spellsById[1]);
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("AutoSpell", "Cast Force the Hand of Fate");
             }
         }
@@ -1413,7 +1413,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
         (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
         (remainsClickFrenzy(10) || remainsDragonflight(6))
     ) {
-        M.castSpell(M.spellsById[1]);
+        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
         logEvent("AutoSpell", "Cast Force the Hand of Fate");
         return;
     }
@@ -1426,7 +1426,7 @@ function autoFTHOFComboAction() {
     const BUILD_AND_BUILD = 2;
     const OFF_AUTO_BUY_NOT_SELL = 3;
 
-    if (!M) return;
+    if (!TOWER_GAME) return;
     if (FrozenCookies.autoFTHOFCombo == 0) return;
 
     // Prereqs check
@@ -1452,8 +1452,8 @@ function autoFTHOFComboAction() {
         autoFTHOFComboAction.state > OFF_AUTO_BUY_NOT_SELL ||
         // Combo started but failed
         (autoFTHOFComboAction.state > BUILD_AND_BUILD &&
-            ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
+            ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)) &&
             !Game.hasBuff("Click frenzy") &&
             !nextSpellName(0) == "Click Frenzy" &&
             !nextSpellName(1) == "Click Frenzy")
@@ -1486,21 +1486,21 @@ function autoFTHOFComboAction() {
 
     if (
         autoFTHOFComboAction.state == IDLE &&
-        ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-            (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1))
+        ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+            (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1))
     ) {
         //Continue casting Haggler's Charm - unless it's something we need right now
         if (nextSpellName(0) == "Sugar Lump") {
-            M.castSpell(M.spellsById[1]);
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
             logEvent("autoFTHOFCombo", "Cast Force the Hand of Fate");
         } else if (
             cpsBonus() < 1 &&
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
         ) {
-            M.castSpell(M.spellsById[2]);
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[2]);
             logEvent("autoFTHOFCombo", "Cast Stretch Time instead of FTHOF");
         } else {
-            M.castSpell(M.spellsById[4]);
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
             logEvent("autoFTHOFCombo", "Cast Haggler's Charm instead of FTHOF");
         }
     }
@@ -1567,8 +1567,8 @@ function autoFTHOFComboAction() {
             }
             if (
                 (
-                    (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                    (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                    (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
                 ) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
                 (
@@ -1588,9 +1588,9 @@ function autoFTHOFComboAction() {
                 BuildingSpecialBuff() == 1 &&
                 BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
             ) {
-                if (M.magic >= CONDITIONS[SugarLevel].cost) {
+                if (TOWER_GAME.magic >= CONDITIONS[SugarLevel].cost) {
                     autoFTHOFComboAction.count = Game.Objects["Wizard tower"].amount - CONDITIONS[SugarLevel].towers;
-                    M.castSpell(M.spellsById[1]);
+                    TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                     logEvent(
                         "autoFTHOFCombo",
                         "Cast first Force the Hand of Fate"
@@ -1609,8 +1609,8 @@ function autoFTHOFComboAction() {
             }
             if (
                 (
-                    (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                    (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                    (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
                 ) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
                 (
@@ -1630,9 +1630,9 @@ function autoFTHOFComboAction() {
                 (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
                 (remainsClickFrenzy(10) || remainsDragonflight(6))
             ) {
-                if (M.magic >= CONDITIONS[SugarLevel].cost) {
+                if (TOWER_GAME.magic >= CONDITIONS[SugarLevel].cost) {
                     autoFTHOFComboAction.count = Game.Objects["Wizard tower"].amount - CONDITIONS[SugarLevel].towers;
-                    M.castSpell(M.spellsById[1]);
+                    TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                     logEvent(
                         "autoFTHOFCombo",
                         "Cast first Force the Hand of Fate"
@@ -1651,8 +1651,8 @@ function autoFTHOFComboAction() {
             }
             if (Game.buyMode == -1) Game.buyMode = 1;
             Game.Objects["Wizard tower"].sell(autoFTHOFComboAction.count);
-            M.computeMagicM(); //Recalc max after selling
-            M.castSpell(M.spellsById[1]);
+            TOWER_GAME.computeMagicM(); //Recalc max after selling
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
             logEvent("autoFTHOFCombo", "Double cast Force the Hand of Fate");
             if (
                 FrozenCookies.towerLimit &&
@@ -1682,8 +1682,8 @@ function autoFTHOFComboAction() {
 }
 
 function auto100ConsistencyComboAction() {
-    if (!M) return;
-    if (!G) return;
+    if (!TOWER_GAME) return;
+    if (!GARDEN_GAME) return;
     if (FrozenCookies.auto100ConsistencyCombo == 0) return;
 
     // Prereqs check
@@ -1701,7 +1701,7 @@ function auto100ConsistencyComboAction() {
     // Not currently possible to do the combo
     if (
         Game.dragonLevel < 26 || // Fully upgraded dragon needed for two auras
-        !G.canPlant(G.plantsById[14]) // Can currently plant whiskerbloom
+        !GARDEN_GAME.canPlant(GARDEN_GAME.plantsById[14]) // Can currently plant whiskerbloom
     ) {
         return;
     }
@@ -1740,8 +1740,8 @@ function auto100ConsistencyComboAction() {
             (auto100ConsistencyComboAction.state > 1 &&
                 !BuildingSpecialBuff() &&
                 !hasClickBuff())) &&
-            ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)))
+            ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)))
     ) {
         if (auto100ConsistencyComboAction.autobuyyes == 1) {
             FrozenCookies.autoBuy = 1;
@@ -1773,7 +1773,7 @@ function auto100ConsistencyComboAction() {
 
     if (
         !auto100ConsistencyComboAction.state &&
-        M.magicM >= 98 &&
+        TOWER_GAME.magicM >= 98 &&
         ((nextSpellName(0) == "Click Frenzy" && nextSpellName(1) == "Building Special") ||
             (nextSpellName(1) == "Click Frenzy" &&
                 nextSpellName(0) == "Building Special") ||
@@ -1796,20 +1796,20 @@ function auto100ConsistencyComboAction() {
     //Continue casting Haggler's Charm - unless it's something we need right now
     if (
         !auto100ConsistencyComboAction.state &&
-        ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-            (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1))
+        ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+            (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1))
     ) {
         if (nextSpellName(0) == "Sugar Lump") {
-            M.castSpell(M.spellsById[1]);
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
             logEvent("auto100ConsistencyCombo", "Cast Force the Hand of Fate");
         } else if (
             cpsBonus() < 1 &&
             (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
         ) {
-            M.castSpell(M.spellsById[2]);
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[2]);
             logEvent("auto100ConsistencyCombo", "Cast Stretch Time instead of FTHOF");
         } else {
-            M.castSpell(M.spellsById[4]);
+            TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
             logEvent("auto100ConsistencyCombo", "Cast Haggler's Charm instead of FTHOF");
         }
     }
@@ -1820,8 +1820,8 @@ function auto100ConsistencyComboAction() {
 
         case 1: // Start combo
             if (
-                ((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)) &&
+                ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                    (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)) &&
                 cpsBonus() >= FrozenCookies.minCpSMult &&
                 (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
                     Game.hasBuff("Dragon Harvest") &&
@@ -1885,7 +1885,7 @@ function auto100ConsistencyComboAction() {
             var whisk = false;
             for (let i = 0; i < 6; i++) {
                 for (let j = 0; j < 6; j++) {
-                    if (G.plot[i][j][0] - 1 === 14) {
+                    if (GARDEN_GAME.plot[i][j][0] - 1 === 14) {
                         whisk = true;
                     }
                 }
@@ -1893,11 +1893,11 @@ function auto100ConsistencyComboAction() {
             if (whisk) {
                 auto100ConsistencyComboAction.state = 4;
             } else {
-                G.harvestAll();
+                GARDEN_GAME.harvestAll();
                 for (var y = 0; y <= 5; y++) {
                     for (var x = 0; x <= 5; x++) {
-                        G.seedSelected = G.plants["whiskerbloom"].id;
-                        G.clickTile(x, y);
+                        GARDEN_GAME.seedSelected = GARDEN_GAME.plants["whiskerbloom"].id;
+                        GARDEN_GAME.clickTile(x, y);
                     }
                 }
                 auto100ConsistencyComboAction.state = 4;
@@ -1945,10 +1945,10 @@ function auto100ConsistencyComboAction() {
 
         case 6: // Cast FTHOF 1
             if (
-                (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
             ) {
-                M.castSpell(M.spellsById[1]);
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 1");
                 auto100ConsistencyComboAction.state = 7;
             }
@@ -1956,9 +1956,9 @@ function auto100ConsistencyComboAction() {
 
         case 7: // Cast FTHOF 2 then buy
             Game.Objects["Wizard tower"].sell(auto100ConsistencyComboAction.countWizard);
-            M.computeMagicM(); //Recalc max after selling
-            if (M.magic >= 30) {
-                M.castSpell(M.spellsById[1]);
+            TOWER_GAME.computeMagicM(); //Recalc max after selling
+            if (TOWER_GAME.magic >= 30) {
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 2");
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
@@ -1969,17 +1969,17 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 8: // Use sugar lump to refill magic
-            M.lumpRefill.click();
+            TOWER_GAME.lumpRefill.click();
             Game.ConfirmPrompt();
             auto100ConsistencyComboAction.state = 9;
             return;
 
         case 9: // Cast FTHOF 3
             if (
-                (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
             ) {
-                M.castSpell(M.spellsById[1]);
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 3");
                 auto100ConsistencyComboAction.state = 10;
             }
@@ -1987,9 +1987,9 @@ function auto100ConsistencyComboAction() {
 
         case 10: // Cast FTHOF 4 then buy
             Game.Objects["Wizard tower"].sell(auto100ConsistencyComboAction.countWizard);
-            M.computeMagicM(); //Recalc max after selling
-            if (M.magic >= 30) {
-                M.castSpell(M.spellsById[1]);
+            TOWER_GAME.computeMagicM(); //Recalc max after selling
+            if (TOWER_GAME.magic >= 30) {
+                TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 4");
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
@@ -2018,7 +2018,7 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 13: // sell buildings for first Devastation boost
-            if (!Game.hasGod("ruin") && T.swaps >= 1) swapIn(2, 0);
+            if (!Game.hasGod("ruin") && TEMPLE_GAME.swaps >= 1) swapIn(2, 0);
             Game.Objects["Farm"].sell(auto100ConsistencyComboAction.countFarm);
             Game.Objects["Mine"].sell(auto100ConsistencyComboAction.countMine);
             Game.Objects["Factory"].sell(auto100ConsistencyComboAction.countFactory);
@@ -2033,7 +2033,7 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 14: // Swap Mokalsium to ruby slot
-            if (!Game.hasGod("mother") && T.swaps >= 1) swapIn(8, 1);
+            if (!Game.hasGod("mother") && TEMPLE_GAME.swaps >= 1) swapIn(8, 1);
             auto100ConsistencyComboAction.state = 15;
             return;
 
@@ -2394,18 +2394,18 @@ function autoSweetAction() {
                     FrozenCookies.manaMax = 37;
                 }
                 if (
-                    (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-                    (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+                    (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                    (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
                 ) {
                     if (nextSpellName(0) != "Sugar Lump") {
-                        M.castSpell(M.spellsById[4]);
+                        TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
                         logEvent(
                             "autoSweet",
                             "Cast Haggler's Charm while waiting for 'Sweet'"
                         );
                     }
                     if (nextSpellName(0) == "Sugar Lump") {
-                        M.castSpell(M.spellsById[1]);
+                        TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                         autoSweetAction.state = 0;
                         logEvent("autoSweet", "Sugar Lump Get! Disabling Auto Sweet");
                         if (autoSweetAction.manaPrev != -1)
@@ -2471,10 +2471,10 @@ function autoBlacklistOff() {
 }
 
 function autoBankAction() {
-    if (!B || hasClickBuff()) return;
+    if (!BANK_GAME || hasClickBuff()) return;
 
     //Upgrade bank level
-    let currentOffice = B.offices[B.officeLevel];
+    let currentOffice = BANK_GAME.offices[BANK_GAME.officeLevel];
     if (
         currentOffice.cost &&
         Game.Objects["Cursor"].amount >= currentOffice.cost[0] &&
@@ -2491,20 +2491,20 @@ function autoBankAction() {
 }
 
 function autoBrokerAction() {
-    if (!B) return; // Just leave if you don't have the stock market
+    if (!BANK_GAME) return; // Just leave if you don't have the stock market
 
     //Hire brokers
     var delay = delayAmount(); //GC or harvest bank
     var recommendation = nextPurchase();
     if (
         recommendation.type == "building" && // Don't hire when saving for upgrade
-        B.brokers < B.getMaxBrokers() &&
-        Game.cookies >= delay + B.getBrokerPrice()
+        BANK_GAME.brokers < BANK_GAME.getMaxBrokers() &&
+        Game.cookies >= delay + BANK_GAME.getBrokerPrice()
     ) {
         l("bankBrokersBuy").click();
         logEvent(
             "AutoBroker",
-            "Hired a broker for " + Beautify(B.getBrokerPrice()) + " cookies"
+            "Hired a broker for " + Beautify(BANK_GAME.getBrokerPrice()) + " cookies"
         );
         Game.recalculateGains = 1;
         Game.upgradesToRebuild = 1;
@@ -2512,12 +2512,12 @@ function autoBrokerAction() {
 }
 
 function autoLoanBuy() {
-    if (!B || B.officelevel < 2) return;
+    if (!BANK_GAME || BANK_GAME.officelevel < 2) return;
 
     if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
-        if (B.officeLevel >= 2) B.takeLoan(1);
-        if (B.officeLevel >= 4) B.takeLoan(2);
-        if (B.officeLevel >= 5 && FrozenCookies.autoLoan == 2) B.takeLoan(3);
+        if (BANK_GAME.officeLevel >= 2) BANK_GAME.takeLoan(1);
+        if (BANK_GAME.officeLevel >= 4) BANK_GAME.takeLoan(2);
+        if (BANK_GAME.officeLevel >= 5 && FrozenCookies.autoLoan == 2) BANK_GAME.takeLoan(3);
     }
 }
 
@@ -2709,64 +2709,64 @@ function autoSugarFrenzyAction() {
 
 function autoWorship0Action() {
     if (
-        !T ||
-        T.swaps < 1 ||
+        !TEMPLE_GAME ||
+        TEMPLE_GAME.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
         FrozenCookies.autoWorship0 == 11 ||
         FrozenCookies.autoCyclius ||
-        T.slot[0] == FrozenCookies.autoWorship0
+        TEMPLE_GAME.slot[0] == FrozenCookies.autoWorship0
     ) {
         return;
     }
 
-    if (T.swaps > 0) swapIn(FrozenCookies.autoWorship0, 0);
+    if (TEMPLE_GAME.swaps > 0) swapIn(FrozenCookies.autoWorship0, 0);
 }
 
 function autoWorship1Action() {
     if (
-        !T ||
-        T.swaps < 1 ||
+        !TEMPLE_GAME ||
+        TEMPLE_GAME.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
         FrozenCookies.autoWorship1 == 11 ||
         FrozenCookies.autoCyclius ||
-        T.slot[1] == FrozenCookies.autoWorship1
+        TEMPLE_GAME.slot[1] == FrozenCookies.autoWorship1
     ) {
         return;
     }
 
-    if (T.slot[0] == FrozenCookies.autoWorship1) {
+    if (TEMPLE_GAME.slot[0] == FrozenCookies.autoWorship1) {
         FrozenCookies.autoworship1 = 11;
         logEvent("autoWorship", "Can't worship the same god in Diamond and Ruby slots!");
         return;
     }
 
-    if (T.swaps > 0) swapIn(FrozenCookies.autoWorship1, 1);
+    if (TEMPLE_GAME.swaps > 0) swapIn(FrozenCookies.autoWorship1, 1);
 }
 
 function autoWorship2Action() {
     if (
-        !T ||
-        T.swaps < 1 ||
+        !TEMPLE_GAME ||
+        TEMPLE_GAME.swaps < 1 ||
         !FrozenCookies.autoWorshipToggle ||
         FrozenCookies.autoWorship2 == 11 ||
         FrozenCookies.autoCyclius ||
-        T.slot[2] == FrozenCookies.autoWorship2
+        TEMPLE_GAME.slot[2] == FrozenCookies.autoWorship2
     ) {
         return;
     }
 
-    if (T.slot[0] == FrozenCookies.autoWorship2) {
+    if (TEMPLE_GAME.slot[0] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 11;
         logEvent("autoWorship", "Can't worship the same god in Diamond and Jade slots!");
         return;
     }
-    if (T.slot[1] == FrozenCookies.autoWorship2) {
+    if (TEMPLE_GAME.slot[1] == FrozenCookies.autoWorship2) {
         FrozenCookies.autoworship2 = 11;
         logEvent("autoWorship", "Can't worship the same god in Ruby and Jade slots!");
         return;
     }
 
-    if (T.swaps > 0) swapIn(FrozenCookies.autoWorship2, 2);
+    if (TEMPLE_GAME.swaps > 0) swapIn(FrozenCookies.autoWorship2, 2);
 }
 
 function buyOtherUpgrades() {
@@ -2881,7 +2881,7 @@ function autoCycliusAction() {
     const AUTO_RUBY_JADE = 1;
     const AUTO_ALL = 2;
 
-    if (!T || T.swaps < 1 || FrozenCookies.autoCyclius == AUTO_OFF) return;
+    if (!TEMPLE_GAME || TEMPLE_GAME.swaps < 1 || FrozenCookies.autoCyclius == AUTO_OFF) return;
 
     if (FrozenCookies.autoWorshipToggle == 1) {
         FrozenCookies.autoWorshipToggle = 0;
@@ -2953,7 +2953,7 @@ function autoCycliusAction() {
     function runSchedule(schedule) {
         for (const { target, from, to } of schedule) {
             if (
-                T.slot[target] != CYCLIUS &&
+                TEMPLE_GAME.slot[target] != CYCLIUS &&
                 from <= currentMinutes &&
                 currentMinutes < to
             ) {
@@ -3612,7 +3612,7 @@ function estimatedTimeRemaining(cookies) {
 }
 
 function canCastSE() {
-    if (M.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) return 1;
+    if (TOWER_GAME.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) return 1;
     return 0;
 }
 
@@ -4025,13 +4025,13 @@ function buildingStats(recalculate) {
             );
             //If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
             if (
-                M &&
+                TOWER_GAME &&
                 FrozenCookies.autoSpell == 3 &&
                 Game.Objects["Cortex baker"].amount >= 399
             )
                 buildingBlacklist.push(18);
             //Stop buying wizard towers at max Mana if enabled
-            if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax)
+            if (TOWER_GAME && FrozenCookies.towerLimit && TOWER_GAME.magicM >= FrozenCookies.manaMax)
                 buildingBlacklist.push(7);
             //Stop buying Mines if at set limit
             if (
@@ -4980,7 +4980,7 @@ function safeBuy(bldg, count) {
 }
 
 function autoGodzamokAction() {
-    if (!T) return;
+    if (!TEMPLE_GAME) return;
 
     // if Godz is here and autoGodzamok is set
     if (Game.hasGod("ruin") && FrozenCookies.autoGodzamok) {
@@ -5175,7 +5175,7 @@ function autoCookie() {
                     Game.Objects["Cortex baker"].amount >= 299) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        M.magic >= FrozenCookies.manaMax - 10) ||
+                        TOWER_GAME.magic >= FrozenCookies.manaMax - 10) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
                         Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 100) ||
@@ -5200,7 +5200,7 @@ function autoCookie() {
                     Game.Objects["Cortex baker"].amount >= 389) ||
                     (FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        M.magic >= FrozenCookies.manaMax - 2) ||
+                        TOWER_GAME.magic >= FrozenCookies.manaMax - 2) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
                         Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 10) ||
