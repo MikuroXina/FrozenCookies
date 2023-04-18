@@ -4257,9 +4257,23 @@ function upgradeStats(recalculate) {
             ).map(function (item) {
                 return item.won;
             });
+
+            const needToCalculate = new Set(Object.values(Game.UpgradesById).map(({ id }) => id));
+            for (const { id: cachedId } of FrozenCookies.caches.upgrades) {
+                if (needToCalculate.has(cachedId)) {
+                    needToCalculate.delete(cachedId);
+                } else {
+                    needToCalculate.add(cachedId);
+                }
+            }
+
             FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
                 .filter(function (current) {
-                    return !(current.bought || isUnavailable(current, upgradeBlacklist));
+                    return (
+                        !current.bought
+                        && !isUnavailable(current, upgradeBlacklist)
+                        && needToCalculate.has(current.id)
+                    );
                 })
                 .map(function (current) {
                     const currentBank = bestBank(0).cost;
@@ -4268,7 +4282,10 @@ function upgradeStats(recalculate) {
                     const cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank));
                     const existingWrath = Game.elderWrath;
                     const discounts = totalDiscount() + totalDiscount(true);
+
                     const reverseFunctions = upgradeToggle(current);
+                    Game.recalculateGains = 1;
+                    Game.CalculateGains();
                     const baseCpsNew = baseCps();
                     const cpsNew = effectiveCps(currentBank);
                     const priceReduction =
@@ -4276,6 +4293,9 @@ function upgradeStats(recalculate) {
                             ? 0
                             : checkPrices(current);
                     upgradeToggleReverse(current, reverseFunctions);
+                    Game.recalculateGains = 1;
+                    Game.CalculateGains();
+
                     Game.elderWrath = existingWrath;
                     const deltaCps = cpsNew - cpsOrig;
                     const baseDeltaCps = baseCpsNew - baseCpsOrig;
