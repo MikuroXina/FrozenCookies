@@ -3776,7 +3776,7 @@ function cookieEfficiency(startingPoint, bankAmount) {
 function bestBank(minEfficiency) {
     var edifice =
         FrozenCookies.autoSpell == 3 || FrozenCookies.holdSEBank ? edificeBank() : 0;
-    var bankLevels = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
+    var bankLevel = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
         .sort(function (a, b) {
             return b - a;
         })
@@ -3786,14 +3786,12 @@ function bestBank(minEfficiency) {
                 efficiency: cookieEfficiency(Game.cookies, bank),
             };
         })
-        .filter(function (bank) {
+        .find(function (bank) {
             return (bank.efficiency >= 0 && bank.efficiency <= minEfficiency) ||
-                FrozenCookies.setHarvestBankPlant
-                ? bank
-                : null;
+                FrozenCookies.setHarvestBankPlant;
         });
-    if (bankLevels[0].cost > edifice || FrozenCookies.setHarvestBankPlant)
-        return bankLevels[0];
+    if (bankLevel.cost > edifice || FrozenCookies.setHarvestBankPlant)
+        return bankLevel;
     return {
         cost: edifice,
         efficiency: 1,
