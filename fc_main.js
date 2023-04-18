@@ -4122,7 +4122,7 @@ function upgradeStats(recalculate) {
                         discounts == totalDiscount() + totalDiscount(true)
                             ? 0
                             : checkPrices(current);
-                    upgradeToggle(current, existingAchievements, reverseFunctions);
+                    upgradeToggleReverse(current, existingAchievements, reverseFunctions);
                     Game.elderWrath = existingWrath;
                     var deltaCps = cpsNew - cpsOrig;
                     var baseDeltaCps = baseCpsNew - baseCpsOrig;
@@ -4148,6 +4148,14 @@ function upgradeStats(recalculate) {
                         type: "upgrade",
                     };
                 });
+
+                const achievementsLen = existingAchievements.length;
+                for (let index = 0; index < achievementsLen; ++index) {
+                    Game.AchievementsById[index].won = existingAchievements[index];
+                }
+                Game.AchievementsOwned = existingAchievements.filter(function (won, index) {
+                    return won && Game.AchievementsById[index].pool != "shadow";
+                }).length;
         }
     }
     return FrozenCookies.caches.upgrades;
@@ -4402,70 +4410,62 @@ function unfinishedUpgradePrereqs(upgrade) {
     return needed.length ? needed : null;
 }
 
-function upgradeToggle(upgrade, achievements, reverseFunctions) {
-    if (!achievements) {
-        reverseFunctions = {};
-        if (!upgrade.unlocked) {
-            var prereqs = upgradeJson[upgrade.id];
-            if (prereqs) {
-                reverseFunctions.prereqBuildings = [];
-                prereqs.buildings.forEach(function (requiredBuildings, buildingId) {
-                    var building = Game.ObjectsById[buildingId];
-                    if (requiredBuildings && building.amount < requiredBuildings) {
-                        var difference = requiredBuildings - building.amount;
-                        reverseFunctions.prereqBuildings.push({
-                            id: buildingId,
-                            amount: difference,
+function upgradeToggle(upgrade) {
+    const reverseFunctions = {};
+    if (!upgrade.unlocked) {
+        var prereqs = upgradeJson[upgrade.id];
+        if (prereqs) {
+            reverseFunctions.prereqBuildings = [];
+            prereqs.buildings.forEach(function (requiredBuildings, buildingId) {
+                var building = Game.ObjectsById[buildingId];
+                if (requiredBuildings && building.amount < requiredBuildings) {
+                    var difference = requiredBuildings - building.amount;
+                    reverseFunctions.prereqBuildings.push({
+                        id: buildingId,
+                        amount: difference,
+                    });
+                    building.amount += difference;
+                    building.bought += difference;
+                    Game.BuildingsOwned += difference;
+                }
+            });
+            reverseFunctions.prereqUpgrades = [];
+            if (prereqs.upgrades.length > 0) {
+                prereqs.upgrades.forEach(function (id) {
+                    var upgrade = Game.UpgradesById[id];
+                    if (!upgrade.bought) {
+                        reverseFunctions.prereqUpgrades.push({
+                            id: id,
+                            reverseFunctions: upgradeToggle(upgrade),
                         });
-                        building.amount += difference;
-                        building.bought += difference;
-                        Game.BuildingsOwned += difference;
                     }
                 });
-                reverseFunctions.prereqUpgrades = [];
-                if (prereqs.upgrades.length > 0) {
-                    prereqs.upgrades.forEach(function (id) {
-                        var upgrade = Game.UpgradesById[id];
-                        if (!upgrade.bought) {
-                            reverseFunctions.prereqUpgrades.push({
-                                id: id,
-                                reverseFunctions: upgradeToggle(upgrade),
-                            });
-                        }
-                    });
-                }
             }
         }
-        upgrade.bought = 1;
-        Game.UpgradesOwned += 1;
-        reverseFunctions.current = buyFunctionToggle(upgrade);
-    } else {
-        if (reverseFunctions.prereqBuildings) {
-            reverseFunctions.prereqBuildings.forEach(function (b) {
-                var building = Game.ObjectsById[b.id];
-                building.amount -= b.amount;
-                building.bought -= b.amount;
-                Game.BuildingsOwned -= b.amount;
-            });
-        }
-        if (reverseFunctions.prereqUpgrades) {
-            reverseFunctions.prereqUpgrades.forEach(function (u) {
-                var upgrade = Game.UpgradesById[u.id];
-                upgradeToggle(upgrade, [], u.reverseFunctions);
-            });
-        }
-        upgrade.bought = 0;
-        Game.UpgradesOwned -= 1;
-        buyFunctionToggle(reverseFunctions.current);
-        const achievementsLen = achievements.length;
-        for (let index = 0; index < achievementsLen; ++index) {
-            Game.AchievementsById[index].won = achievements[index];
-        }
-        Game.AchievementsOwned = achievements.filter(function (won, index) {
-            return won && Game.AchievementsById[index].pool != "shadow";
-        }).length;
     }
+    upgrade.bought = 1;
+    Game.UpgradesOwned += 1;
+    reverseFunctions.current = buyFunctionToggle(upgrade);
     return reverseFunctions;
+}
+function upgradeToggleReverse(upgrade, reverseFunctions) {
+    if (reverseFunctions.prereqBuildings) {
+        reverseFunctions.prereqBuildings.forEach(function (b) {
+            var building = Game.ObjectsById[b.id];
+            building.amount -= b.amount;
+            building.bought -= b.amount;
+            Game.BuildingsOwned -= b.amount;
+        });
+    }
+    if (reverseFunctions.prereqUpgrades) {
+        reverseFunctions.prereqUpgrades.forEach(function (u) {
+            var upgrade = Game.UpgradesById[u.id];
+            upgradeToggleReverse(upgrade, u.reverseFunctions);
+        });
+    }
+    upgrade.bought = 0;
+    Game.UpgradesOwned -= 1;
+    buyFunctionToggle(reverseFunctions.current);
 }
 
 function buildingToggle(building, achievements) {
