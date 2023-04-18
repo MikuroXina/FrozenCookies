@@ -1103,7 +1103,7 @@ function remainsClickFrenzy(factor) {
 }
 
 function autoCast() {
-    if (!TOWER_GAM || FrozenCookies.autoSpell == 0) {
+    if (!TOWER_GAME || FrozenCookies.autoSpell == 0) {
         return;
     }
 
