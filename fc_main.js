@@ -4271,7 +4271,7 @@ function upgradeStats(recalculate) {
                 .filter(function (current) {
                     return (
                         !current.bought
-                        && !isUnavailable(current, upgradeBlacklist)
+                        && isAvailable(current, upgradeBlacklist)
                         && needToCalculate.has(current.id)
                     );
                 })
@@ -4334,20 +4334,20 @@ function upgradeStats(recalculate) {
     return FrozenCookies.caches.upgrades;
 }
 
-function isUnavailable(upgrade, upgradeBlacklist) {
+function isAvailable(upgrade, upgradeBlacklist) {
     // should we even recommend upgrades at all?
     if (upgradeBlacklist === true) {
-        return true;
+        return false;
     }
 
     // check if the upgrade is in the selected blacklist, or is an upgrade that shouldn't be recommended
     if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id)) {
-        return true;
+        return false;
     }
 
     // Is it vaulted?
     if (Game.Has("Inspired checklist") && Game.vault.includes(upgrade.id)) {
-        return true;
+        return false;
     }
 
     // Don't pledge if Easter or Halloween not complete
@@ -4356,22 +4356,22 @@ function isUnavailable(upgrade, upgradeBlacklist) {
         (Game.season == "halloween" || Game.season == "easter") &&
         !haveAll(Game.season)
     ) {
-        return true;
+        return false;
     }
 
     // Don't pledge if we want to protect Shiny Wrinklers
     if (upgrade.id == 74 && FrozenCookies.shinyPop == 1) {
-        return true;
+        return false;
     }
 
     // Web cookies are only on Browser
     if (App && upgrade.id == 816) {
-        return true;
+        return false;
     }
 
     // Steamed cookies are only on Steam
     if (!App && upgrade.id == 817) {
-        return true;
+        return false;
     }
 
     // Don't leave base season if it's desired
@@ -4395,35 +4395,43 @@ function isUnavailable(upgrade, upgradeBlacklist) {
             (FrozenCookies.freeSeason == 1 &&
                 ((Game.baseSeason == "christmas" && upgrade.id == 182) ||
                     (Game.baseSeason == "fools" && upgrade.id == 185))))
-    )
-        return true;
-
-    let result = false;
+    ) {
+        return false;
+    }
 
     const needed = unfinishedUpgradePrereqs(upgrade);
-    result = result || (!upgrade.unlocked && !needed);
-    result =
-        result ||
-        (_.find(needed, function (a) {
+    if (!upgrade.unlocked && !needed) {
+        return false;
+    }
+    if (
+        _.find(needed, function (a) {
             return a.type == "wrinklers";
         }) != null &&
-            needed);
-    result =
-        result ||
-        (_.find(needed, function (a) {
+        needed
+    ) {
+        return false;
+    }
+    if (
+        _.find(needed, function (a) {
             return a.type == "santa";
         }) != null &&
-            "christmas" != Game.season &&
-            !Game.UpgradesById[181].unlocked &&
-            !Game.prestige);
-    result =
-        result ||
-        (upgrade.season &&
-            (!haveAll(Game.season) ||
-                (upgrade.season != seasons[FrozenCookies.defaultSeason] &&
-                    haveAll(upgrade.season))));
-
-    return result;
+        "christmas" != Game.season &&
+        !Game.UpgradesById[181].unlocked &&
+        !Game.prestige
+    ) {
+        return false;
+    }
+    if (
+        (upgrade.season && !haveAll(Game.season)) ||
+        (
+            upgrade.season &&
+            upgrade.season != seasons[FrozenCookies.defaultSeason] &&
+            haveAll(upgrade.season)
+        )
+    ) {
+        return false;
+    }
+    return true;
 }
 
 function santaStats() {
