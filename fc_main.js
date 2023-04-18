@@ -4122,7 +4122,7 @@ function upgradeStats(recalculate) {
                         discounts == totalDiscount() + totalDiscount(true)
                             ? 0
                             : checkPrices(current);
-                    upgradeToggleReverse(current, existingAchievements, reverseFunctions);
+                    upgradeToggleReverse(current, reverseFunctions);
                     Game.elderWrath = existingWrath;
                     var deltaCps = cpsNew - cpsOrig;
                     var baseDeltaCps = baseCpsNew - baseCpsOrig;
