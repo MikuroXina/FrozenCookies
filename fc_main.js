@@ -3940,6 +3940,9 @@ function recommendationList(recalculate) {
         );
         if (FrozenCookies.pastemode) FrozenCookies.caches.recommendationList.reverse();
         FrozenCookies.showAchievements = true;
+
+        Game.recalculateGains = 1;
+        Game.CalculateGains();
     }
     return FrozenCookies.caches.recommendationList;
 }
@@ -4468,8 +4471,6 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
             }
         });
     }
-    Game.recalculateGains = 1;
-    Game.CalculateGains();
     return reverseFunctions;
 }
 
@@ -4489,8 +4490,6 @@ function buildingToggle(building, achievements) {
             if (won && achievement.pool != "shadow") Game.AchievementsOwned += 1;
         });
     }
-    Game.recalculateGains = 1;
-    Game.CalculateGains();
 }
 
 function buyFunctionToggle(upgrade) {
