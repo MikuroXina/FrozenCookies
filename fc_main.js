@@ -5033,12 +5033,12 @@ function upgradeToggle(upgrade, achievements, reverseFunctions) {
             var prereqs = upgradeJson[upgrade.id];
             if (prereqs) {
                 reverseFunctions.prereqBuildings = [];
-                prereqs.buildings.forEach(function (a, b) {
-                    var building = Game.ObjectsById[b];
-                    if (a && building.amount < a) {
-                        var difference = a - building.amount;
+                prereqs.buildings.forEach(function (requiredBuildings, buildingId) {
+                    var building = Game.ObjectsById[buildingId];
+                    if (requiredBuildings && building.amount < requiredBuildings) {
+                        var difference = requiredBuildings - building.amount;
                         reverseFunctions.prereqBuildings.push({
-                            id: b,
+                            id: buildingId,
                             amount: difference,
                         });
                         building.amount += difference;
@@ -5116,8 +5116,9 @@ function buildingToggle(building, achievements) {
 }
 
 function buyFunctionToggle(upgrade) {
-    if (upgrade && upgrade.id == 452) return null;
-    if (upgrade && !upgrade.length) {
+    if (!upgrade) { return null; }
+    if (upgrade.id == 452) return null;
+    if (!upgrade.length) {
         if (!upgrade.buyFunction) return null;
 
         var ignoreFunctions = [
@@ -5155,47 +5156,55 @@ function buyFunctionToggle(upgrade) {
             .replace("--", "-=1")
             .split(";")
             .map(function (a) {
-                return a.trim();
+                a = a.trim();
+                for (let i = 0; i < ignoreFunctions.length; ++i) {
+                    if (a === "") {
+                        break;
+                    }
+                    a = a.replace(ignoreFunctions[i], "");
+                }
+                return a;
             })
             .filter(function (a) {
-                ignoreFunctions.forEach(function (b) {
-                    a = a.replace(b, "");
-                });
                 return a != "";
             });
 
         if (buyFunctions.length == 0) return null;
 
         var reversedFunctions = buyFunctions.map(function (a) {
-            var reversed = "";
             var achievementMatch = /Game\.Win\('(.*)'\)/.exec(a);
             if (a.indexOf("+=") > -1) {
-                reversed = a.replace("+=", "-=");
-            } else if (a.indexOf("-=") > -1) {
-                reversed = a.replace("-=", "+=");
-            } else if (
+                return a.replace("+=", "-=");
+            }
+            if (a.indexOf("-=") > -1) {
+                return a.replace("-=", "+=");
+            }
+            if (
                 achievementMatch &&
                 Game.Achievements[achievementMatch[1]].won == 0
             ) {
-                reversed = "Game.Achievements['" + achievementMatch[1] + "'].won=0";
-            } else if (a.indexOf("=") > -1) {
-                var expression = a.split("=");
-                var expressionResult = eval(expression[0]);
-                var isString = _.isString(expressionResult);
-                reversed =
-                    expression[0] +
-                    "=" +
-                    (isString ? "'" : "") +
-                    expressionResult +
-                    (isString ? "'" : "");
+                return "Game.Achievements['" + achievementMatch[1] + "'].won=0";
             }
-            return reversed;
+            if (a.indexOf("=") < 0) {
+                return "";
+            }
+            var expression = a.split("=");
+            var expressionResult = eval(expression[0]);
+            var isString = _.isString(expressionResult);
+            return (
+                expression[0] +
+                "=" +
+                (isString ? "'" : "") +
+                expressionResult +
+                (isString ? "'" : "")
+            );
         });
         buyFunctions.forEach(function (f) {
             eval(f);
         });
         return reversedFunctions;
-    } else if (upgrade && upgrade.length) {
+    }
+    if (upgrade.length) {
         upgrade.forEach(function (f) {
             eval(f);
         });
