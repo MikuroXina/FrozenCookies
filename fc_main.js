@@ -1015,6 +1015,20 @@ function BuffTimeFactor() {
     return DurMod;
 }
 
+
+function remainsDragonHarvest(factor) {
+    return Game.hasBuff("Dragon Harvest").time / 30 >= Math.ceil(factor * BuffTimeFactor()) - 1;
+}
+function remainsDragonflight(factor) {
+    return Game.hasBuff("Dragonflight").time / 30 >= Math.ceil(factor * BuffTimeFactor()) - 1;
+}
+function remainsFrenzy(factor) {
+    return Game.hasBuff("Frenzy").time / 30 >= Math.ceil(factor * BuffTimeFactor()) - 1;
+}
+function remainsClickFrenzy(factor) {
+    return Game.hasBuff("ClickFrenzy").time / 30 >= Math.ceil(factor * BuffTimeFactor()) - 1;
+}
+
 function autoCast() {
     if (!M) return;
     if (FrozenCookies.autoSpell == 0) return;
@@ -1028,356 +1042,370 @@ function autoCast() {
     }
 
     if (
-        (FrozenCookies.towerLimit && M.magic >= M.magicM) ||
-        (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1)
+        !((FrozenCookies.towerLimit && M.magic >= M.magicM) ||
+        (!FrozenCookies.towerLimit && M.magic >= M.magicM - 1))
     ) {
-        // Free lump!
-        if (
-            M.magicM >=
-                Math.floor(
-                    M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
-                ) &&
-            nextSpellName(0) == "Sugar Lump"
-        ) {
-            M.castSpell(M.spellsById[1]);
-            logEvent("AutoSpell", "Cast Force the Hand of Fate for a free lump");
+        return;
+    }
+
+    // Free lump!
+    if (
+        M.magicM >=
+            Math.floor(
+                M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+            ) &&
+        nextSpellName(0) == "Sugar Lump"
+    ) {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate for a free lump");
+        return;
+    }
+
+    // Can we shorten a negative buff with a backfire?
+    if (
+        M.magicM >=
+            Math.floor(
+                M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM
+            ) &&
+        ((cpsBonus() < 7 &&
+            (Game.hasBuff("Loan 1 (interest)") ||
+                Game.hasBuff("Loan 2 (interest)") ||
+                Game.hasBuff("Loan 3 (interest)"))) ||
+            cpsBonus() < 1) &&
+        (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
+    ) {
+        M.castSpell(M.spellsById[2]);
+        logEvent("AutoSpell", "Cast Stretch Time to shorten debuff");
+        return;
+    }
+
+    // Will it backfire?
+    if (
+        M.magicM >=
+            Math.floor(
+                M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+            ) &&
+        cpsBonus() >= FrozenCookies.minCpSMult &&
+        (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
+    ) {
+        M.castSpell(M.spellsById[4]);
+        logEvent("AutoSpell", "Cast Haggler's Charm to avoid backfire");
+        return;
+    }
+
+    switch (FrozenCookies.autoSpell) {
+        case 1:
+            autoCastConjureBakedGoods();
+            return;
+
+        case 2:
+            autoCastForceHandFate();
+            return;
+
+        case 3:
+            autoCastSpontaneousEdifice();
+            return;
+
+        case 4:
+            autoCastHagglersCharm();
+            return;
+
+        case 5:
+            autoCastForceHandFateClickSpecialsOnly();
+            return;
+    }
+}
+
+function autoCastConjureBakedGoods() {
+    if (
+        M.magicM <
+        Math.floor(
+            M.spellsById[0].costMin + M.spellsById[0].costPercent * M.magicM
+        )
+    ) {
+        return;
+    }
+    M.castSpell(M.spellsById[0]);
+    logEvent("AutoSpell", "Cast Conjure Baked Goods");
+}
+
+function autoCastForceHandFate() {
+    if (
+        M.magicM <
+        Math.floor(
+            M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+        )
+    ) {
+        return;
+    }
+
+    if (
+        !Game.hasBuff("Dragonflight") &&
+        (nextSpellName(0) == "Blab" ||
+            nextSpellName(0) == "Cookie Storm (Drop)")
+    ) {
+        M.castSpell(M.spellsById[4]);
+        logEvent(
+            "AutoSpell",
+            "Cast Haggler's Charm instead of Force the Hand of Fate"
+        );
+        return;
+    }
+
+    if (cpsBonus() < FrozenCookies.minCpSMult) {
+        return;
+    }
+    if (!Game.hasBuff("Dragonflight") && nextSpellName(0) == "Lucky") {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+    }
+
+    if (
+        nextSpellName(0) == "Cookie Chain" ||
+        nextSpellName(0) == "Cookie Storm" ||
+        nextSpellName(0) == "Frenzy" ||
+        nextSpellName(0) == "Building Special"
+    ) {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+        return;
+    }
+
+    if (
+        nextSpellName(0) == "Click Frenzy" &&
+        (
+            (
+                (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                Game.hasBuff("Dragon Harvest") &&
+                Game.hasBuff("Frenzy") &&
+                remainsDragonHarvest(13) &&
+                remainsFrenzy(13)
+            ) ||
+            (
+                !Game.hasAura("Reaper of Fields") &&
+                (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
+                (remainsDragonHarvest(13) || remainsFrenzy(13))
+            )
+        ) &&
+        BuildingSpecialBuff() == 1 &&
+        BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
+    ) {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+        return;
+    }
+
+    if (nextSpellName(0) == "Elder Frenzy") {
+        if (Game.Upgrades["Elder Pact"].bought == 1) {
+            if (
+                (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+                (remainsClickFrenzy(6) || remainsDragonflight(6))
+            ) {
+                M.castSpell(M.spellsById[1]);
+                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+            }
             return;
         }
-
-        // Can we shorten a negative buff with a backfire?
-        if (
-            M.magicM >=
-                Math.floor(
-                    M.spellsById[2].costMin + M.spellsById[2].costPercent * M.magicM
+        if (Game.Upgrades["Elder Pact"].bought == 0) {
+            if (
+                (
+                    (
+                        (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                        Game.hasBuff("Dragon Harvest") &&
+                        Game.hasBuff("Frenzy") &&
+                        remainsDragonHarvest(13) &&
+                        remainsFrenzy(13)
+                    ) ||
+                    (
+                        !Game.hasAura("Reaper of Fields") &&
+                        (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
+                        (remainsDragonHarvest(13) || remainsFrenzy(13))
+                    )
                 ) &&
-            ((cpsBonus() < 7 &&
-                (Game.hasBuff("Loan 1 (interest)") ||
-                    Game.hasBuff("Loan 2 (interest)") ||
-                    Game.hasBuff("Loan 3 (interest)"))) ||
-                cpsBonus() < 1) &&
-            (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
-        ) {
-            M.castSpell(M.spellsById[2]);
-            logEvent("AutoSpell", "Cast Stretch Time to shorten debuff");
+                (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+                (remainsClickFrenzy(6) || remainsDragonflight(6))
+            ) {
+                M.castSpell(M.spellsById[1]);
+                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+            }
+        }
+        return;
+    }
+
+    if (
+        nextSpellName(0) == "Cursed Finger" &&
+        (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+        (remainsClickFrenzy(10) || remainsDragonflight(6))
+    ) {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+        return;
+    }
+}
+
+function autoCastSpontaneousEdifice() {
+    // If you don't have any Cortex baker yet, or can't cast SE, just give up.
+    if (
+        Game.Objects["Cortex baker"].amount == 0 ||
+        M.magicM <
+            Math.floor(
+                M.spellsById[3].costMin +
+                    M.spellsById[3].costPercent * M.magicM
+            )
+    ) {
+        return;
+    }
+
+    // If we have over 400 Cortex bakers, always going to sell down to 399.
+    // If you don't have half a Cortex baker's worth of cookies in bank, sell one or more until you do
+    while (
+        Game.Objects["Cortex baker"].amount >= 400 ||
+        Game.cookies < Game.Objects["Cortex baker"].price / 2
+    ) {
+        Game.Objects["Cortex baker"].sell(1);
+        logEvent(
+            "Store",
+            "Sold 1 Cortex baker for " +
+                (Beautify(
+                    Game.Objects["Cortex baker"].price *
+                        Game.Objects["Cortex baker"].getSellMultiplier()
+                ) +
+                    " cookies")
+        );
+    }
+    M.castSpell(M.spellsById[3]);
+    logEvent("AutoSpell", "Cast Spontaneous Edifice");
+}
+
+function autoCastHagglersCharm() {
+    if (
+        M.magicM <
+        Math.floor(
+            M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+        )
+    ) {
+        return;
+    }
+    M.castSpell(M.spellsById[4]);
+    logEvent("AutoSpell", "Cast Haggler's Charm");
+}
+
+function autoCastForceHandFateClickSpecialsOnly() {
+    if (
+        M.magicM <
+        Math.floor(
+            M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
+        )
+    ) {
+        return;
+    }
+
+    if (
+        !Game.hasBuff("Dragonflight") &&
+        [
+            "Blab",
+            "Cookie Storm (Drop)",
+            "Cookie Chain",
+            "Cookie Storm",
+            "Frenzy",
+            "Lucky",
+        ].includes(nextSpellName(0))
+    ) {
+        M.castSpell(M.spellsById[4]);
+        logEvent(
+            "AutoSpell",
+            "Cast Haggler's Charm instead of Force the Hand of Fate"
+        );
+    }
+
+    if (cpsBonus() < FrozenCookies.minCpSMult) {
+        return;
+    }
+
+    if (nextSpellName(0) == "Building Special") {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+        return;
+    }
+
+    if (
+        nextSpellName(0) == "Click Frenzy" &&
+        (
+            (
+                (
+                    Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")
+                ) &&
+                Game.hasBuff("Dragon Harvest") &&
+                Game.hasBuff("Frenzy") &&
+                remainsDragonHarvest(13) &&
+                remainsFrenzy(13)
+            ) ||
+            (
+                !Game.hasAura("Reaper of Fields") &&
+                (
+                    Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")
+                ) &&
+                (
+                    remainsDragonHarvest(13) ||
+                    remainsFrenzy(13)
+                )
+            )
+        ) &&
+        BuildingSpecialBuff() == 1 &&
+        BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
+    ) {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+        return;
+    }
+
+    if (nextSpellName(0) == "Elder Frenzy") {
+        if (Game.Upgrades["Elder Pact"].bought == 1) {
+            if (
+                (Game.hasBuff("Click frenzy") ||
+                    Game.hasBuff("Dragonflight")) &&
+                (remainsClickFrenzy(6) ||
+                    remainsDragonflight(6))
+            ) {
+                M.castSpell(M.spellsById[1]);
+                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+            }
             return;
         }
-
-        // Will it backfire?
-        if (
-            M.magicM >=
-                Math.floor(
-                    M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
+        if (Game.Upgrades["Elder Pact"].bought == 0) {
+            if (
+                (
+                    (
+                        (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                        Game.hasBuff("Dragon Harvest") &&
+                        Game.hasBuff("Frenzy") &&
+                        remainsDragonHarvest(13) &&
+                        remainsFrenzy(13)
+                    ) ||
+                    (
+                        !Game.hasAura("Reaper of Fields") &&
+                        (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
+                        (remainsDragonHarvest(13) || remainsFrenzy(13))
+                    )
                 ) &&
-            cpsBonus() >= FrozenCookies.minCpSMult &&
-            (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
-        ) {
-            M.castSpell(M.spellsById[4]);
-            logEvent("AutoSpell", "Cast Haggler's Charm to avoid backfire");
-            return;
+                (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+                (remainsClickFrenzy(6) || remainsDragonflight(6))
+            ) {
+                M.castSpell(M.spellsById[1]);
+                logEvent("AutoSpell", "Cast Force the Hand of Fate");
+            }
         }
+        return;
+    }
 
-        switch (FrozenCookies.autoSpell) {
-            case 1:
-                if (
-                    M.magicM <
-                    Math.floor(
-                        M.spellsById[0].costMin + M.spellsById[0].costPercent * M.magicM
-                    )
-                ) {
-                    return;
-                }
-                M.castSpell(M.spellsById[0]);
-                logEvent("AutoSpell", "Cast Conjure Baked Goods");
-                return;
-
-            case 2:
-                if (
-                    M.magicM <
-                    Math.floor(
-                        M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
-                    )
-                ) {
-                    return;
-                }
-
-                if (
-                    !Game.hasBuff("Dragonflight") &&
-                    (nextSpellName(0) == "Blab" ||
-                        nextSpellName(0) == "Cookie Storm (Drop)")
-                ) {
-                    M.castSpell(M.spellsById[4]);
-                    logEvent(
-                        "AutoSpell",
-                        "Cast Haggler's Charm instead of Force the Hand of Fate"
-                    );
-                    return;
-                }
-
-                if (cpsBonus() >= FrozenCookies.minCpSMult) {
-                    if (!Game.hasBuff("Dragonflight") && nextSpellName(0) == "Lucky") {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                    }
-
-                    if (
-                        nextSpellName(0) == "Cookie Chain" ||
-                        nextSpellName(0) == "Cookie Storm" ||
-                        nextSpellName(0) == "Frenzy" ||
-                        nextSpellName(0) == "Building Special"
-                    ) {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                        return;
-                    }
-
-                    if (
-                        nextSpellName(0) == "Click Frenzy" &&
-                        (((Game.hasAura("Reaper of Fields") ||
-                            Game.hasAura("Reality Bending")) &&
-                            Game.hasBuff("Dragon Harvest") &&
-                            Game.hasBuff("Frenzy") &&
-                            Game.hasBuff("Dragon Harvest").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                            Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                            (!Game.hasAura("Reaper of Fields") &&
-                                (Game.hasBuff("Dragon Harvest") ||
-                                    Game.hasBuff("Frenzy")) &&
-                                (Game.hasBuff("Dragon Harvest").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                                    Game.hasBuff("Frenzy").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1))) &&
-                        BuildingSpecialBuff() == 1 &&
-                        BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
-                    ) {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                        return;
-                    }
-
-                    if (nextSpellName(0) == "Elder Frenzy") {
-                        if (Game.Upgrades["Elder Pact"].bought == 1) {
-                            if (
-                                (Game.hasBuff("Click frenzy") ||
-                                    Game.hasBuff("Dragonflight")) &&
-                                (Game.hasBuff("Click frenzy").time / 30 >=
-                                    Math.ceil(6 * BuffTimeFactor()) - 1 ||
-                                    Game.hasBuff("Dragonflight").time / 30 >=
-                                        Math.ceil(6 * BuffTimeFactor()) - 1)
-                            ) {
-                                M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                            }
-                        } else if (Game.Upgrades["Elder Pact"].bought == 0) {
-                            if (
-                                (((Game.hasAura("Reaper of Fields") ||
-                                    Game.hasAura("Reality Bending")) &&
-                                    Game.hasBuff("Dragon Harvest") &&
-                                    Game.hasBuff("Frenzy") &&
-                                    Game.hasBuff("Dragon Harvest").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                                    Game.hasBuff("Frenzy").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                                    (!Game.hasAura("Reaper of Fields") &&
-                                        (Game.hasBuff("Dragon Harvest") ||
-                                            Game.hasBuff("Frenzy")) &&
-                                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                                            Game.hasBuff("Frenzy").time / 30 >=
-                                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
-                                (Game.hasBuff("Click frenzy") ||
-                                    Game.hasBuff("Dragonflight")) &&
-                                (Game.hasBuff("Click frenzy").time / 30 >=
-                                    Math.ceil(6 * BuffTimeFactor()) - 1 ||
-                                    Game.hasBuff("Dragonflight").time / 30 >=
-                                        Math.ceil(6 * BuffTimeFactor()) - 1)
-                            ) {
-                                M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                            }
-                        }
-                        return;
-                    }
-
-                    if (
-                        nextSpellName(0) == "Cursed Finger" &&
-                        (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
-                        (Game.hasBuff("Click frenzy").time / 30 >=
-                            Math.ceil(10 * BuffTimeFactor()) - 1 ||
-                            Game.hasBuff("Dragonflight").time / 30 >=
-                                Math.ceil(6 * BuffTimeFactor()) - 1)
-                    ) {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                        return;
-                    }
-                }
-                return;
-
-            case 3:
-                // If you don't have any Cortex baker yet, or can't cast SE, just give up.
-                if (
-                    Game.Objects["Cortex baker"].amount == 0 ||
-                    M.magicM <
-                        Math.floor(
-                            M.spellsById[3].costMin +
-                                M.spellsById[3].costPercent * M.magicM
-                        )
-                ) {
-                    return;
-                }
-
-                // If we have over 400 Cortex bakers, always going to sell down to 399.
-                // If you don't have half a Cortex baker's worth of cookies in bank, sell one or more until you do
-                while (
-                    Game.Objects["Cortex baker"].amount >= 400 ||
-                    Game.cookies < Game.Objects["Cortex baker"].price / 2
-                ) {
-                    Game.Objects["Cortex baker"].sell(1);
-                    logEvent(
-                        "Store",
-                        "Sold 1 Cortex baker for " +
-                            (Beautify(
-                                Game.Objects["Cortex baker"].price *
-                                    Game.Objects["Cortex baker"].getSellMultiplier()
-                            ) +
-                                " cookies")
-                    );
-                }
-                M.castSpell(M.spellsById[3]);
-                logEvent("AutoSpell", "Cast Spontaneous Edifice");
-                return;
-
-            case 4:
-                if (
-                    M.magicM <
-                    Math.floor(
-                        M.spellsById[4].costMin + M.spellsById[4].costPercent * M.magicM
-                    )
-                ) {
-                    return;
-                }
-                M.castSpell(M.spellsById[4]);
-                logEvent("AutoSpell", "Cast Haggler's Charm");
-                return;
-
-            case 5:
-                if (
-                    M.magicM <
-                    Math.floor(
-                        M.spellsById[1].costMin + M.spellsById[1].costPercent * M.magicM
-                    )
-                ) {
-                    return;
-                }
-
-                if (
-                    !Game.hasBuff("Dragonflight") &&
-                    (nextSpellName(0) == "Blab" ||
-                        nextSpellName(0) == "Cookie Storm (Drop)" ||
-                        nextSpellName(0) == "Cookie Chain" ||
-                        nextSpellName(0) == "Cookie Storm" ||
-                        nextSpellName(0) == "Frenzy" ||
-                        nextSpellName(0) == "Lucky")
-                ) {
-                    M.castSpell(M.spellsById[4]);
-                    logEvent(
-                        "AutoSpell",
-                        "Cast Haggler's Charm instead of Force the Hand of Fate"
-                    );
-                }
-
-                if (cpsBonus() >= FrozenCookies.minCpSMult) {
-                    if (nextSpellName(0) == "Building Special") {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                        return;
-                    }
-
-                    if (
-                        nextSpellName(0) == "Click Frenzy" &&
-                        (((Game.hasAura("Reaper of Fields") ||
-                            Game.hasAura("Reality Bending")) &&
-                            Game.hasBuff("Dragon Harvest") &&
-                            Game.hasBuff("Frenzy") &&
-                            Game.hasBuff("Dragon Harvest").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                            Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                            (!Game.hasAura("Reaper of Fields") &&
-                                (Game.hasBuff("Dragon Harvest") ||
-                                    Game.hasBuff("Frenzy")) &&
-                                (Game.hasBuff("Dragon Harvest").time / 30 >=
-                                    Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                                    Game.hasBuff("Frenzy").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1))) &&
-                        BuildingSpecialBuff() == 1 &&
-                        BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
-                    ) {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                        return;
-                    }
-
-                    if (nextSpellName(0) == "Elder Frenzy") {
-                        if (Game.Upgrades["Elder Pact"].bought == 1) {
-                            if (
-                                (Game.hasBuff("Click frenzy") ||
-                                    Game.hasBuff("Dragonflight")) &&
-                                (Game.hasBuff("Click frenzy").time / 30 >=
-                                    Math.ceil(6 * BuffTimeFactor()) - 1 ||
-                                    Game.hasBuff("Dragonflight").time / 30 >=
-                                        Math.ceil(6 * BuffTimeFactor()) - 1)
-                            ) {
-                                M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                            }
-                        } else if (Game.Upgrades["Elder Pact"].bought == 0) {
-                            if (
-                                (((Game.hasAura("Reaper of Fields") ||
-                                    Game.hasAura("Reality Bending")) &&
-                                    Game.hasBuff("Dragon Harvest") &&
-                                    Game.hasBuff("Frenzy") &&
-                                    Game.hasBuff("Dragon Harvest").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                                    Game.hasBuff("Frenzy").time / 30 >=
-                                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                                    (!Game.hasAura("Reaper of Fields") &&
-                                        (Game.hasBuff("Dragon Harvest") ||
-                                            Game.hasBuff("Frenzy")) &&
-                                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                                            Game.hasBuff("Frenzy").time / 30 >=
-                                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
-                                (Game.hasBuff("Click frenzy") ||
-                                    Game.hasBuff("Dragonflight")) &&
-                                (Game.hasBuff("Click frenzy").time / 30 >=
-                                    Math.ceil(6 * BuffTimeFactor()) - 1 ||
-                                    Game.hasBuff("Dragonflight").time / 30 >=
-                                        Math.ceil(6 * BuffTimeFactor()) - 1)
-                            ) {
-                                M.castSpell(M.spellsById[1]);
-                                logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                            }
-                        }
-                        return;
-                    }
-
-                    if (
-                        nextSpellName(0) == "Cursed Finger" &&
-                        (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
-                        (Game.hasBuff("Click frenzy").time / 30 >=
-                            Math.ceil(10 * BuffTimeFactor()) - 1 ||
-                            Game.hasBuff("Dragonflight").time / 30 >=
-                                Math.ceil(6 * BuffTimeFactor()) - 1)
-                    ) {
-                        M.castSpell(M.spellsById[1]);
-                        logEvent("AutoSpell", "Cast Force the Hand of Fate");
-                        return;
-                    }
-                }
-                return;
-        }
+    if (
+        nextSpellName(0) == "Cursed Finger" &&
+        (Game.hasBuff("Click frenzy") || Game.hasBuff("Dragonflight")) &&
+        (remainsClickFrenzy(10) || remainsDragonflight(6))
+    ) {
+        M.castSpell(M.spellsById[1]);
+        logEvent("AutoSpell", "Cast Force the Hand of Fate");
+        return;
     }
 }
 
