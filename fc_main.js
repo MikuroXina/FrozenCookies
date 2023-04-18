@@ -3940,9 +3940,6 @@ function recommendationList(recalculate) {
         );
         if (FrozenCookies.pastemode) FrozenCookies.caches.recommendationList.reverse();
         FrozenCookies.showAchievements = true;
-
-        Game.recalculateGains = 1;
-        Game.CalculateGains();
     }
     return FrozenCookies.caches.recommendationList;
 }
@@ -4760,6 +4757,9 @@ function updateCaches() {
         }
         recalcCount += 1;
     } while (FrozenCookies.recalculateCaches && recalcCount < 10);
+
+    Game.recalculateGains = 1;
+    Game.CalculateGains();
 }
 
 //Why the hell is fcWin being called so often? It seems to be getting called repeatedly on the CPS achievements,
