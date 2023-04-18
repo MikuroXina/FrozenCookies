@@ -24,12 +24,12 @@ method are below.
 
 ### Beta
 
-If you are on Beta 2.05.x 'Final building' and want to experiment, you can use the FC beta by 
-using https://github.erbkaiser.com/FrozenCookies/beta/frozen_cookies.js instead of the default
+If you are on Beta 2.05.x 'Final building' and want to experiment, you can use the FC beta by
+using [./beta/frozen_cookies.js]() instead of the default
 script. This will be _removed_ once the beta Cookie Clicker goes live.
 
 The updated readme for the beta is at
-https://github.com/erbkaiser/FrozenCookies/tree/2023-beta#readme
+https://github.com/MikuroXina/FrozenCookies/tree/2023-beta#readme
 
 **Warning**: The beta branch is a work in progress. If you moved your save and Frozen
 Cookies to beta and go back to the release version, your selected Autocast option may be
@@ -42,7 +42,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2816199538
 
 If you want to manually install it:
 
-1. Download the Steam folder at https://erbkaiser.github.io/FrozenCookies/Steam/ and put
+1. Download the Steam folder at https://mikuroxina.github.io/FrozenCookies/Steam/ and put
    the FrozenCookies folder in your mods/local folder. Remove or disable any other
    variants of FC.
 2. Close Cookie Clicker if it is running, or refresh it
@@ -54,7 +54,7 @@ If you want to manually install it:
 1. Open the browser dev tools by whatever works for your browser. F12 might do it.
 2. Go to the Console tab.
 3. Type the following on the commandline and press enter after:
-   **Game.LoadMod("https://github.erbkaiser.com/FrozenCookies/frozen_cookies.js");**
+   **Game.LoadMod("https://mikuroxina.github.io/FrozenCookies/frozen_cookies.js");**
 4. Frozen Cookies should tell you it's loaded in the console now. Feel free to close the
    browser console, or keep it open. If you keep it open, you'll get some detailed info
    whenever FC does its thing.
@@ -62,7 +62,7 @@ If you want to manually install it:
 ## Bookmarklet install
 
 1. Paste the **contents** (not the url) of
-   https://github.erbkaiser.com/FrozenCookies/fc_bookmarklet_loader.js into a bookmark.
+   https://mikuroxina.github.io/FrozenCookies/fc_bookmarklet_loader.js into a bookmark.
 2. Load up Cookie Clicker.
 3. Load the recently created bookmark.
 
@@ -72,7 +72,7 @@ If you want to manually install it:
    [Tampermonkey (Chrome)](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en)
    or
    [Greasemonkey (Firefox)](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
-1. Go to https://github.erbkaiser.com/FrozenCookies/fc_userscript_loader.user.js
+1. Go to https://mikuroxina.github.io/FrozenCookies/fc_userscript_loader.user.js
 2. Click the 'install' button in the upper right corner.
 3. Load up Cookie Clicker.
 
@@ -366,11 +366,11 @@ that I currently know of.
 \*Note: Recommended for a late stage game only. Don't like these values? Don't use it.
 
 </details>
-  
-## Older changelogs 
+
+## Older changelogs
 <details>
   <summary>Click to expand!</summary>
-  
+
 2020 Nov 2
 
 -   Version 1.10.0
@@ -1123,7 +1123,7 @@ considering buying.
 -   **Δ CPS**: The full CPS change that buying this purchase would have. Includes
     estimated Golden Cookie CPS changes, meaning that it may be negative (especially for
     Elder Covenant.)
-    
+
 -----
 
 # Original Contact info and credits
@@ -1132,7 +1132,7 @@ The below info is from icehawk78's Frozen Cookies.
 
 ## Discord
 
-For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT 
+For developers / code intended behavior purposes only. https://discord.gg/Cpw8csuypT
 _(link invalid as of 2023)_
 
 ## Contact Us!

@@ -1,7 +1,7 @@
 {
 	"Name": "Frozen Cookies",
 	"ID": "frozen_cookies",
-	"Author": "Icehawk78 / erbkaiser",
+	"Author": "Icehawk78 / erbkaiser / MikuroXina",
 	"Description": "Optimize and Automate Everything",
 	"ModVersion": "2.0.0",
 	"GameVersion": 2.048,

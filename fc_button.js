@@ -391,7 +391,7 @@ function FCMenu() {
             .addClass("subsection")
             .append(
                 $(
-                    '<a href="https://github.com/erbkaiser/FrozenCookies#what-can-frozen-cookies-do" target="new">Online documentation</a>'
+                    '<a href="https://github.com/MikuroXina/FrozenCookies#what-can-frozen-cookies-do" target="new">Online documentation</a>'
                 )
             )),
             menu.append(subsection);

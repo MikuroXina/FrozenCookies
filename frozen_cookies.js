@@ -20,7 +20,7 @@ var scriptElement =
 var baseUrl =
     scriptElement !== null
         ? scriptElement.getAttribute("src").replace(/\/frozen_cookies\.js$/, "")
-        : "https://github.erbkaiser.com/FrozenCookies/";
+        : "https://mikuroxina.github.io/FrozenCookies/";
 var FrozenCookies = {
     baseUrl: baseUrl,
     branch: "Main-",
