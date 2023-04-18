@@ -212,7 +212,7 @@ function setOverrides(gameSaveData) {
     // Caching
     emptyCaches();
 
-    //Whether to currently display achievement popups
+    // Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;
 
     if (!blacklist[FrozenCookies.blacklist]) {
@@ -865,7 +865,7 @@ function toggleFrozen(setting) {
 
 function rigiSell() {
     const toSell = Game.BuildingsOwned % 10;
-    //Sell enough of the cheapest building to enable Rigidels effect
+    // Sell enough of the cheapest building to enable Rigidels effect
     if (toSell == 0) {
         return;
     }
@@ -879,7 +879,7 @@ function rigiSell() {
 }
 
 function lumpIn(mins) {
-    //For debugging, set minutes until next lump is *ripe*
+    // For debugging, set minutes until next lump is *ripe*
     Game.lumpT = Date.now() - Game.lumpRipeAge + 60000 * mins;
 }
 
@@ -894,16 +894,16 @@ function swapIn(godId, targetSlot) {
         return;
     }
 
-    //mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
+    // mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
     if (TEMPLE_GAME.swaps == 0) {
         return;
     }
     TEMPLE_GAME.useSwap(1);
     TEMPLE_GAME.lastSwapT = 0;
-    let prev = TEMPLE_GAME.slot[targetSlot]; //id of God currently in slot
+    let prev = TEMPLE_GAME.slot[targetSlot]; // id of God currently in slot
     if (prev != -1) {
-        //when something's in there already
-        prev = TEMPLE_GAME.godsById[prev]; //prev becomes god object
+        // when something's in there already
+        prev = TEMPLE_GAME.godsById[prev]; // prev becomes god object
         const prevDiv = l("templeGod" + prev.id);
         if (TEMPLE_GAME.godsById[godId].slot != -1) {
             l("templeSlot" + TEMPLE_GAME.godsById[godId].slot).appendChild(prevDiv);
@@ -924,24 +924,24 @@ function swapIn(godId, targetSlot) {
 
 function autoRigidel() {
     if (!TEMPLE_GAME) {
-        //Exit if pantheon doesnt even exist
+        // Exit if pantheon doesnt even exist
         return;
     }
-    const timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - Game.lumpT)) / 60000; //Minutes until sugar lump ripens
+    const timeToRipe = (Math.ceil(Game.lumpRipeAge) - (Date.now() - Game.lumpT)) / 60000; // Minutes until sugar lump ripens
     const started = Game.lumpT;
     const ripeAge = Math.ceil(Game.lumpRipeAge);
     const orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
     switch (orderLvl) {
-        case 0: //Rigidel isn't in a slot
+        case 0: // Rigidel isn't in a slot
             if (TEMPLE_GAME.swaps < 2 || (TEMPLE_GAME.swaps == 1 && TEMPLE_GAME.slot[0] == -1)) {
-                //Don't do anything if we can't swap Rigidel in
+                // Don't do anything if we can't swap Rigidel in
                 return;
             }
             if (timeToRipe < 60) {
-                const prev = TEMPLE_GAME.slot[0]; //cache whatever god you have equipped
-                swapIn(10, 0); //swap in rigidel
+                const prev = TEMPLE_GAME.slot[0]; // cache whatever god you have equipped
+                swapIn(10, 0); // swap in rigidel
                 Game.computeLumpTimes();
-                rigiSell(); //Meet the %10 condition
+                rigiSell(); // Meet the %10 condition
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
                     if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
@@ -950,13 +950,13 @@ function autoRigidel() {
                         Game.clickLump();
                     }
                     if (prev != -1) {
-                        //put the old one back
+                        // put the old one back
                         swapIn(prev, 0);
                     }
                     logEvent("autoRigidel", "Sugar lump harvested early");
                 }
             }
-        case 1: //Rigidel is already in diamond slot
+        case 1: // Rigidel is already in diamond slot
             if (timeToRipe < 60 && Game.BuildingsOwned % 10) {
                 rigiSell();
                 Game.computeLumpTimes();
@@ -969,7 +969,7 @@ function autoRigidel() {
                     logEvent("autoRigidel", "Sugar lump harvested early");
                 }
             }
-        case 2: //Rigidel in Ruby slot,
+        case 2: // Rigidel in Ruby slot,
             if (timeToRipe < 40 && Game.BuildingsOwned % 10) {
                 rigiSell();
                 Game.computeLumpTimes();
@@ -982,7 +982,7 @@ function autoRigidel() {
                     logEvent("autoRigidel", "Sugar lump harvested early");
                 }
             }
-        case 3: //Rigidel in Jade slot
+        case 3: // Rigidel in Jade slot
             if (timeToRipe < 20 && Game.BuildingsOwned % 10) {
                 rigiSell();
                 Game.computeLumpTimes();
@@ -999,7 +999,7 @@ function autoRigidel() {
 }
 
 function autoDragonsCurve() {
-    //Swap dragon auras to try for unusual lumps
+    // Swap dragon auras to try for unusual lumps
     if (Game.dragonLevel < 21 || FrozenCookies.dragonsCurve < 1) {
         return;
     }
@@ -1013,7 +1013,7 @@ function autoDragonsCurve() {
 
     if (
         Game.dragonLevel > 25 &&
-        Game.dragonAura == 18 && //RB
+        Game.dragonAura == 18 && // RB
         !Game.dragonAura2 == 17 // DC
     ) {
         Game.specialTab = "dragon";
@@ -1558,7 +1558,7 @@ function autoFTHOFComboAction() {
         ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
             (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1))
     ) {
-        //Continue casting Haggler's Charm - unless it's something we need right now
+        // Continue casting Haggler's Charm - unless it's something we need right now
         if (nextSpellName(0) == "Sugar Lump") {
             TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
             logEvent("autoFTHOFCombo", "Cast Force the Hand of Fate");
@@ -1579,7 +1579,7 @@ function autoFTHOFComboAction() {
         return;
     }
 
-    // Calculated with https://lookas123.github.io/CCGrimoireCalculator/
+    // Calculated with https:// lookas123.github.io/CCGrimoireCalculator/
     const CONDITIONS = {
         1: {
             cost: 81,
@@ -1722,7 +1722,7 @@ function autoFTHOFComboAction() {
                 Game.buyMode = 1;
             }
             Game.Objects["Wizard tower"].sell(autoFTHOFComboAction.count);
-            TOWER_GAME.computeMagicM(); //Recalc max after selling
+            TOWER_GAME.computeMagicM(); // Recalc max after selling
             TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
             logEvent("autoFTHOFCombo", "Double cast Force the Hand of Fate");
             if (
@@ -1880,7 +1880,7 @@ function auto100ConsistencyComboAction() {
     auto100ConsistencyComboAction.countAlchemy = Game.Objects["Alchemy lab"].amount;
     auto100ConsistencyComboAction.countTimeMach = Game.Objects["Time machine"].amount;
 
-    //Continue casting Haggler's Charm - unless it's something we need right now
+    // Continue casting Haggler's Charm - unless it's something we need right now
     if (
         !auto100ConsistencyComboAction.state &&
         ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
@@ -2043,7 +2043,7 @@ function auto100ConsistencyComboAction() {
 
         case 7: // Cast FTHOF 2 then buy
             Game.Objects["Wizard tower"].sell(auto100ConsistencyComboAction.countWizard);
-            TOWER_GAME.computeMagicM(); //Recalc max after selling
+            TOWER_GAME.computeMagicM(); // Recalc max after selling
             if (TOWER_GAME.magic >= 30) {
                 TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 2");
@@ -2074,7 +2074,7 @@ function auto100ConsistencyComboAction() {
 
         case 10: // Cast FTHOF 4 then buy
             Game.Objects["Wizard tower"].sell(auto100ConsistencyComboAction.countWizard);
-            TOWER_GAME.computeMagicM(); //Recalc max after selling
+            TOWER_GAME.computeMagicM(); // Recalc max after selling
             if (TOWER_GAME.magic >= 30) {
                 TOWER_GAME.castSpell(TOWER_GAME.spellsById[1]);
                 logEvent("auto100ConsistencyCombo", "Cast FTHOF 4");
@@ -2573,7 +2573,7 @@ function autoBankAction() {
         return;
     }
 
-    //Upgrade bank level
+    // Upgrade bank level
     const currentOffice = BANK_GAME.offices[BANK_GAME.officeLevel];
     if (
         currentOffice.cost &&
@@ -2596,8 +2596,8 @@ function autoBrokerAction() {
         return;
      }
 
-    //Hire brokers
-    const delay = delayAmount(); //GC or harvest bank
+    // Hire brokers
+    const delay = delayAmount(); // GC or harvest bank
     const recommendation = nextPurchase();
     if (
         recommendation.type == "building" && // Don't hire when saving for upgrade
@@ -2665,20 +2665,20 @@ function petDragonAction() {
         return;
     }
 
-    //Calculate current pet drop and if we have it
+    // Calculate current pet drop and if we have it
     Math.seedrandom(Game.seed + "/dragonTime");
     let drops = ["Dragon scale", "Dragon claw", "Dragon fang", "Dragon teddy bear"];
     drops = shuffle(drops);
     Math.seedrandom();
     let currentDrop = drops[Math.floor((new Date().getMinutes() / 60) * drops.length)];
 
-    //Pet the dragon
+    // Pet the dragon
     if (!Game.Has(currentDrop) && !Game.HasUnlocked(currentDrop)) {
         Game.specialTab = "dragon";
         Game.ToggleSpecialMenu(1);
         Game.ClickSpecialPic();
         Game.ToggleSpecialMenu(0);
-        //logEvent("autoDragon", "Who's a good dragon? You are!");
+        // logEvent("autoDragon", "Who's a good dragon? You are!");
     }
 }
 
@@ -2891,7 +2891,7 @@ function autoWorship2Action() {
 
 function buyOtherUpgrades() {
     // I'm sure there's a better way to do this
-    //Buy eggs
+    // Buy eggs
     if (
         Game.Upgrades["Faberge egg"].unlocked == 1 &&
         !Game.Upgrades["Faberge egg"].bought &&
@@ -2921,7 +2921,7 @@ function buyOtherUpgrades() {
         Game.Upgrades['"egg"'].buy();
     }
 
-    //Buy Santa stuff
+    // Buy Santa stuff
     if (
         Game.season == "christmas" &&
         Game.Upgrades["Weighted sleighs"].unlocked == 1 &&
@@ -2939,7 +2939,7 @@ function buyOtherUpgrades() {
         Game.Upgrades["Santa's bottomless bag"].buy();
     }
 
-    //Buy dragon drops
+    // Buy dragon drops
     if (
         Game.dragonLevel > 25 &&
         Game.Upgrades["Dragon fang"].unlocked == 1 &&
@@ -2957,7 +2957,7 @@ function buyOtherUpgrades() {
         Game.Upgrades["Dragon teddy bear"].buy();
     }
 
-    //Buy other essential upgrades
+    // Buy other essential upgrades
     if (
         Game.Upgrades["Elder Pact"].bought == 1 &&
         Game.Upgrades["Sacrificial rolling pins"].unlocked == 1 &&
@@ -3312,7 +3312,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoSugarFrenzy = 0;
         FrozenCookies.minASFMult = 7777;
         FrozenCookies.autoSweet = 0;
-        //Dragon options
+        // Dragon options
         FrozenCookies.autoDragon = 1;
         FrozenCookies.petDragon = 1;
         FrozenCookies.autoDragonToggle = 1;
@@ -3326,7 +3326,7 @@ function recommendedSettingsAction() {
         FrozenCookies.freeSeason = 1;
         FrozenCookies.autoEaster = 1;
         FrozenCookies.autoHalloween = 1;
-        //Bank options
+        // Bank options
         FrozenCookies.holdSEBank = 0;
         FrozenCookies.setHarvestBankPlant = 0;
         FrozenCookies.setHarvestBankType = 3;
@@ -3334,7 +3334,7 @@ function recommendedSettingsAction() {
         // Other options
         FrozenCookies.FCshortcuts = 1;
         FrozenCookies.simulatedGCPercent = 1;
-        //Display options
+        // Display options
         FrozenCookies.showMissedCookies = 0;
         FrozenCookies.numberDisplay = 1;
         FrozenCookies.fancyui = 1;
@@ -3434,7 +3434,7 @@ function cpsBonus() {
 }
 
 function hasClickBuff() {
-    //return Game.hasBuff("Cursed finger") || clickBuffBonus() > 1;
+    // return Game.hasBuff("Cursed finger") || clickBuffBonus() > 1;
     return clickBuffBonus() > 1;
 }
 
@@ -4169,14 +4169,14 @@ function buildingStats(recalculate) {
             const buildingBlacklist = Array.from(
                 blacklist[FrozenCookies.blacklist].buildings
             );
-            //If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
+            // If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
             if (
                 TOWER_GAME &&
                 FrozenCookies.autoSpell == 3 &&
                 Game.Objects["Cortex baker"].amount >= 399
             )
                 buildingBlacklist.push(18);
-            //Stop buying wizard towers at max Mana if enabled
+            // Stop buying wizard towers at max Mana if enabled
             if (
                 TOWER_GAME &&
                 FrozenCookies.towerLimit &&
@@ -4184,19 +4184,19 @@ function buildingStats(recalculate) {
             ) {
                 buildingBlacklist.push(7);
             }
-            //Stop buying Mines if at set limit
+            // Stop buying Mines if at set limit
             if (
                 FrozenCookies.mineLimit &&
                 Game.Objects["Mine"].amount >= FrozenCookies.mineMax
             )
                 buildingBlacklist.push(3);
-            //Stop buying Factories if at set limit
+            // Stop buying Factories if at set limit
             if (
                 FrozenCookies.factoryLimit &&
                 Game.Objects["Factory"].amount >= FrozenCookies.factoryMax
             )
                 buildingBlacklist.push(4);
-            //Stop buying Cortex bakers if at set limit
+            // Stop buying Cortex bakers if at set limit
             if (
                 FrozenCookies.autoDragonOrbs &&
                 FrozenCookies.cortexLimit &&
@@ -4963,8 +4963,8 @@ function updateCaches() {
     Game.CalculateGains();
 }
 
-//Why the hell is fcWin being called so often? It seems to be getting called repeatedly on the CPS achievements,
-//which should only happen when you actually win them?
+// Why the hell is fcWin being called so often? It seems to be getting called repeatedly on the CPS achievements,
+// which should only happen when you actually win them?
 function fcWin(what) {
     if (typeof what === "string") {
         if (Game.Achievements[what]) {
@@ -4973,10 +4973,10 @@ function fcWin(what) {
                     ? Game.Achievements[what].shortName
                     : Game.Achievements[what].name;
                 Game.Achievements[what].won = 1;
-                //This happens a ton of times on CPS achievements; it seems like they would be CHECKED for, but a debug message placed
-                //here gets repeatedly called seeming to indicate that the achievements.won value is 1, even though the achievement isn't
-                //being unlocked. This also means that placing a function to log the achievement spams out messages. Are the Achievement.won
-                //values being turned off before the game checks again? There must be some reason Game.Win is replaced with fcWin
+                // This happens a ton of times on CPS achievements; it seems like they would be CHECKED for, but a debug message placed
+                // here gets repeatedly called seeming to indicate that the achievements.won value is 1, even though the achievement isn't
+                // being unlocked. This also means that placing a function to log the achievement spams out messages. Are the Achievement.won
+                // values being turned off before the game checks again? There must be some reason Game.Win is replaced with fcWin
                 if (!FrozenCookies.disabledPopups) {
                     logEvent(
                         "Achievement",
@@ -5091,9 +5091,9 @@ function popValue(w) {
         toSuck *= 1.05;
     }
     if (w.type == 1) {
-        toSuck *= 3; //shiny wrinklers are an elusive, profitable breed
+        toSuck *= 3; // shiny wrinklers are an elusive, profitable breed
     }
-    let sucked = w.sucked * toSuck; //cookie dough does weird things inside wrinkler digestive tracts
+    let sucked = w.sucked * toSuck; // cookie dough does weird things inside wrinkler digestive tracts
     if (Game.Has("Wrinklerspawn")) {
         sucked *= 1.05;
     }
@@ -5205,15 +5205,15 @@ function autoGodzamokAction() {
     // if Godz is here and autoGodzamok is set
     if (Game.hasGod("ruin") && FrozenCookies.autoGodzamok) {
         // Need at least 10 of each to be useful
-        //if (Game.Objects["Mine"].amount < 10 || Game.Objects["Factory"].amount < 10) return;
+        // if (Game.Objects["Mine"].amount < 10 || Game.Objects["Factory"].amount < 10) return;
         const countMine = Game.Objects["Mine"].amount;
         const countFactory = Game.Objects["Factory"].amount;
 
-        //Automatically sell all mines and factories
+        // Automatically sell all mines and factories
         if (!Game.hasBuff("Devastation") && hasClickBuff()) {
             Game.Objects["Mine"].sell(countMine);
             Game.Objects["Factory"].sell(countFactory);
-            //Rebuy mines
+            // Rebuy mines
             if (FrozenCookies.mineLimit) {
                 safeBuy(Game.Objects["Mine"], FrozenCookies.mineMax);
                 FrozenCookies.autobuyCount += 1;
@@ -5223,7 +5223,7 @@ function autoGodzamokAction() {
                 FrozenCookies.autobuyCount += 1;
                 logEvent("AutoGodzamok", "Bought " + countMine + " mines");
             }
-            //Rebuy factories
+            // Rebuy factories
             if (FrozenCookies.factoryLimit) {
                 safeBuy(Game.Objects["Factory"], FrozenCookies.factoryMax);
                 FrozenCookies.autobuyCount += 1;
@@ -5265,7 +5265,7 @@ function fcClickCookie() {
 }
 
 function autoCookie() {
-    //console.log('autocookie called');
+    // console.log('autocookie called');
     if (!FrozenCookies.processing && !Game.OnAscend && !Game.AscendTimer) {
         FrozenCookies.processing = true;
         const currentHCAmount = Game.HowMuchPrestige(
@@ -5363,7 +5363,7 @@ function autoCookie() {
 
         let itemBought = false;
 
-        //const seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
+        // const seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); // true == good on SE bank or don't care about it
         if (
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
@@ -5371,7 +5371,7 @@ function autoCookie() {
             (FrozenCookies.pastemode || isFinite(nextChainedPurchase().efficiency))
         ) {
             //    if (FrozenCookies.autoBuy && (Game.cookies >= delay + recommendation.cost)) {
-            //console.log('something should get bought');
+            // console.log('something should get bought');
             recommendation.time = Date.now() - Game.startDate;
             //      full_history.push(recommendation);  // Probably leaky, maybe laggy?
             recommendation.purchase.clickFunction = null;
