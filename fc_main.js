@@ -2959,7 +2959,7 @@ function autoCycliusAction() {
             ) {
                 swapIn(CYCLIUS, target);
                 logEvent(`autoCyclius", "Putting Cyclius in ${slotToString(target)}`);
-                for (const other of otherSlots(slot)) {
+                for (const other of otherSlots(target)) {
                     if (!WANT_TO_EMPTY[other] && !DIAMOND_WANT_TO_CYCLIUS) {
                         swapIn(FrozenCookies[`autoWorship${other}`], other);
                         logEvent(`autoCyclius", "set desired god to ${slotToString(other)}`);
