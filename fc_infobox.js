@@ -1,4 +1,12 @@
 // functionality for the infobox
+
+function decodeHtml(html) {
+    // used to convert text with an HTML entity (like "&eacute;") into readable text
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
 function drawCircles(t_d, x, y) {
     var maxRadius,
         heightOffset,
