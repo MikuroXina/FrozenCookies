@@ -40,7 +40,6 @@ const SCRIPTS = [
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.logAxisRenderer.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.cursor.min.js",
     baseUrl + "/fc_preferences.js",
-    baseUrl + "/fc_main.js",
     baseUrl + "/fc_spellpredict.js",
 ];
 
@@ -74,6 +73,7 @@ async function loadScripts() {
     for (const url of SCRIPTS) {
         await loadScript(url);
     }
+    const { registerMod } = await import("./fc_main.js");
     registerMod("frozen_cookies"); // when the mod is registered, the save data is passed in the load function
 }
 
