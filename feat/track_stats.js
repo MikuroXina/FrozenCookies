@@ -13,6 +13,20 @@ export function start() {
     }
 }
 
+function statSpeed() {
+    switch (FrozenCookies.trackStats) {
+        case 1: // 60s
+            return 1000 * 60;
+        case 2: // 30m
+            return 1000 * 60 * 30;
+        case 3: // 1h
+            return 1000 * 60 * 60;
+        case 4: // 24h
+            return 1000 * 60 * 60 * 24;
+    }
+    return 0;
+}
+
 export function stop() {
     if (FrozenCookies.statBot) {
         clearInterval(FrozenCookies.statBot);

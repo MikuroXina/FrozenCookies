@@ -1823,63 +1823,6 @@ function buySanta() {
     }
 }
 
-function statSpeed() {
-    switch (FrozenCookies.trackStats) {
-        case 1: // 60s
-            return 1000 * 60;
-        case 2: // 30m
-            return 1000 * 60 * 30;
-        case 3: // 1h
-            return 1000 * 60 * 60;
-        case 4: // 24h
-            return 1000 * 60 * 60 * 24;
-    }
-    return 0;
-}
-
-function updateCaches() {
-    let recommendation, currentBank, targetBank, currentCookieCPS, currentUpgradeCount;
-    let recalcCount = 0;
-    do {
-        recommendation = nextPurchase(FrozenCookies.recalculateCaches);
-        FrozenCookies.recalculateCaches = false;
-        currentBank = bestBank(0);
-        targetBank = bestBank(recommendation.efficiency);
-        currentCookieCPS = gcPs(cookieValue(currentBank.cost));
-        currentUpgradeCount = Game.UpgradesInStore.length;
-        FrozenCookies.safeGainsCalc();
-
-        if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
-        }
-
-        if (FrozenCookies.currentBank.cost != currentBank.cost) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.currentBank = currentBank;
-        }
-
-        if (FrozenCookies.targetBank.cost != targetBank.cost) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.targetBank = targetBank;
-        }
-
-        if (FrozenCookies.lastCookieCPS != currentCookieCPS) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastCookieCPS = currentCookieCPS;
-        }
-
-        if (FrozenCookies.lastUpgradeCount != currentUpgradeCount) {
-            FrozenCookies.recalculateCaches = true;
-            FrozenCookies.lastUpgradeCount = currentUpgradeCount;
-        }
-        recalcCount += 1;
-    } while (FrozenCookies.recalculateCaches && recalcCount < 10);
-
-    Game.recalculateGains = 1;
-    Game.CalculateGains();
-}
-
 // Why the hell is fcWin being called so often? It seems to be getting called repeatedly on the CPS achievements,
 // which should only happen when you actually win them?
 function fcWin(what) {
