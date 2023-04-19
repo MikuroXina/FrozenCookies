@@ -1,5 +1,3 @@
-
-
 /**
  * Swaps the god of `godId` into the target slot. If it was set, then does nothing and returns false.
  *
