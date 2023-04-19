@@ -1,7 +1,11 @@
-// This variable builds a list of upgrades that have prerequisites.
-// With this list, the recommendation engine can include them even before the prerequisites are met.
-// (useful for determining chain strategies) or tracking what's left
-var upgradeJson = {
+/**
+ * This variable builds a list of upgrades that have prerequisites.
+ * With this list, the recommendation engine can include them even before the  prerequisites are met.
+ * (useful for determining chain strategies) or tracking what's left
+ *
+ * @type {Object.<number, { buildings: number[], upgrades: number[] } | undefined>}
+ */
+export const UPGRADE_PREREQUISITES = Object.freeze({
     // Cursor tiered upgrades
     0: {
         buildings: [1],
@@ -1851,9 +1855,9 @@ var upgradeJson = {
         buildings: [],
         upgrades: [323, 324, 647],
     }, // Dragon teddy bear
-};
+});
 
-var blacklist = [
+export const BLACKLIST = Object.freeze([
     {
         upgrades: [],
         buildings: [],
@@ -1874,9 +1878,9 @@ var blacklist = [
         upgrades: [],
         buildings: true,
     },
-];
+]);
 
-var recommendationBlacklist = [
+export const RECOMMENDATION_BLACKLIST = Object.freeze([
     227, // blacklist chocolate egg from being included in the recommendationList
     331,
     332, // blacklist golden switch from being included in the recommendationList
@@ -1887,11 +1891,11 @@ var recommendationBlacklist = [
     563,
     564, // blacklist shimmering veil from being included in the recommendationList
     806, // blacklist jukebox from being included in the recommendationList
-];
+]);
 
-var seasons = ["", "fools", "christmas", "easter", "halloween", "valentines"];
+export const SEASONS = Object.freeze(["", "fools", "christmas", "easter", "halloween", "valentines"]);
 
-var holidayCookies = {
+export const HOLIDAY_COOKIES = Object.freeze({
     halloween: [134, 135, 136, 137, 138, 139, 140],
     christmas: [143, 144, 145, 146, 147, 148, 149],
     valentines: [169, 170, 171, 172, 173, 174, 645],
@@ -1899,9 +1903,9 @@ var holidayCookies = {
         210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225,
         226, 227, 228, 229,
     ],
-};
+});
 
-var cookieInfo = {
+export const COOKIE_SPEC = Object.freeze({
     clot: {
         odds: [0, 0.10386789477947, 0.19565417350258, 0.279830557040944],
         isOverlap: false,
@@ -1964,4 +1968,4 @@ var cookieInfo = {
         odds: [0, 0, 0, 0],
         isOverlap: false,
     },
-};
+});
