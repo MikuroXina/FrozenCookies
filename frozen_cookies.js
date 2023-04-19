@@ -18,11 +18,6 @@ const scriptElement =
 const baseUrl =
     scriptElement?.getAttribute("src").replace(/\/frozen_cookies\.js$/, "") ??
     "https://mikuroxina.github.io/FrozenCookies/";
-const FrozenCookies = {
-    baseUrl: baseUrl,
-    branch: "Main-",
-    version: "2.0.0",
-};
 
 // Load external libraries
 const SCRIPTS = [
@@ -43,10 +38,10 @@ const SCRIPTS = [
     baseUrl + "/fc_spellpredict.js",
 ];
 
-FrozenCookies.loadInterval = setInterval(function () {
+let loadInterval = setInterval(function () {
     if (Game && Game.ready) {
-        clearInterval(FrozenCookies.loadInterval);
-        FrozenCookies.loadInterval = 0;
+        clearInterval(loadInterval);
+        loadInterval = 0;
         fcInit();
     }
 }, 1000);
