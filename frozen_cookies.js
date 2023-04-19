@@ -34,7 +34,6 @@ const SCRIPTS = [
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.logAxisRenderer.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.cursor.min.js",
-    baseUrl + "/fc_preferences.js",
     baseUrl + "/fc_spellpredict.js",
 ];
 
