@@ -1,4 +1,4 @@
-FrozenCookies.preferenceValues = {
+export const PREFERENCES = Object.freeze({
     // clicking options
     clickingOptions: {
         hint: "Auto clicking options:",
@@ -549,4 +549,4 @@ FrozenCookies.preferenceValues = {
         display: ["Recommended OFF", "Recommended ON"],
         default: 0,
     },
-};
+});
