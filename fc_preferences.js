@@ -1,3 +1,5 @@
+import { Beautify } from "./fc_beautify.js";
+
 export const PREFERENCES = Object.freeze({
     // clicking options
     clickingOptions: {

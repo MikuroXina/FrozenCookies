@@ -1,3 +1,4 @@
+import { Beautify } from "./fc_beautify.js";
 import { META } from "./fc_meta.js";
 import { PREFERENCES } from "./fc_preferences.js";
 import { chocolateValue } from "./fc_pay.js";

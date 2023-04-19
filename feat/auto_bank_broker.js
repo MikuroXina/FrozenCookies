@@ -1,3 +1,5 @@
+import { Beautify } from "../fc_beautify.js";
+
 export function start() {
     if (FrozenCookies.autoBroker) {
         FrozenCookies.autoBrokerBot = setInterval(

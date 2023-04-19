@@ -1,3 +1,5 @@
+import { Beautify } from "./fc_beautify.js";
+
 export function timeDisplay(seconds) {
     if (seconds === "---" || seconds === 0) {
         return "Done!";

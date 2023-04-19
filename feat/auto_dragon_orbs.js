@@ -1,3 +1,4 @@
+import { Beautify } from "../fc_beautify.js";
 import { goldenCookieLife } from "../fc_time.js";
 
 export function start() {

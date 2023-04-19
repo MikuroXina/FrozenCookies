@@ -1,3 +1,4 @@
+import { Beautify } from "../fc_beautify.js";
 import { cpsBonus, goldenCookieLife, hasClickBuff, liveWrinklers } from "../fc_time.js";
 import { chocolateValue, safeBuy } from "../fc_pay.js";
 

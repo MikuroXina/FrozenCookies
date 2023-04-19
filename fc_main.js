@@ -6,6 +6,7 @@ import {
     SEASONS,
     UPGRADE_PREREQUISITES,
 } from "./cc_upgrade_prerequisites.js";
+import { Beautify } from "./fc_beautify.js";
 import { FCMenu } from "./fc_button.js";
 import { divCps } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
@@ -482,16 +483,6 @@ const NUMBER_FORMATTERS = Object.freeze([
     formatEveryThirdPower(["", " M", " G", " T", " P", " E", " Z", " Y", " R", " Q"]),
     scientificNotation,
 ]);
-
-function fcBeautify(value) {
-    const negative = value < 0;
-    value = Math.abs(value);
-    const formatter = NUMBER_FORMATTERS[FrozenCookies.numberDisplay];
-    const output = formatter(value)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return negative ? "-" + output : output;
-}
 
 // Runs numbers in upgrades and achievements through our beautify function
 function beautifyUpgradesAndAchievements() {
