@@ -192,7 +192,6 @@ function setOverrides(Game) {
         efficiency: 0,
     };
     FrozenCookies.disabledPopups = true;
-    FrozenCookies.trackedStats = [];
     FrozenCookies.lastGraphDraw = 0;
     FrozenCookies.calculatedCpsByType = {};
 
@@ -556,7 +555,6 @@ function fcReset() {
     FrozenCookies.prevLastHCTime = Date.now();
     FrozenCookies.lastCps = 0;
     FrozenCookies.lastBaseCps = 0;
-    FrozenCookies.trackedStats = [];
     recommendationList(true);
 }
 

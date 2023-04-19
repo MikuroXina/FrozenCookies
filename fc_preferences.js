@@ -797,6 +797,13 @@ function updateASFMultMin(e) {
     );
 }
 
+let lastGraphDraw = 0;
+const trackedStats = [];
+
+export function pushStats(...entry) {
+    trackedStats.push(...entry);
+}
+
 export function viewStatGraphs() {
     saveStats(true);
     const containerDiv = $("#statGraphContainer").length
@@ -815,15 +822,15 @@ export function viewStatGraphs() {
         containerDiv.dialog();
     }
     if (
-        FrozenCookies.trackedStats.length > 0 &&
-        Date.now() - FrozenCookies.lastGraphDraw > 1000
+        trackedStats.length > 0 &&
+        Date.now() - lastGraphDraw > 1000
     ) {
-        FrozenCookies.lastGraphDraw = Date.now();
+        lastGraphDraw = Date.now();
         $("#statGraphs").empty();
         $.jqplot(
             "statGraphs",
             transpose(
-                FrozenCookies.trackedStats.map(function (s) {
+                trackedStats.map(function (s) {
                     return [
                         [s.time / 1000, s.baseCps],
                         [s.time / 1000, s.effectiveCps],

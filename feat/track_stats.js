@@ -1,4 +1,4 @@
-import { viewStatGraphs } from "../fc_preferences.js";
+import { pushStats, viewStatGraphs } from "../fc_preferences.js";
 
 export function start() {
     if (statSpeed(FrozenCookies.trackStats) > 0) {
@@ -21,7 +21,7 @@ export function stop() {
 }
 
 function saveStats(fromGraph) {
-    FrozenCookies.trackedStats.push({
+    pushStats({
         time: Date.now() - Game.startDate,
         baseCps: baseCps(),
         effectiveCps: effectiveCps(),
