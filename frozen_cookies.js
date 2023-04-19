@@ -43,7 +43,6 @@ var script_list = [
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.logAxisRenderer.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.cursor.min.js",
     FrozenCookies.baseUrl + "/fc_preferences.js",
-    FrozenCookies.baseUrl + "/cc_upgrade_prerequisites.js",
     FrozenCookies.baseUrl + "/fc_main.js",
     FrozenCookies.baseUrl + "/fc_button.js",
     FrozenCookies.baseUrl + "/fc_spellpredict.js",
