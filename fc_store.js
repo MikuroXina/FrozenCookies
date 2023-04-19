@@ -2,6 +2,27 @@
 const config = new Map();
 
 /**
+ * Loads the value from the storage, or use `defaultValue` if none.
+ *
+ * @param {Storage} storage
+ * @returns {(key: string, defaultValue: string | number | undefined) => void} The partial application function.
+ */
+export const loadFromStorage = (storage) => (key, defaultValue) => {
+    if (has(key)) {
+        return;
+    }
+    const stored = storage.getItem(setting);
+    if (stored !== null) {
+        set(key, stored);
+        return;
+    }
+    if (defaultValue !== undefined) {
+        set(key, defaultValue);
+        return;
+    }
+}
+
+/**
  * Sets the value for entry of the key.
  *
  * @param {string} key

@@ -11,6 +11,7 @@ import { FCMenu } from "./fc_button.js";
 import { divCps } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
+import { loadFromStorage, set } from "./fc_store.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
     // register with the modding API
@@ -272,27 +273,25 @@ function setOverrides(Game) {
 }
 
 function loadFCData() {
+    const loadFromLocalStorage = loadFromStorage(localStorage);
     // Set all cycleable preferences
-    _.keys(PREFERENCES).forEach(function (preference) {
-        FrozenCookies[preference] = preferenceParse(
-            preference,
-            PREFERENCES[preference].default
-        );
-    });
+    for (const preference in PREFERENCES) {
+        loadFromLocalStorage(preference, PREFERENCES[preference].default);
+    }
     // Separate because these are user-input values
-    FrozenCookies.cookieClickSpeed = preferenceParse("cookieClickSpeed", 0);
-    FrozenCookies.frenzyClickSpeed = preferenceParse("frenzyClickSpeed", 0);
-    FrozenCookies.HCAscendAmount = preferenceParse("HCAscendAmount", 0);
-    FrozenCookies.minCpSMult = preferenceParse("minCpSMult", 1);
-    FrozenCookies.maxSpecials = preferenceParse("maxSpecials", 1);
-    FrozenCookies.minLoanMult = preferenceParse("minLoanMult", 1);
-    FrozenCookies.minASFMult = preferenceParse("minASFMult", 1);
+    loadFromLocalStorage("cookieClickSpeed", 0);
+    loadFromLocalStorage("frenzyClickSpeed", 0);
+    loadFromLocalStorage("HCAscendAmount", 0);
+    loadFromLocalStorage("minCpSMult", 1);
+    loadFromLocalStorage("maxSpecials", 1);
+    loadFromLocalStorage("minLoanMult", 1);
+    loadFromLocalStorage("minASFMult", 1);
 
     // building max values
-    FrozenCookies.mineMax = preferenceParse("mineMax", 0);
-    FrozenCookies.factoryMax = preferenceParse("factoryMax", 0);
-    FrozenCookies.manaMax = preferenceParse("manaMax", 0);
-    FrozenCookies.cortexMax = preferenceParse("cortexMax", 0);
+    loadFromLocalStorage("mineMax", 0);
+    loadFromLocalStorage("factoryMax", 0);
+    loadFromLocalStorage("manaMax", 0);
+    loadFromLocalStorage("cortexMax", 0);
 
     // Restore some possibly broken settings
     if (!FrozenCookies.autoSweet && autoSweetAction.autobuyyes == 1) {
@@ -345,27 +344,13 @@ function loadFCData() {
             FrozenCookies.loadedData["frenzyTimes"] ||
                 localStorage.getItem("frenzyTimes")
         ) || {};
-    //  FrozenCookies.non_gc_time = Number(FrozenCookies.loadedData['nonFrenzyTime']) || Number(localStorage.getItem('nonFrenzyTime')) || 0;
-    //  FrozenCookies.gc_time = Number(FrozenCookies.loadedData['frenzyTime']) || Number(localStorage.getItem('frenzyTime')) || 0;;
-    FrozenCookies.lastHCAmount = preferenceParse("lastHCAmount", 0);
-    FrozenCookies.lastHCTime = preferenceParse("lastHCTime", 0);
-    FrozenCookies.prevLastHCTime = preferenceParse("prevLastHCTime", 0);
-    FrozenCookies.maxHCPercent = preferenceParse("maxHCPercent", 0);
+    loadFromLocalStorage("lastHCAmount", 0);
+    loadFromLocalStorage("lastHCTime", 0);
+    loadFromLocalStorage("prevLastHCTime", 0);
+    loadFromLocalStorage("maxHCPercent", 0);
     if (Object.keys(FrozenCookies.loadedData).length > 0) {
         logEvent("Load", "Restored Frozen Cookies settings from previous save");
     }
-}
-
-function preferenceParse(setting, defaultVal) {
-    if (setting in FrozenCookies.loadedData) {
-        // first look in the data from the game save
-        return Number(FrozenCookies.loadedData[setting]);
-    }
-    if (localStorage.getItem(setting)) {
-        // if the setting isn't there, check localStorage
-        return Number(localStorage.getItem(setting));
-    }
-    return Number(defaultVal); // if not overridden by game save or localStorage, defaultVal is returned
 }
 
 function emptyCaches() {
