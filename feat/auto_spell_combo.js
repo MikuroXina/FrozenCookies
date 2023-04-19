@@ -7,6 +7,9 @@ export function start() {
             autoFTHOFComboAction,
             FrozenCookies.frequency * 2
         );
+    } else if (autoFTHOFComboAction.autobuyyes == 1) {
+        FrozenCookies.autoBuy = 1;
+        autoFTHOFComboAction.autobuyyes = 0;
     }
 }
 

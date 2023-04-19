@@ -4,6 +4,9 @@ export function start() {
             autoSweetAction,
             FrozenCookies.frequency * 2
         );
+    } else if (autoSweetAction.autobuyyes == 1) {
+        FrozenCookies.autoBuy = 1;
+        autoSweetAction.autobuyyes = 0;
     }
 }
 

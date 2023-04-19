@@ -7,6 +7,27 @@ export function start() {
             auto100ConsistencyComboAction,
             FrozenCookies.frequency * 2
         );
+        return;
+    }
+    if (auto100ConsistencyComboAction.autobuyyes == 1) {
+        FrozenCookies.autoBuy = 1;
+        auto100ConsistencyComboAction.autobuyyes = 0;
+    }
+    if (auto100ConsistencyComboAction.autogcyes == 1) {
+        FrozenCookies.autoGC = 1;
+        auto100ConsistencyComboAction.autogcyes = 0;
+    }
+    if (auto100ConsistencyComboAction.autogodyes == 1) {
+        FrozenCookies.autoGodzamok = 1;
+        auto100ConsistencyComboAction.autogodyes = 0;
+    }
+    if (auto100ConsistencyComboAction.autoworshipyes == 1) {
+        FrozenCookies.autoWorshipToggle = 1;
+        auto100ConsistencyComboAction.autoworshipyes = 0;
+    }
+    if (auto100ConsistencyComboAction.autodragonyes == 1) {
+        FrozenCookies.autoDragonToggle = 1;
+        auto100ConsistencyComboAction.autodragonyes = 0;
     }
 }
 
