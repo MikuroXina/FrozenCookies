@@ -6,6 +6,7 @@ import {
     SEASONS,
     UPGRADE_PREREQUISITES,
 } from "./cc_upgrade_prerequisites.js";
+import { FCMenu } from "./fc_button.js";
 import { divCps } from "./fc_calc.js";
 import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
