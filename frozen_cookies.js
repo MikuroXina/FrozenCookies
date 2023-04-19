@@ -1,5 +1,5 @@
 // Global Variables
-var lastCompatibleVersion = 2.048;
+const lastCompatibleVersion = 2.048;
 if (Game.version > lastCompatibleVersion) {
     console.log(
         "WARNING: The Cookie Clicker version is newer than this version of Frozen Cookies."
@@ -13,22 +13,19 @@ if (Game.version > lastCompatibleVersion) {
     );
 }
 
-var scriptElement =
-    document.getElementById("frozenCookieScript") !== null
-        ? document.getElementById("frozenCookieScript")
-        : document.getElementById("modscript_frozen_cookies");
-var baseUrl =
-    scriptElement !== null
-        ? scriptElement.getAttribute("src").replace(/\/frozen_cookies\.js$/, "")
-        : "https://mikuroxina.github.io/FrozenCookies/";
-var FrozenCookies = {
+const scriptElement =
+    document.getElementById("frozenCookieScript") ?? document.getElementById("modscript_frozen_cookies");
+const baseUrl =
+    scriptElement?.getAttribute("src").replace(/\/frozen_cookies\.js$/, "") ??
+    "https://mikuroxina.github.io/FrozenCookies/";
+const FrozenCookies = {
     baseUrl: baseUrl,
     branch: "Main-",
     version: "2.0.0",
 };
 
 // Load external libraries
-var script_list = [
+const SCRIPTS = [
     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js",
     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css",
     "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js",
@@ -42,9 +39,9 @@ var script_list = [
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.highlighter.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.logAxisRenderer.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.cursor.min.js",
-    FrozenCookies.baseUrl + "/fc_preferences.js",
-    FrozenCookies.baseUrl + "/fc_main.js",
-    FrozenCookies.baseUrl + "/fc_spellpredict.js",
+    baseUrl + "/fc_preferences.js",
+    baseUrl + "/fc_main.js",
+    baseUrl + "/fc_spellpredict.js",
 ];
 
 FrozenCookies.loadInterval = setInterval(function () {
@@ -55,33 +52,33 @@ FrozenCookies.loadInterval = setInterval(function () {
     }
 }, 1000);
 
-function loadScript(id) {
-    if (id >= script_list.length) {
-        registerMod("frozen_cookies"); // when the mod is registered, the save data is passed in the load function
-    } else {
-        var url = script_list[id];
-        if (/\.js$/.exec(url)) {
-            $.getScript(url, function () {
-                loadScript(id + 1);
-            });
-        } else if (/\.css$/.exec(url)) {
-            $("<link>")
-                .attr({
-                    rel: "stylesheet",
-                    type: "text/css",
-                    href: url,
-                })
-                .appendTo($("head"));
-            loadScript(id + 1);
-        } else {
-            console.log("Error loading script: " + url);
-            loadScript(id + 1);
-        }
+async function loadScript(url) {
+    const url = SCRIPTS[id];
+    if (/\.js$/.exec(url)) {
+        return new Promise((resolve) => $.getScript(url, resolve));
     }
+    if (/\.css$/.exec(url)) {
+        $("<link>")
+            .attr({
+                rel: "stylesheet",
+                type: "text/css",
+                href: url,
+            })
+            .appendTo($("head"));
+        return;
+    }
+    console.log("Error loading script: " + url);
+}
+
+async function loadScripts() {
+    for (const url of SCRIPTS) {
+        await loadScript(url);
+    }
+    registerMod("frozen_cookies"); // when the mod is registered, the save data is passed in the load function
 }
 
 function fcInit() {
-    var jquery = document.createElement("script");
+    const jquery = document.createElement("script");
     jquery.setAttribute("type", "text/javascript");
     jquery.setAttribute("src", "https://code.jquery.com/jquery-3.6.0.min.js");
     jquery.setAttribute(
@@ -90,7 +87,7 @@ function fcInit() {
     );
     jquery.setAttribute("crossorigin", "anonymous");
     jquery.onload = function () {
-        loadScript(0);
+        void loadScripts();
     };
     document.head.appendChild(jquery);
 }
