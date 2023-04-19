@@ -46,7 +46,6 @@ var script_list = [
     FrozenCookies.baseUrl + "/fc_main.js",
     FrozenCookies.baseUrl + "/fc_button.js",
     FrozenCookies.baseUrl + "/fc_spellpredict.js",
-    FrozenCookies.baseUrl + "/fc_infobox.js",
 ];
 
 FrozenCookies.loadInterval = setInterval(function () {

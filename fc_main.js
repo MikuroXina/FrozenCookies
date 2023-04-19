@@ -8,6 +8,7 @@ import {
 } from "./cc_upgrade_prerequisites.js";
 import { divCps } from "./fc_calc.js";
 import { timeDisplay } from "./fc_format.js";
+import { updateTimers } from "./fc_infobox.js";
 
 export function registerMod(mod_id = "frozen_cookies") {
     // register with the modding API
