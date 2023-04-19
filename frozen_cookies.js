@@ -69,7 +69,7 @@ async function loadScripts() {
         await loadScript(url);
     }
     const { registerMod } = await import("./fc_main.js");
-    registerMod("frozen_cookies"); // when the mod is registered, the save data is passed in the load function
+    registerMod("frozen_cookies", Game); // when the mod is registered, the save data is passed in the load function
 }
 
 function fcInit() {
