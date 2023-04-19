@@ -1,17 +1,15 @@
-// Add polyfills:
-(function (global) {
-    const global_isFinite = global.isFinite;
-    Object.defineProperty(Number, "isFinite", {
-        value: function isFinite(value) {
-            return typeof value === "number" && global_isFinite(value);
-        },
-        configurable: true,
-        enumerable: false,
-        writable: true,
-    });
-})(this);
+import {
+    BLACKLIST,
+    COOKIE_SPEC,
+    HOLIDAY_COOKIES,
+    RECOMMENDATION_BLACKLIST,
+    SEASONS,
+    UPGRADE_PREREQUISITES,
+} from "./cc_upgrade_prerequisites.js";
+import { divCps } from "./fc_calc.js";
+import { timeDisplay } from "./fc_format.js";
 
-function registerMod(mod_id = "frozen_cookies") {
+export function registerMod(mod_id = "frozen_cookies") {
     // register with the modding API
     Game.registerMod(mod_id, {
         init: function () {
@@ -215,7 +213,7 @@ function setOverrides(gameSaveData) {
     // Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;
 
-    if (!blacklist[FrozenCookies.blacklist]) {
+    if (!BLACKLIST[FrozenCookies.blacklist]) {
         FrozenCookies.blacklist = 0;
     }
 
@@ -271,10 +269,10 @@ function setOverrides(gameSaveData) {
 
     function loadFCData() {
         // Set all cycleable preferences
-        _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
+        _.keys(PREFERENCES).forEach(function (preference) {
             FrozenCookies[preference] = preferenceParse(
                 preference,
-                FrozenCookies.preferenceValues[preference].default
+                PREFERENCES[preference].default
             );
         });
         // Separate because these are user-input values
@@ -368,13 +366,6 @@ function setOverrides(gameSaveData) {
     FCStart();
 }
 
-function decodeHtml(html) {
-    // used to convert text with an HTML entity (like "&eacute;") into readable text
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-}
-
 function emptyCaches() {
     FrozenCookies.recalculateCaches = true;
     FrozenCookies.caches = {};
@@ -398,7 +389,7 @@ function scientificNotation(value) {
     return value;
 }
 
-const NUMBER_FORMATTERS = [
+const NUMBER_FORMATTERS = Object.freeze([
     rawFormatter,
     formatEveryThirdPower([
         "",
@@ -488,7 +479,7 @@ const NUMBER_FORMATTERS = [
 
     formatEveryThirdPower(["", " M", " G", " T", " P", " E", " Z", " Y", " R", " Q"]),
     scientificNotation,
-];
+]);
 
 function fcBeautify(value) {
     const negative = value < 0;
@@ -515,35 +506,6 @@ function beautifyUpgradesAndAchievements() {
     Object.values(Game.UpgradesById).forEach(function (upg) {
         upg.desc = upg.desc.replace(numre, beautifyFn);
     });
-}
-
-function timeDisplay(seconds) {
-    if (seconds === "---" || seconds === 0) {
-        return "Done!";
-    }
-    if (seconds == Number.POSITIVE_INFINITY) {
-        return "Never!";
-    }
-    seconds = Math.floor(seconds);
-
-    let years = Math.floor(seconds / (365.25 * 24 * 60 * 60));
-    years = years > 0 ? Beautify(years) + "y " : "";
-    seconds %= 365.25 * 24 * 60 * 60;
-
-    let days = Math.floor(seconds / (24 * 60 * 60));
-    days = days > 0 ? days + "d " : "";
-    seconds %= 24 * 60 * 60;
-
-    let hours = Math.floor(seconds / (60 * 60));
-    hours = hours > 0 ? hours + "h " : "";
-    seconds %= 60 * 60;
-
-    let minutes = Math.floor(seconds / 60);
-    minutes = minutes > 0 ? minutes + "m " : "";
-    seconds %= 60;
-
-    seconds = seconds > 0 ? seconds + "s" : "";
-    return (years + days + hours + minutes + seconds).trim();
 }
 
 function fcDraw(from, text, origin) {
@@ -607,7 +569,7 @@ function fcReset() {
 
 function saveFCData() {
     const saveString = {};
-    _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
+    _.keys(PREFERENCES).forEach(function (preference) {
         saveString[preference] = FrozenCookies[preference];
     });
     saveString.frenzyClickSpeed = FrozenCookies.frenzyClickSpeed;
@@ -630,25 +592,6 @@ function saveFCData() {
     saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
-}
-
-function divCps(value, cps) {
-    if (!value) {
-        return 0;
-    }
-    if (cps) {
-        return value / cps;
-    }
-    return Number.POSITIVE_INFINITY;
-}
-
-function nextHC(tg) {
-    const futureHC = Math.ceil(
-        Game.HowMuchPrestige(Game.cookiesEarned + Game.cookiesReset)
-    );
-    const nextHC = Game.HowManyCookiesReset(futureHC);
-    const toGo = nextHC - (Game.cookiesEarned + Game.cookiesReset);
-    return tg ? toGo : timeDisplay(divCps(toGo, Game.cookiesPs));
 }
 
 function copyToClipboard(text) {
@@ -831,7 +774,7 @@ function updateASFMultMin(base) {
 }
 
 function cyclePreference(preferenceName) {
-    const preference = FrozenCookies.preferenceValues[preferenceName];
+    const preference = PREFERENCES[preferenceName];
     if (!preference) {
         return;
     }
@@ -3477,17 +3420,17 @@ function effectiveCps(delay, wrathValue, wrinklerCount) {
 
 function frenzyProbability(wrathValue) {
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    return cookieInfo.frenzy.odds[wrathValue]; // + cookieInfo.frenzyRuin.odds[wrathValue] + cookieInfo.frenzyLucky.odds[wrathValue] + cookieInfo.frenzyClick.odds[wrathValue];
+    return COOKIE_SPEC.frenzy.odds[wrathValue]; // + COOKIE_SPEC.frenzyRuin.odds[wrathValue] + COOKIE_SPEC.frenzyLucky.odds[wrathValue] + COOKIE_SPEC.frenzyClick.odds[wrathValue];
 }
 
 function clotProbability(wrathValue) {
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    return cookieInfo.clot.odds[wrathValue]; // + cookieInfo.clotRuin.odds[wrathValue] + cookieInfo.clotLucky.odds[wrathValue] + cookieInfo.clotClick.odds[wrathValue];
+    return COOKIE_SPEC.clot.odds[wrathValue]; // + COOKIE_SPEC.clotRuin.odds[wrathValue] + COOKIE_SPEC.clotLucky.odds[wrathValue] + COOKIE_SPEC.clotClick.odds[wrathValue];
 }
 
 function bloodProbability(wrathValue) {
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;
-    return cookieInfo.blood.odds[wrathValue];
+    return COOKIE_SPEC.blood.odds[wrathValue];
 }
 
 function cookieValue(bankAmount, wrathValue, wrinklerCount) {
@@ -3506,61 +3449,61 @@ function cookieValue(bankAmount, wrathValue, wrinklerCount) {
     let value = 0;
     // Clot
     value -=
-        cookieInfo.clot.odds[wrathValue] *
+        COOKIE_SPEC.clot.odds[wrathValue] *
         (wrinkler * cps + clickCps) *
         luckyMod *
         66 *
         0.5;
     // Frenzy
     value +=
-        cookieInfo.frenzy.odds[wrathValue] *
+        COOKIE_SPEC.frenzy.odds[wrathValue] *
         (wrinkler * cps + clickCps) *
         luckyMod *
         77 *
         6;
     // Blood
     value +=
-        cookieInfo.blood.odds[wrathValue] *
+        COOKIE_SPEC.blood.odds[wrathValue] *
         (wrinkler * cps + clickCps) *
         luckyMod *
         6 *
         665;
     // Chain
     value +=
-        cookieInfo.chain.odds[wrathValue] *
+        COOKIE_SPEC.chain.odds[wrathValue] *
         calculateChainValue(bankAmount, cps, 7 - wrathValue / 3);
     // Ruin
     value -=
-        cookieInfo.ruin.odds[wrathValue] *
+        COOKIE_SPEC.ruin.odds[wrathValue] *
         (Math.min(bankAmount * 0.05, cps * 60 * 10) + 13);
     // Frenzy + Ruin
     value -=
-        cookieInfo.frenzyRuin.odds[wrathValue] *
+        COOKIE_SPEC.frenzyRuin.odds[wrathValue] *
         (Math.min(bankAmount * 0.05, cps * 60 * 10 * 7) + 13);
     // Clot + Ruin
     value -=
-        cookieInfo.clotRuin.odds[wrathValue] *
+        COOKIE_SPEC.clotRuin.odds[wrathValue] *
         (Math.min(bankAmount * 0.05, cps * 60 * 10 * 0.5) + 13);
     // Lucky
     value +=
-        cookieInfo.lucky.odds[wrathValue] *
+        COOKIE_SPEC.lucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15) + 13);
     // Frenzy + Lucky
     value +=
-        cookieInfo.frenzyLucky.odds[wrathValue] *
+        COOKIE_SPEC.frenzyLucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15 * 7) + 13);
     // Clot + Lucky
     value +=
-        cookieInfo.clotLucky.odds[wrathValue] *
+        COOKIE_SPEC.clotLucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15 * 0.5) + 13);
     // Click
-    value += cookieInfo.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
+    value += COOKIE_SPEC.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
     // Frenzy + Click
     value +=
-        cookieInfo.frenzyClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 7;
+        COOKIE_SPEC.frenzyClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 7;
     // Clot + Click
     value +=
-        cookieInfo.clotClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 0.5;
+        COOKIE_SPEC.clotClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 0.5;
     // Blah
     value += 0;
     return value;
@@ -3583,64 +3526,64 @@ function cookieStats(bankAmount, wrathValue, wrinklerCount) {
     // Clot
     result.clot =
         -1 *
-        cookieInfo.clot.odds[wrathValue] *
+        COOKIE_SPEC.clot.odds[wrathValue] *
         (wrinkler * cps + clickCps) *
         luckyMod *
         66 *
         0.5;
     // Frenzy
     result.frenzy =
-        cookieInfo.frenzy.odds[wrathValue] *
+        COOKIE_SPEC.frenzy.odds[wrathValue] *
         (wrinkler * cps + clickCps) *
         luckyMod *
         77 *
         7;
     // Blood
     result.blood =
-        cookieInfo.blood.odds[wrathValue] *
+        COOKIE_SPEC.blood.odds[wrathValue] *
         (wrinkler * cps + clickCps) *
         luckyMod *
         666 *
         6;
     // Chain
     result.chain =
-        cookieInfo.chain.odds[wrathValue] *
+        COOKIE_SPEC.chain.odds[wrathValue] *
         calculateChainValue(bankAmount, cps, 7 - wrathValue / 3);
     // Ruin
     result.ruin =
         -1 *
-        cookieInfo.ruin.odds[wrathValue] *
+        COOKIE_SPEC.ruin.odds[wrathValue] *
         (Math.min(bankAmount * 0.05, cps * 60 * 10) + 13);
     // Frenzy + Ruin
     result.frenzyRuin =
         -1 *
-        cookieInfo.frenzyRuin.odds[wrathValue] *
+        COOKIE_SPEC.frenzyRuin.odds[wrathValue] *
         (Math.min(bankAmount * 0.05, cps * 60 * 10 * 7) + 13);
     // Clot + Ruin
     result.clotRuin =
         -1 *
-        cookieInfo.clotRuin.odds[wrathValue] *
+        COOKIE_SPEC.clotRuin.odds[wrathValue] *
         (Math.min(bankAmount * 0.05, cps * 60 * 10 * 0.5) + 13);
     // Lucky
     result.lucky =
-        cookieInfo.lucky.odds[wrathValue] *
+        COOKIE_SPEC.lucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15) + 13);
     // Frenzy + Lucky
     result.frenzyLucky =
-        cookieInfo.frenzyLucky.odds[wrathValue] *
+        COOKIE_SPEC.frenzyLucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15 * 7) + 13);
     // Clot + Lucky
     result.clotLucky =
-        cookieInfo.clotLucky.odds[wrathValue] *
+        COOKIE_SPEC.clotLucky.odds[wrathValue] *
         (Math.min(bankAmount * 0.15, cps * 60 * 15 * 0.5) + 13);
     // Click
-    result.click = cookieInfo.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
+    result.click = COOKIE_SPEC.click.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777;
     // Frenzy + Click
     result.frenzyClick =
-        cookieInfo.frenzyClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 7;
+        COOKIE_SPEC.frenzyClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 7;
     // Clot + Click
     result.clotClick =
-        cookieInfo.clotClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 0.5;
+        COOKIE_SPEC.clotClick.odds[wrathValue] * frenzyCps * luckyMod * 13 * 777 * 0.5;
     // Blah
     result.blah = 0;
     return result;
@@ -4019,7 +3962,7 @@ function delayAmount() {
 }
 
 function haveAll(holiday) {
-    return _.every(holidayCookies[holiday], function (id) {
+    return _.every(HOLIDAY_COOKIES[holiday], function (id) {
         return Game.UpgradesById[id].unlocked;
     });
 }
@@ -4163,11 +4106,11 @@ function nextChainedPurchase(recalculate) {
 
 function buildingStats(recalculate) {
     if (recalculate) {
-        if (blacklist[FrozenCookies.blacklist].buildings === true) {
+        if (BLACKLIST[FrozenCookies.blacklist].buildings === true) {
             FrozenCookies.caches.buildings = [];
         } else {
             const buildingBlacklist = Array.from(
-                blacklist[FrozenCookies.blacklist].buildings
+                BLACKLIST[FrozenCookies.blacklist].buildings
             );
             // If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
             if (
@@ -4248,10 +4191,10 @@ function buildingStats(recalculate) {
 
 function upgradeStats(recalculate) {
     if (recalculate) {
-        if (blacklist[FrozenCookies.blacklist].upgrades === true) {
+        if (BLACKLIST[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
         } else {
-            const upgradeBlacklist = blacklist[FrozenCookies.blacklist].upgrades;
+            const upgradeBlacklist = BLACKLIST[FrozenCookies.blacklist].upgrades;
             const existingAchievements = Object.values(
                 Game.AchievementsById
             ).map(function (item) {
@@ -4301,7 +4244,7 @@ function upgradeStats(recalculate) {
                     const baseDeltaCps = baseCpsNew - baseCpsOrig;
                     const efficiency =
                         current.season &&
-                        current.season == seasons[FrozenCookies.defaultSeason]
+                        current.season == SEASONS[FrozenCookies.defaultSeason]
                             ? cost / baseCpsOrig
                             : priceReduction > cost
                             ? 1
@@ -4341,7 +4284,7 @@ function isAvailable(upgrade, upgradeBlacklist) {
     }
 
     // check if the upgrade is in the selected blacklist, or is an upgrade that shouldn't be recommended
-    if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id)) {
+    if (upgradeBlacklist.concat(RECOMMENDATION_BLACKLIST).includes(upgrade.id)) {
         return false;
     }
 
@@ -4425,7 +4368,7 @@ function isAvailable(upgrade, upgradeBlacklist) {
         (upgrade.season && !haveAll(Game.season)) ||
         (
             upgrade.season &&
-            upgrade.season != seasons[FrozenCookies.defaultSeason] &&
+            upgrade.season != SEASONS[FrozenCookies.defaultSeason] &&
             haveAll(upgrade.season)
         )
     ) {
@@ -4553,7 +4496,7 @@ function upgradePrereqCost(upgrade, full) {
     if (upgrade.unlocked) {
         return cost;
     }
-    const prereqs = upgradeJson[upgrade.id];
+    const prereqs = UPGRADE_PREREQUISITES[upgrade.id];
     if (!prereqs) {
         return cost;
     }
@@ -4581,7 +4524,7 @@ function unfinishedUpgradePrereqs(upgrade) {
     if (upgrade.unlocked) {
         return null;
     }
-    const prereqs = upgradeJson[upgrade.id];
+    const prereqs = UPGRADE_PREREQUISITES[upgrade.id];
     if (!prereqs) {
         return null;
     }
@@ -4636,7 +4579,7 @@ function unfinishedUpgradePrereqs(upgrade) {
 function upgradeToggle(upgrade) {
     const reverseFunctions = {};
     if (!upgrade.unlocked) {
-        const prereqs = upgradeJson[upgrade.id];
+        const prereqs = UPGRADE_PREREQUISITES[upgrade.id];
         if (prereqs) {
             reverseFunctions.prereqBuildings = [];
             prereqs.buildings.forEach(function (requiredBuildings, buildingId) {
