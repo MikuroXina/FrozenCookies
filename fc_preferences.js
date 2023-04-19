@@ -7,13 +7,27 @@ export const PREFERENCES = Object.freeze({
         hint: "Click the large cookie",
         display: ["Autoclick OFF", "Autoclick ON"],
         default: 0,
-        extras: '<a class="option" id="cookieClickSpeed" onclick="updateSpeed(\'cookieClickSpeed\');">${cookieClickSpeed} clicks/sec</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "cookieClickSpeed";
+            aElem.addEventListener('click', updateSpeed);
+            aElem.innerText = "{} clicks";
+            return aElem;
+        },
     },
     autoFrenzy: {
         hint: "Click the large cookie during Clicking Frenzies",
         display: ["Autofrenzy OFF", "Autofrenzy ON"],
         default: 0,
-        extras: '<a class="option" id="frenzyClickSpeed" onclick="updateSpeed(\'frenzyClickSpeed\');">${frenzyClickSpeed} clicks/sec</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "frenzyClickSpeed";
+            aElem.addEventListener('click', updateSpeed);
+            aElem.innerText = "{} clicks/sec";
+            return aElem;
+        },
     },
     autoGC: {
         hint: "Automatically click Golden Cookies when they appear",
@@ -65,13 +79,27 @@ export const PREFERENCES = Object.freeze({
         hint: "Limit max number of mines to keep Godzamok useful",
         display: ["Mine Limit OFF", "Mine Limit ON"],
         default: 0,
-        extras: '<a class="option" id="mineMax" onclick="updateMineMax(\'mineMax\');">${mineMax} Mines</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "mineMax";
+            aElem.addEventListener('click', updateMineMax);
+            aElem.innerText = "{} clicks/sec";
+            return aElem;
+        },
     },
     factoryLimit: {
         hint: "Limit max number of factories to keep Godzamok useful",
         display: ["Factory Limit OFF", "Factory Limit ON"],
         default: 0,
-        extras: '<a class="option" id="factoryMax" onclick="updateFactoryMax(\'factoryMax\');">${factoryMax} Factories</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "factoryMax";
+            aElem.addEventListener('click', updateFactoryMax);
+            aElem.innerText = "{} Factories";
+            return aElem;
+        },
     },
     pastemode: {
         hint: "Always autobuy the least efficient purchase. This is a stupid idea, you should never turn this on",
@@ -97,7 +125,14 @@ export const PREFERENCES = Object.freeze({
         hint: "Automatically ascend when your heavenly chip count hits a certain number. Note: this will skip the upgrade screen",
         display: ["Autoascend OFF", "Autoascend ON"],
         default: 0,
-        extras: '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "chipsToAscend";
+            aElem.addEventListener('click', updateAscendAmount);
+            aElem.innerText = "{} heavenly chips";
+            return aElem;
+        },
     },
     autoWrinkler: {
         hint: "Automatically pop wrinklers efficiently (calculated timing to balance cookies vs. upgrades) or instantly",
@@ -160,7 +195,14 @@ export const PREFERENCES = Object.freeze({
         hint: "Automatically take loans during click buffs with frenzies",
         display: ["Auto-Loans OFF", "Take loans 1 and 2", "Take all 3 loans"],
         default: 0,
-        extras: '<a class="option" id="minLoanMult" onclick="updateLoanMultMin(\'minLoanMult\');">x${minLoanMult} minimum Frenzy</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "minLoanMult";
+            aElem.addEventListener('click', updateLoanMultMin);
+            aElem.innerText = "{} minimum Frenzy";
+            return aElem;
+        },
     },
 
     // Pantheon options
@@ -244,7 +286,14 @@ export const PREFERENCES = Object.freeze({
         hint: "Stop autobuying Wizard Towers at selected Max Mana. 37 for optimal single casting FTHOF. Not recommended to set over 100",
         display: ["Wizard Tower Cap OFF", "Wizard Tower Cap ON"],
         default: 0,
-        extras: '<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "manaMax";
+            aElem.addEventListener('click', updateManaMax);
+            aElem.innerText = "{} max Mana";
+            return aElem;
+        },
     },
     autoSpell: {
         hint: "Automatically cast selected spell when your mana is full",
@@ -257,7 +306,14 @@ export const PREFERENCES = Object.freeze({
             "Auto Cast FTHOF (Click and Building Specials only)",
         ],
         default: 0,
-        extras: '<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "minCpSMult";
+            aElem.addEventListener('click', updateCpSMultMin);
+            aElem.innerText = "{} minimum Frenzy";
+            return aElem;
+        },
     },
     spellNotes: {
         hint: "(Only one combo is active at the same time, with the last one winning. See the readme for more info)",
@@ -283,7 +339,14 @@ export const PREFERENCES = Object.freeze({
             "ASF also for Double Cast Combo",
         ],
         default: 0,
-        extras: '<a class="option" id="minASFMult" onclick="updateASFMultMin(\'minASFMult\');">x${minASFMult} minimum Frenzy</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "minASFMult";
+            aElem.addEventListener('click', updateASFMultMin);
+            aElem.innerText = "{} minimum Frenzy";
+            return aElem;
+        },
     },
     autoSweet: {
         hint: "EXPERIMENTAL: Automatically ascend until 'Sweet' is in the next ten spells. Disables other combos. No manual shutdown!",
@@ -376,7 +439,14 @@ export const PREFERENCES = Object.freeze({
         hint: "Limit max number of Cortex bakers to keep Dragon Orbs useful",
         display: ["Cortex bakers Limit OFF", "Cortex bakers Limit ON"],
         default: 0,
-        extras: '<a class="option" id="cortexMax" onclick="updateCortexMax(\'cortexMax\');">${cortexMax} Cortex bakers</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "cortexMax";
+            aElem.addEventListener('click', updateCortexMax);
+            aElem.innerText = "{} Cortex bakers";
+            return aElem;
+        },
     },
 
     // Season options
@@ -447,7 +517,14 @@ export const PREFERENCES = Object.freeze({
             "Harvesting during FRENZY + BUILDING SPECIAL",
         ],
         default: 0,
-        extras: '<a class="option" id="maxSpecials" onclick="updateMaxSpecials(\'maxSpecials\');">${maxSpecials} Building specials</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "maxSpecials";
+            aElem.addEventListener('click', updateMaxSpecials);
+            aElem.innerText = "{} Building specials";
+            return aElem;
+        },
     },
 
     // Other options
@@ -542,7 +619,14 @@ export const PREFERENCES = Object.freeze({
             "Tracking SMART TIMING",
         ],
         default: 0,
-        extras: '<a class="option" id="viewStats" onclick="viewStatGraphs();">View Stat Graphs</a>',
+        extras: () => {
+            const aElem = document.createElement('a');
+            aElem.class = "option";
+            aElem.id = "viewStats";
+            aElem.addEventListener('click', viewStatGraphs);
+            aElem.innerText = "View Stat Graphs";
+            return aElem;
+        },
     },
     recommendedSettings: {
         hint: "Enable all recommended settings. WARNING: the game will save and reload, possibly unloading Frozen Cookies. This will override any current setting!",
@@ -585,7 +669,11 @@ function storeNumberCallback(base, min, max) {
     };
 }
 
-function updateSpeed(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateSpeed(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Autoclicking!",
         "How many times per second do you want to click? (250 recommended, 1000 max)",
@@ -594,7 +682,11 @@ function updateSpeed(base) {
     );
 }
 
-function updateCpSMultMin(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateCpSMultMin(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Autocasting!",
         'What CpS multiplier should trigger Auto Casting? (e.g. "7" will trigger during a Frenzy, "1" prevents triggering during a clot, etc.)',
@@ -603,7 +695,11 @@ function updateCpSMultMin(base) {
     );
 }
 
-function updateAscendAmount(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateAscendAmount(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Autoascending!",
         "How many heavenly chips do you want to auto-ascend at?",
@@ -612,7 +708,11 @@ function updateAscendAmount(base) {
     );
 }
 
-function updateManaMax(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateManaMax(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Mana Cap!",
         "Choose a maximum mana amount (100 max recommended)",
@@ -621,7 +721,11 @@ function updateManaMax(base) {
     );
 }
 
-function updateMaxSpecials(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateMaxSpecials(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Harvest Bank!",
         "Set amount of stacked Building specials for Harvest Bank",
@@ -630,7 +734,11 @@ function updateMaxSpecials(base) {
     );
 }
 
-function updateMineMax(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateMineMax(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Mine Cap!",
         "How many Mines should autoBuy stop at?",
@@ -639,7 +747,11 @@ function updateMineMax(base) {
     );
 }
 
-function updateFactoryMax(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateFactoryMax(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Factory Cap!",
         "How many Factories should autoBuy stop at?",
@@ -648,7 +760,11 @@ function updateFactoryMax(base) {
     );
 }
 
-function updateCortexMax(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateCortexMax(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Cortex baker Cap!",
         "How many Cortex bakers should autoBuy stop at?",
@@ -657,7 +773,11 @@ function updateCortexMax(base) {
     );
 }
 
-function updateLoanMultMin(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateLoanMultMin(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Loans!",
         'What CpS multiplier should trigger taking loans (e.g. "7" will trigger for a normal Frenzy, "500" will require a huge building buff combo, etc.)?',
@@ -666,11 +786,115 @@ function updateLoanMultMin(base) {
     );
 }
 
-function updateASFMultMin(base) {
+/**
+ * @param {MouseEvent} e - Event on click.
+ */
+function updateASFMultMin(e) {
+    const base = e.target.id;
     userInputPrompt(
         "Sugar Frenzy!",
         'What CpS multiplier should trigger buying the sugar frenzy (e.g. "100" will trigger for a decent early combo, "1000" will require a huge building buff combo, etc.)?',
         FrozenCookies[base],
         storeNumberCallback(base, 0)
     );
+}
+
+export function viewStatGraphs() {
+    saveStats(true);
+    const containerDiv = $("#statGraphContainer").length
+        ? $("#statGraphContainer")
+        : $("<div>")
+              .attr("id", "statGraphContainer")
+              .html($("<div>").attr("id", "statGraphs"))
+              .appendTo("body")
+              .dialog({
+                  modal: true,
+                  title: "Frozen Cookies Tracked Stats",
+                  width: $(window).width() * 0.8,
+                  height: $(window).height() * 0.8,
+              });
+    if (containerDiv.is(":hidden")) {
+        containerDiv.dialog();
+    }
+    if (
+        FrozenCookies.trackedStats.length > 0 &&
+        Date.now() - FrozenCookies.lastGraphDraw > 1000
+    ) {
+        FrozenCookies.lastGraphDraw = Date.now();
+        $("#statGraphs").empty();
+        $.jqplot(
+            "statGraphs",
+            transpose(
+                FrozenCookies.trackedStats.map(function (s) {
+                    return [
+                        [s.time / 1000, s.baseCps],
+                        [s.time / 1000, s.effectiveCps],
+                        [s.time / 1000, s.hc],
+                    ];
+                })
+            ), //
+            {
+                legend: {
+                    show: true,
+                },
+                height: containerDiv.height() - 50,
+                axes: {
+                    xaxis: {
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            angle: -30,
+                            fontSize: "10pt",
+                            showGridline: false,
+                            formatter: function (_ah, ai) {
+                                return timeDisplay(ai);
+                            },
+                        },
+                    },
+                    yaxis: {
+                        padMin: 0,
+                        renderer: $.jqplot.LogAxisRenderer,
+                        tickDistribution: "even",
+                        tickOptions: {
+                            formatter: function (_ah, ai) {
+                                return Beautify(ai);
+                            },
+                        },
+                    },
+                    y2axis: {
+                        padMin: 0,
+                        tickOptions: {
+                            showGridline: false,
+                            formatter: function (_ah, ai) {
+                                return Beautify(ai);
+                            },
+                        },
+                    },
+                },
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 15,
+                },
+                series: [
+                    {
+                        label: "Base CPS",
+                    },
+                    {
+                        label: "Effective CPS",
+                    },
+                    {
+                        label: "Earned HC",
+                        yaxis: "y2axis",
+                    },
+                ],
+            }
+        );
+    }
+}
+
+function transpose(a) {
+    return Object.keys(a[0]).map(function (c) {
+        return a.map(function (r) {
+            return r[c];
+        });
+    });
 }

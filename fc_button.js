@@ -538,13 +538,9 @@ function buildPreferences(menu, config) {
                 )
             );
             if (extras) {
-                listing.append(
-                    $(
-                        extras.replace(/\$\{(.+)\}/g, function (_s, id) {
-                            return fcBeautify(FrozenCookies[id]);
-                        })
-                    )
-                );
+                const extraElem = extras();
+                extraElem.innerText = extraElem.innerText.replace(/\{(.+)\}/g, FrozenCookies[extraElem.id]);
+                listing.append(extraElem);
             }
             subsection.append(listing);
         }
