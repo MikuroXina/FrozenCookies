@@ -1904,10 +1904,9 @@ function popValue(w) {
     return sucked;
 }
 
-const config = new Map();
 
 async function loadFeatures() {
-    /** @type {{ start: (config: Map<string, any>) => void; stop: () => void }[]} */
+    /** @type {{ start: () => void; stop: () => void }[]} */
     const features = [
         await import("./feat/auto_100_consist_combo.js"),
         await import("./feat/auto_bank_broker.js"),
@@ -1949,7 +1948,7 @@ async function loadFeatures() {
     // Now create new intervals with their specified frequencies.
 
     for (const { start } of features) {
-        start(config);
+        start();
     }
 
     /*if (FrozenCookies.autoGC) {
@@ -1959,5 +1958,5 @@ async function loadFeatures() {
           );
       }*/
 
-    FCMenu(config);
+    FCMenu();
 }

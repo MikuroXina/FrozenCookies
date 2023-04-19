@@ -4,6 +4,7 @@ import { PREFERENCES } from "./fc_preferences.js";
 import { chocolateValue } from "./fc_pay.js";
 import { cpsBonus, liveWrinklers } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
+import { getNumber, getString, set } from "./fc_store.js";
 
 $("#logButton").before(
     $("<div>")
@@ -52,10 +53,8 @@ function buildListing(label, name) {
 
 /**
  * Builds a menu which displays stats and preferences.
- *
- * @param {Map<string, any>} config - Preferences store.
  */
-export function FCMenu(config) {
+export function FCMenu() {
     Game.UpdateMenu = function () {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
@@ -82,7 +81,7 @@ export function FCMenu(config) {
 
         buildAutoBuyInfo(menu);
         buildReadme(menu);
-        buildPreferences(menu, config);
+        buildPreferences(menu);
         buildGoldenCookiesStats(menu);
         buildFrenzyTimesStats(menu);
         buildHeavenlyChipsInfo(menu);
@@ -484,15 +483,14 @@ function buildOtherStats(menu) {
 /**
  *
  * @param {string} preferenceName - Key of the preference.
- * @param {Map<string, any>} config - Preferences store.
  */
-function cyclePreference(preferenceName, config) {
+function cyclePreference(preferenceName) {
     const preference = PREFERENCES[preferenceName];
     if (!preference) {
         return;
     }
     const { display } = preference;
-    const current = config.get(preferenceName);
+    const current = getNumber(preferenceName) ?? preference.default;
     const preferenceButton = $("#" + preferenceName + "Button");
     if (
         display &&
@@ -500,9 +498,9 @@ function cyclePreference(preferenceName, config) {
         preferenceButton &&
         preferenceButton.length > 0
     ) {
-        const newValue = (current ?? preference.default + 1) % display.length;
+        const newValue = (current + 1) % display.length;
         preferenceButton[0].innerText = display[newValue];
-        FrozenCookies[preferenceName] = newValue;
+        set(preferenceName, newValue);
         FrozenCookies.recalculateCaches = true;
         Game.RefreshStore();
         Game.RebuildUpgrades();
@@ -510,16 +508,16 @@ function cyclePreference(preferenceName, config) {
     }
 }
 
-function buildPreferences(menu, config) {
+function buildPreferences(menu) {
     const subsection = $("<div>").addClass("subsection");
     subsection.append(
         $("<div>").addClass("title").text("Frozen Cookie Controls")
     );
-    for (const preference in PREFERENCES) {
+    for (const preferenceName in PREFERENCES) {
         /** @type {{ hint: string; display: string[] | undefined; extras: string | undefined }} */
-        const { hint, display, extras } = PREFERENCES[preference];
-        const current = FrozenCookies[preference];
-        const preferenceButtonId = preference + "Button";
+        const { hint, display, extras } = PREFERENCES[preferenceName];
+        const current = getNumber(preferenceName);
+        const preferenceButtonId = preferenceName + "Button";
         if (display && display.length > 0 && display.length > current) {
             const listing = $("<div>").addClass("listing");
             listing.append(
@@ -527,20 +525,20 @@ function buildPreferences(menu, config) {
                     .addClass("option")
                     .prop("id", preferenceButtonId)
                     .click(function () {
-                        cyclePreference(preference, config);
+                        cyclePreference(preferenceName);
                     })
                     .text(display[current])
             );
             listing.append(
                 $("<label>").text(
                     hint.replace(/\$\{(.+)\}/g, function (_s, id) {
-                        return FrozenCookies[id];
+                        return getString(id);
                     })
                 )
             );
             if (extras) {
                 const extraElem = extras();
-                extraElem.innerText = extraElem.innerText.replace(/\{(.+)\}/g, FrozenCookies[extraElem.id]);
+                extraElem.innerText = extraElem.innerText.replace(/\{.*\}/g, getString(extraElem.id));
                 listing.append(extraElem);
             }
             subsection.append(listing);
