@@ -1,5 +1,7 @@
 import { META } from "./fc_meta.js";
 import { PREFERENCES } from "./fc_preferences.js";
+import { chocolateValue } from "./fc_pay.js";
+import { cpsBonus, liveWrinklers } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 
 $("#logButton").before(
@@ -47,7 +49,12 @@ function buildListing(label, name) {
         .append($("<b>").text(label + ":"), " ", name);
 }
 
-export function FCMenu() {
+/**
+ * Builds a menu which displays stats and preferences.
+ *
+ * @param {Map<string, any>} config - Preferences store.
+ */
+export function FCMenu(config) {
     Game.UpdateMenu = function () {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
@@ -74,7 +81,7 @@ export function FCMenu() {
 
         buildAutoBuyInfo(menu);
         buildReadme(menu);
-        buildPreferences(menu);
+        buildPreferences(menu, config);
         buildGoldenCookiesStats(menu);
         buildFrenzyTimesStats(menu);
         buildHeavenlyChipsInfo(menu);
@@ -473,7 +480,36 @@ function buildOtherStats(menu) {
     menu.append(subsection);
 }
 
-function buildPreferences(menu) {
+/**
+ *
+ * @param {string} preferenceName - Key of the preference.
+ * @param {Map<string, any>} config - Preferences store.
+ */
+function cyclePreference(preferenceName, config) {
+    const preference = PREFERENCES[preferenceName];
+    if (!preference) {
+        return;
+    }
+    const { display } = preference;
+    const current = config.get(preferenceName);
+    const preferenceButton = $("#" + preferenceName + "Button");
+    if (
+        display &&
+        display.length > 0 &&
+        preferenceButton &&
+        preferenceButton.length > 0
+    ) {
+        const newValue = (current ?? preference.default + 1) % display.length;
+        preferenceButton[0].innerText = display[newValue];
+        FrozenCookies[preferenceName] = newValue;
+        FrozenCookies.recalculateCaches = true;
+        Game.RefreshStore();
+        Game.RebuildUpgrades();
+        loadFeatures();
+    }
+}
+
+function buildPreferences(menu, config) {
     const subsection = $("<div>").addClass("subsection");
     subsection.append(
         $("<div>").addClass("title").text("Frozen Cookie Controls")
@@ -490,7 +526,7 @@ function buildPreferences(menu) {
                     .addClass("option")
                     .prop("id", preferenceButtonId)
                     .click(function () {
-                        cyclePreference(preference);
+                        cyclePreference(preference, config);
                     })
                     .text(display[current])
             );
@@ -632,4 +668,20 @@ function buildFrenzyTimesStats(menu) {
         }
     );
     menu.append(subsection);
+}
+
+function chainBank() {
+    //  More exact
+    const digit = 7 - Math.floor(Game.elderWrath / 3);
+    return (
+        4 *
+        Math.floor(
+            (digit / 9) *
+                Math.pow(
+                    10,
+                    Math.floor(Math.log((194400 * baseCps()) / digit) / Math.LN10)
+                )
+        )
+    );
+    //  return baseCps() * 60 * 60 * 6 * 4;
 }

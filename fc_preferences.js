@@ -550,3 +550,127 @@ export const PREFERENCES = Object.freeze({
         default: 0,
     },
 });
+
+function userInputPrompt(title, description, existingValue, callback) {
+    Game.Prompt(
+        `<h3>${title}</h3><div class="block" style="text-align:center;">${description}</div><div class="block"><input type="text" style="text-align:center;width:100%;" id="fcGenericInput" value="${existingValue}"/></div>`,
+        ["Confirm", "Cancel"]
+    );
+    $("#promptOption0").click(() => {
+        callback(l("fcGenericInput").value);
+    });
+    l("fcGenericInput").focus();
+    l("fcGenericInput").select();
+}
+
+function validateNumber(value, minValue = null, maxValue = null) {
+    if (typeof value == "undefined" || value == null) {
+        return false;
+    }
+    const numericValue = Number(value);
+    return (
+        !isNaN(numericValue) &&
+        (minValue == null || numericValue >= minValue) &&
+        (maxValue == null || numericValue <= maxValue)
+    );
+}
+
+function storeNumberCallback(base, min, max) {
+    return (result) => {
+        if (!validateNumber(result, min, max)) {
+            result = FrozenCookies[base];
+        }
+        FrozenCookies[base] = Number(result);
+        loadFeatures();
+    };
+}
+
+function updateSpeed(base) {
+    userInputPrompt(
+        "Autoclicking!",
+        "How many times per second do you want to click? (250 recommended, 1000 max)",
+        FrozenCookies[base],
+        storeNumberCallback(base, 0, 1000)
+    );
+}
+
+function updateCpSMultMin(base) {
+    userInputPrompt(
+        "Autocasting!",
+        'What CpS multiplier should trigger Auto Casting? (e.g. "7" will trigger during a Frenzy, "1" prevents triggering during a clot, etc.)',
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateAscendAmount(base) {
+    userInputPrompt(
+        "Autoascending!",
+        "How many heavenly chips do you want to auto-ascend at?",
+        FrozenCookies[base],
+        storeNumberCallback(base, 1)
+    );
+}
+
+function updateManaMax(base) {
+    userInputPrompt(
+        "Mana Cap!",
+        "Choose a maximum mana amount (100 max recommended)",
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateMaxSpecials(base) {
+    userInputPrompt(
+        "Harvest Bank!",
+        "Set amount of stacked Building specials for Harvest Bank",
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateMineMax(base) {
+    userInputPrompt(
+        "Mine Cap!",
+        "How many Mines should autoBuy stop at?",
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateFactoryMax(base) {
+    userInputPrompt(
+        "Factory Cap!",
+        "How many Factories should autoBuy stop at?",
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateCortexMax(base) {
+    userInputPrompt(
+        "Cortex baker Cap!",
+        "How many Cortex bakers should autoBuy stop at?",
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateLoanMultMin(base) {
+    userInputPrompt(
+        "Loans!",
+        'What CpS multiplier should trigger taking loans (e.g. "7" will trigger for a normal Frenzy, "500" will require a huge building buff combo, etc.)?',
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}
+
+function updateASFMultMin(base) {
+    userInputPrompt(
+        "Sugar Frenzy!",
+        'What CpS multiplier should trigger buying the sugar frenzy (e.g. "100" will trigger for a decent early combo, "1000" will require a huge building buff combo, etc.)?',
+        FrozenCookies[base],
+        storeNumberCallback(base, 0)
+    );
+}

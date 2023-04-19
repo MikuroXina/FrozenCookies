@@ -1,5 +1,7 @@
 // functionality for the infobox
 
+import { probabilitySpan } from "./fc_probability.js";
+
 function decodeHtml(html) {
     // used to convert text with an HTML entity (like "&eacute;") into readable text
     const txt = document.createElement("textarea");
@@ -328,4 +330,8 @@ export function updateTimers() {
     }
     const height = $("#backgroundLeftCanvas").height() - 140;
     drawCircles(t_draw, 20, height);
+}
+
+function maxCookieTime() {
+    return Game.shimmerTypes.golden.maxTime;
 }
