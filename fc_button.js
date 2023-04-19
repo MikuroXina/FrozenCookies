@@ -1,3 +1,4 @@
+import { META } from "./fc_meta.js";
 import { PREFERENCES } from "./fc_preferences.js";
 import { timeDisplay } from "./fc_format.js";
 
@@ -65,9 +66,9 @@ export function FCMenu() {
                     .addClass("section")
                     .text(
                         "Frozen Cookies v " +
-                            FrozenCookies.branch +
+                            META.branch +
                             "." +
-                            FrozenCookies.version
+                            META.version
                     )
             );
 
