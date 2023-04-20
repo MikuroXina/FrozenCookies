@@ -1,10 +1,10 @@
 import { cpsBonus, hasClickBuff } from "../fc_time.js";
+import { getNumber } from "./fc_store.js";
 
 /** @type {Object.<number, number | undefined>} */
 const frenzyTimes = {};
 let lastGoldenCookieState = 0;
 let lastGoldenCookieTime = 0;
-let heavenlyChipsGain = 0;
 let heavenlyChipsGainTime = 0;
 
 export function loadFromJson(json) {
@@ -33,6 +33,7 @@ export function frenzyTimesByGain() {
 
 export function updateFrenzyTimes() {
     const currentFrenzy = cpsBonus() * clickBuffBonus();
+    const heavenlyChipsGain = getNumber("heavenlyChipsGain");
     if (currentFrenzy != lastGoldenCookieState) {
         if (lastGoldenCookieState != 1 && currentFrenzy == 1) {
             logEvent("GC", "Frenzy ended, cookie production x1");
@@ -47,7 +48,7 @@ export function updateFrenzyTimes() {
                         " HC/s."
                 );
                 heavenlyChipsGainTime = Date.now();
-                heavenlyChipsGain = 0;
+                set("heavenlyChipsGain", 0);
             }
         } else {
             if (lastGoldenCookieState != 1) {
@@ -66,7 +67,7 @@ export function updateFrenzyTimes() {
                         " HC/s."
                 );
                 heavenlyChipsGainTime = Date.now();
-                heavenlyChipsGain = 0;
+                set("heavenlyChipsGain", 0);
             }
             logEvent(
                 "GC",

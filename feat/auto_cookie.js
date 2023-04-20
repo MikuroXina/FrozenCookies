@@ -1,7 +1,7 @@
 import { Beautify } from "../fc_beautify.js";
 import { goldenCookieLife, liveWrinklers } from "../fc_time.js";
 import { chocolateValue, safeBuy } from "../fc_pay.js";
-import { getNumber } from "../fc_store.js";
+import { getNumber, set } from "../fc_store.js";
 import { updateFrenzyTimes } from "../fc_frenzy_times.js";
 
 let cookieBot = 0;
@@ -32,13 +32,14 @@ function autoCookie() {
             Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
         );
 
-        if (Math.floor(FrozenCookies.lastHCAmount) < Math.floor(currentHCAmount)) {
-            const changeAmount = currentHCAmount - FrozenCookies.lastHCAmount;
-            FrozenCookies.lastHCAmount = currentHCAmount;
+        const lastHCAmount = getNumber("lastHCAmount");
+        if (Math.floor(lastHCAmount) < Math.floor(currentHCAmount)) {
+            const changeAmount = currentHCAmount - lastHCAmount;
+            set("lastHCAmount", currentHCAmount);
             FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
             FrozenCookies.lastHCTime = Date.now();
             const currHCPercent =
-                (60 * 60 * (FrozenCookies.lastHCAmount - Game.heavenlyChips)) /
+                (60 * 60 * (lastHCAmount - Game.heavenlyChips)) /
                 ((FrozenCookies.lastHCTime - Game.startDate) / 1000);
             if (
                 Game.heavenlyChips < currentHCAmount - changeAmount &&
@@ -46,7 +47,7 @@ function autoCookie() {
             ) {
                 FrozenCookies.maxHCPercent = currHCPercent;
             }
-            FrozenCookies.hc_gain += changeAmount;
+            set("heavenlyChipsGain", getNumber("heavenlyChipsGain") + changeAmount);
         }
         updateCaches();
         const recommendation = nextPurchase();
