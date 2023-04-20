@@ -396,7 +396,7 @@ function buildHarvestingInfo(menu) {
         );
         subsection.append(buildListing("Base CPS", Beautify(baseCps())));
         subsection.append(
-            buildListing("Plant to harvest", FrozenCookies.harvestPlant)
+            buildListing("Plant to harvest", getString("harvestPlant"))
         );
         subsection.append(
             buildListing("Minutes of CpS", FrozenCookies.harvestMinutes + " min")
@@ -410,7 +410,7 @@ function buildHarvestingInfo(menu) {
         subsection.append(
             buildListing(
                 "Single " +
-                FrozenCookies.harvestPlant +
+                getString("harvestPlant") +
                 (setHarvestBankPlant < 6
                     ? " harvesting"
                     : " exploding") +

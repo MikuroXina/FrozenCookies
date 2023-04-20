@@ -812,7 +812,7 @@ function harvestBank() {
     FrozenCookies.harvestMaxPercent = 0;
     FrozenCookies.harvestFrenzy = 1;
     FrozenCookies.harvestBuilding = 1;
-    FrozenCookies.harvestPlant = "";
+    set("harvestPlant", "");
 
     if (FrozenCookies.setHarvestBankType == 1 || FrozenCookies.setHarvestBankType == 3) {
         FrozenCookies.harvestFrenzy = 7;
@@ -855,43 +855,43 @@ function harvestBank() {
 
     switch (setHarvestBankPlant) {
         case BAKEBERRY:
-            FrozenCookies.harvestPlant = "Bakeberry";
+            set("harvestPlant", "Bakeberry");
             FrozenCookies.harvestMinutes = 30;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
         case CHOCOROOT:
-            FrozenCookies.harvestPlant = "Chocoroot";
+            set("harvestPlant", "Chocoroot");
             FrozenCookies.harvestMinutes = 3;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
         case WHITE_CHOCOROOT:
-            FrozenCookies.harvestPlant = "White Chocoroot";
+            set("harvestPlant", "White Chocoroot");
             FrozenCookies.harvestMinutes = 3;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
         case QUEENBEET:
-            FrozenCookies.harvestPlant = "Queenbeet";
+            set("harvestPlant", "Queenbeet");
             FrozenCookies.harvestMinutes = 60;
             FrozenCookies.harvestMaxPercent = 0.04;
             break;
 
         case DUKETATER:
-            FrozenCookies.harvestPlant = "Duketater";
+            set("harvestPlant", "Duketater");
             FrozenCookies.harvestMinutes = 120;
             FrozenCookies.harvestMaxPercent = 0.08;
             break;
 
         case CRUMBSPORE:
-            FrozenCookies.harvestPlant = "Crumbspore";
+            set("harvestPlant", "Crumbspore");
             FrozenCookies.harvestMinutes = 1;
             FrozenCookies.harvestMaxPercent = 0.01;
             break;
 
         case DOUGHSHROOM:
-            FrozenCookies.harvestPlant = "Doughshroom";
+            set("harvestPlant", "Doughshroom");
             FrozenCookies.harvestMinutes = 5;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
