@@ -44,9 +44,9 @@ function autoCookie() {
                 ((lastHCTime - Game.startDate) / 1000);
             if (
                 Game.heavenlyChips < currentHCAmount - changeAmount &&
-                currHCPercent > FrozenCookies.maxHCPercent
+                currHCPercent > getNumber("maxHCPercent")
             ) {
-                FrozenCookies.maxHCPercent = currHCPercent;
+                set("maxHCPercent", currHCPercent);
             }
             set("heavenlyChipsGain", getNumber("heavenlyChipsGain") + changeAmount);
         }

@@ -487,7 +487,7 @@ function fcReset() {
         Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
     ));
     set("lastHCTime", Date.now());
-    FrozenCookies.maxHCPercent = 0;
+    set("maxHCPercent", 0);
     set("prevLastHCTime", Date.now());
     FrozenCookies.lastCps = 0;
     FrozenCookies.lastBaseCps = 0;
@@ -511,7 +511,7 @@ function saveFCData() {
     //  saveString.nonFrenzyTime = FrozenCookies.non_gc_time;
     //  saveString.frenzyTime = FrozenCookies.gc_time;
     saveString.lastHCAmount = getString("lastHCAmount");
-    saveString.maxHCPercent = FrozenCookies.maxHCPercent;
+    saveString.maxHCPercent = getString("maxHCPercent");
     saveString.lastHCTime = getString("lastHCTime");
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;

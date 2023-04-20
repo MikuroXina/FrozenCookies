@@ -131,9 +131,10 @@ function buildHeavenlyChipsInfo(menu) {
                 );
             }
         }
-        if (FrozenCookies.maxHCPercent > 0) {
+        const maxHCPercent = getNumber("maxHCPercent");
+        if (maxHCPercent > 0) {
             subsection.append(
-                buildListing("Max HC Gain/hr", Beautify(FrozenCookies.maxHCPercent))
+                buildListing("Max HC Gain/hr", Beautify(maxHCPercent))
             );
         }
         subsection.append(
