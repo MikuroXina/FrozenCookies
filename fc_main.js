@@ -483,9 +483,9 @@ function fcReset() {
     FrozenCookies.last_gc_state =
         (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
     FrozenCookies.last_gc_time = Date.now();
-    FrozenCookies.lastHCAmount = Game.HowMuchPrestige(
+    set("lastHCAmount", Game.HowMuchPrestige(
         Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
-    );
+    ));
     set("lastHCTime", Date.now());
     FrozenCookies.maxHCPercent = 0;
     FrozenCookies.prevLastHCTime = Date.now();
@@ -510,7 +510,7 @@ function saveFCData() {
     saveString.frenzyTimes = saveAsJson();
     //  saveString.nonFrenzyTime = FrozenCookies.non_gc_time;
     //  saveString.frenzyTime = FrozenCookies.gc_time;
-    saveString.lastHCAmount = FrozenCookies.lastHCAmount;
+    saveString.lastHCAmount = getString("lastHCAmount");
     saveString.maxHCPercent = FrozenCookies.maxHCPercent;
     saveString.lastHCTime = getString("lastHCTime");
     saveString.manaMax = FrozenCookies.manaMax;

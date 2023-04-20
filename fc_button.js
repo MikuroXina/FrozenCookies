@@ -110,6 +110,7 @@ function buildHeavenlyChipsInfo(menu) {
         subsection.append(buildListing("Estimated time to next HC", nextHC()));
     }
     if (currHC < resetHC) {
+        const lastHCAmount = getNumber("lastHCAmount");
         if (showTiming) {
             subsection.append(
                 buildListing(
@@ -117,7 +118,7 @@ function buildHeavenlyChipsInfo(menu) {
                     timeDisplay((Date.now() - getNumber("lastHCTime")) / 1000)
                 )
             );
-            if (FrozenCookies.lastHCAmount - 1 >= currHC) {
+            if (lastHCAmount - 1 >= currHC) {
                 subsection.append(
                     buildListing(
                         "Time to get last HC",
@@ -139,17 +140,17 @@ function buildHeavenlyChipsInfo(menu) {
             buildListing(
                 "Average HC Gain/hr",
                 Beautify(
-                    (60 * 60 * (FrozenCookies.lastHCAmount - currHC)) /
+                    (60 * 60 * (lastHCAmount - currHC)) /
                     ((getNumber("lastHCTime") - Game.startDate) / 1000)
                 )
             )
         );
-        if (showTiming && FrozenCookies.lastHCAmount - 1 >= currHC) {
+        if (showTiming && lastHCAmount - 1 >= currHC) {
             subsection.append(
                 buildListing(
                     "Previous Average HC Gain/hr",
                     Beautify(
-                        (60 * 60 * (FrozenCookies.lastHCAmount - 1 - currHC)) /
+                        (60 * 60 * (lastHCAmount - 1 - currHC)) /
                         ((FrozenCookies.prevLastHCTime - Game.startDate) / 1000)
                     )
                 )
