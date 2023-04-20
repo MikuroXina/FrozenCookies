@@ -1,3 +1,5 @@
+import { set } from "../fc_store";
+
 export function start() {
     if (FrozenCookies.recommendedSettings) {
         FrozenCookies.recommendedSettingsBot = setInterval(
@@ -90,7 +92,7 @@ function recommendedSettingsAction() {
         FrozenCookies.simulatedGCPercent = 1;
         // Display options
         FrozenCookies.showMissedCookies = 0;
-        FrozenCookies.numberDisplay = 1;
+        set("numberDisplay", 1);
         FrozenCookies.fancyui = 1;
         FrozenCookies.logging = 1;
         FrozenCookies.purchaseLog = 0;
