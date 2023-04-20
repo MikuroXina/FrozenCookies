@@ -36,11 +36,12 @@ function autoCookie() {
         if (Math.floor(lastHCAmount) < Math.floor(currentHCAmount)) {
             const changeAmount = currentHCAmount - lastHCAmount;
             set("lastHCAmount", currentHCAmount);
-            FrozenCookies.prevLastHCTime = FrozenCookies.lastHCTime;
-            FrozenCookies.lastHCTime = Date.now();
+            set("prevLastHCTime", getNumber("lastHCTime"));
+            const lastHCTime = Date.now();
+            set("lastHCTime", lastHCTime);
             const currHCPercent =
                 (60 * 60 * (lastHCAmount - Game.heavenlyChips)) /
-                ((FrozenCookies.lastHCTime - Game.startDate) / 1000);
+                ((lastHCTime - Game.startDate) / 1000);
             if (
                 Game.heavenlyChips < currentHCAmount - changeAmount &&
                 currHCPercent > FrozenCookies.maxHCPercent

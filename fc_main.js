@@ -11,7 +11,7 @@ import { FCMenu } from "./fc_button.js";
 import { divCps } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
-import { loadFromStorage, set } from "./fc_store.js";
+import { getString, loadFromStorage, set } from "./fc_store.js";
 import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
@@ -486,7 +486,7 @@ function fcReset() {
     FrozenCookies.lastHCAmount = Game.HowMuchPrestige(
         Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
     );
-    FrozenCookies.lastHCTime = Date.now();
+    set("lastHCTime", Date.now());
     FrozenCookies.maxHCPercent = 0;
     FrozenCookies.prevLastHCTime = Date.now();
     FrozenCookies.lastCps = 0;
@@ -512,7 +512,7 @@ function saveFCData() {
     //  saveString.frenzyTime = FrozenCookies.gc_time;
     saveString.lastHCAmount = FrozenCookies.lastHCAmount;
     saveString.maxHCPercent = FrozenCookies.maxHCPercent;
-    saveString.lastHCTime = FrozenCookies.lastHCTime;
+    saveString.lastHCTime = getString("lastHCTime");
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
     saveString.cortexMax = FrozenCookies.cortexMax;
