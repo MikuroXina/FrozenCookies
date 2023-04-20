@@ -3,6 +3,7 @@ import { goldenCookieLife, liveWrinklers } from "../fc_time.js";
 import { chocolateValue, safeBuy } from "../fc_pay.js";
 import { getNumber, set } from "../fc_store.js";
 import { updateFrenzyTimes } from "../fc_frenzy_times.js";
+import { bestBank } from "../fc_best_bank.js";
 
 let cookieBot = 0;
 

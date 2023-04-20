@@ -6,6 +6,7 @@ import { cpsBonus, liveWrinklers } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { getNumber, getString, set } from "./fc_store.js";
 import { frenzyTimesByGain } from "./fc_frenzy_times.js";
+import { bestBank } from "./fc_best_bank.js";
 
 $("#logButton").before(
     $("<div>")
