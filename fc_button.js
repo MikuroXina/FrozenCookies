@@ -124,7 +124,7 @@ function buildHeavenlyChipsInfo(menu) {
                         "Time to get last HC",
                         timeDisplay(
                             (getNumber("lastHCTime") -
-                                FrozenCookies.prevLastHCTime) /
+                                getNumber("prevLastHCTime")) /
                             1000
                         )
                     )
@@ -151,7 +151,7 @@ function buildHeavenlyChipsInfo(menu) {
                     "Previous Average HC Gain/hr",
                     Beautify(
                         (60 * 60 * (lastHCAmount - 1 - currHC)) /
-                        ((FrozenCookies.prevLastHCTime - Game.startDate) / 1000)
+                        ((getNumber("prevLastHCTime") - Game.startDate) / 1000)
                     )
                 )
             );

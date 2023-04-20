@@ -488,7 +488,7 @@ function fcReset() {
     ));
     set("lastHCTime", Date.now());
     FrozenCookies.maxHCPercent = 0;
-    FrozenCookies.prevLastHCTime = Date.now();
+    set("prevLastHCTime", Date.now());
     FrozenCookies.lastCps = 0;
     FrozenCookies.lastBaseCps = 0;
     recommendationList(true);
@@ -516,7 +516,7 @@ function saveFCData() {
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
     saveString.cortexMax = FrozenCookies.cortexMax;
-    saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
+    saveString.prevLastHCTime = getString("prevLastHCTime");
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
 }
