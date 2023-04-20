@@ -1,3 +1,4 @@
+import { getNumber } from "../fc_store.js";
 import { hasClickBuff } from "../fc_time.js";
 
 export function start() {
@@ -24,10 +25,11 @@ function autoFrenzyClick() {
     } else if (!hasClickBuff() && FrozenCookies.autoFrenzyBot) {
         clearInterval(FrozenCookies.autoFrenzyBot);
         FrozenCookies.autoFrenzyBot = 0;
-        if (FrozenCookies.autoClick && FrozenCookies.cookieClickSpeed) {
+        const cookieClickSpeed = getNumber("cookieClickSpeed")
+        if (FrozenCookies.autoClick && cookieClickSpeed) {
             FrozenCookies.autoclickBot = setInterval(
                 fcClickCookie,
-                1000 / FrozenCookies.cookieClickSpeed
+                1000 / cookieClickSpeed
             );
         }
     }

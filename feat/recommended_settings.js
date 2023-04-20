@@ -20,7 +20,7 @@ function recommendedSettingsAction() {
     if (FrozenCookies.recommendedSettings == 1) {
         // clicking options
         FrozenCookies.autoClick = 1;
-        FrozenCookies.cookieClickSpeed = 250;
+        set("cookieClickSpeed", 250);
         FrozenCookies.autoFrenzy = 1;
         FrozenCookies.frenzyClickSpeed = 1000;
         FrozenCookies.autoGC = 1;

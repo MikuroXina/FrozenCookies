@@ -500,7 +500,7 @@ function saveFCData() {
         saveString[preference] = FrozenCookies[preference];
     });
     saveString.frenzyClickSpeed = FrozenCookies.frenzyClickSpeed;
-    saveString.cookieClickSpeed = FrozenCookies.cookieClickSpeed;
+    saveString.cookieClickSpeed = getNumber("cookieClickSpeed");
     saveString.HCAscendAmount = FrozenCookies.HCAscendAmount;
     saveString.mineMax = FrozenCookies.mineMax;
     saveString.factoryMax = FrozenCookies.factoryMax;
@@ -631,7 +631,7 @@ function effectiveCps(delay, wrathValue, wrinklerCount) {
     return (
         baseCps() * wrinkler +
         gcPs(cookieValue(delay, wrathValue, wrinklerCount)) +
-        baseClickingCps(FrozenCookies.cookieClickSpeed * FrozenCookies.autoClick) +
+        baseClickingCps(getNumber("cookieClickSpeed") * FrozenCookies.autoClick) +
         reindeerCps(wrathValue)
     );
 }
@@ -654,7 +654,7 @@ function bloodProbability(wrathValue) {
 function cookieValue(bankAmount, wrathValue, wrinklerCount) {
     const cps = baseCps();
     const clickCps = baseClickingCps(
-        FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed
+        FrozenCookies.autoClick * getNumber("cookieClickSpeed")
     );
     const frenzyCps = FrozenCookies.autoFrenzy
         ? baseClickingCps(FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed)
@@ -1147,7 +1147,7 @@ function buildingStats(recalculate) {
                 }
                 const currentBank = bestBank(0).cost;
                 const baseCpsOrig = baseCps();
-                const cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+                const cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank));
                 const existingAchievements = Object.values(Game.AchievementsById).map(
                     function (item) {
                         return item.won;
@@ -1155,7 +1155,7 @@ function buildingStats(recalculate) {
                 );
                 buildingToggle(current);
                 const baseCpsNew = baseCps();
-                const cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+                const cpsNew = effectiveCps(currentBank);
                 buildingToggle(current, existingAchievements);
                 const deltaCps = cpsNew - cpsOrig;
                 const baseDeltaCps = baseCpsNew - baseCpsOrig;

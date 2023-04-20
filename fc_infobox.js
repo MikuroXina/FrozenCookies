@@ -157,7 +157,7 @@ export function updateTimers() {
     }
     const bankPercent = Math.min(Game.cookies, bankTotal) / (bankTotal + purchaseTotal);
     const bankMax = bankTotal / (purchaseTotal + bankTotal);
-    const actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+    const actualCps = Game.cookiesPs + Game.mouseCps() * getNumber("cookieClickSpeed");
 
     const t_draw = [];
 

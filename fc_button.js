@@ -169,7 +169,7 @@ function buildAutoBuyInfo(menu) {
         recommendation.type != chainRecommendation.type
     );
     const bankLevel = bestBank(chainRecommendation.efficiency);
-    const actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+    const actualCps = Game.cookiesPs + Game.mouseCps() * getNumber("cookieClickSpeed");
     const chocolateRecoup =
         (recommendation.type == "upgrade"
             ? recommendation.cost
@@ -450,7 +450,7 @@ function buildOtherStats(menu) {
     const subsection = $("<div>").addClass("subsection");
     subsection.append($("<div>").addClass("title").html("Other Information"));
     const cps = baseCps() +
-        baseClickingCps(FrozenCookies.cookieClickSpeed * FrozenCookies.autoClick);
+        baseClickingCps(getNumber("cookieClickSpeed") * FrozenCookies.autoClick);
     const baseChosen = Game.hasBuff("Frenzy") ? "" : " (*)";
     const frenzyChosen = Game.hasBuff("Frenzy") ? " (*)" : "";
     const clickStr = FrozenCookies.autoClick ? " + Autoclick" : "";
