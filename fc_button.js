@@ -5,6 +5,7 @@ import { chocolateValue } from "./fc_pay.js";
 import { cpsBonus, liveWrinklers } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { getNumber, getString, set } from "./fc_store.js";
+import { frenzyTimesByGain } from "./fc_frenzy_times.js";
 
 $("#logButton").before(
     $("<div>")
@@ -645,23 +646,14 @@ function buildGoldenCookiesStats(menu) {
 function buildFrenzyTimesStats(menu) {
     const subsection = $("<div>").addClass("subsection");
     subsection.append($("<div>").addClass("title").text("Frenzy Times"));
-    $.each(
-        Object.keys(FrozenCookies.frenzyTimes)
-            .sort((a, b) => parseInt(a) - parseInt(b))
-            .reduce((result, rate) => {
-                result[parseInt(rate)] =
-                    (result[parseInt(rate)] || 0) + FrozenCookies.frenzyTimes[rate];
-                return result;
-            }, {}),
-        (rate, time) => {
-            subsection.append(
-                buildListing(
-                    "Total Recorded Time at x" + Beautify(rate),
-                    timeDisplay(time / 1000)
-                )
-            );
-        }
-    );
+    for (const [gain, time] of frenzyTimesByGain()) {
+        subsection.append(
+            buildListing(
+                "Total Recorded Time at x" + Beautify(gain),
+                timeDisplay(time / 1000),
+            ),
+        );
+    }
     menu.append(subsection);
 }
 

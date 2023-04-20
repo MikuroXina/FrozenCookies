@@ -12,6 +12,7 @@ import { divCps } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
 import { loadFromStorage, set } from "./fc_store.js";
+import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
     // register with the modding API
@@ -294,11 +295,7 @@ function loadFCData() {
     loadFromLocalStorage("cortexMax", 0);
 
     // Get historical data
-    FrozenCookies.frenzyTimes =
-        JSON.parse(
-            FrozenCookies.loadedData["frenzyTimes"] ||
-                localStorage.getItem("frenzyTimes")
-        ) || {};
+    loadFromJson(localStorage.getItem("frenzyTimes") || "{}");
     loadFromLocalStorage("lastHCAmount", 0);
     loadFromLocalStorage("lastHCTime", 0);
     loadFromLocalStorage("prevLastHCTime", 0);
@@ -483,7 +480,6 @@ function fcReset() {
         Game.Upgrades["Chocolate egg"].buy();
     }
     Game.oldReset();
-    FrozenCookies.frenzyTimes = {};
     FrozenCookies.last_gc_state =
         (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
     FrozenCookies.last_gc_time = Date.now();
@@ -511,7 +507,7 @@ function saveFCData() {
     saveString.minCpSMult = FrozenCookies.minCpSMult;
     saveString.minLoanMult = FrozenCookies.minLoanMult;
     saveString.minASFMult = FrozenCookies.minASFMult;
-    saveString.frenzyTimes = JSON.stringify(FrozenCookies.frenzyTimes);
+    saveString.frenzyTimes = saveAsJson();
     //  saveString.nonFrenzyTime = FrozenCookies.non_gc_time;
     //  saveString.frenzyTime = FrozenCookies.gc_time;
     saveString.lastHCAmount = FrozenCookies.lastHCAmount;

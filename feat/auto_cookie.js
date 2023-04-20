@@ -1,11 +1,13 @@
 import { Beautify } from "../fc_beautify.js";
-import { cpsBonus, goldenCookieLife, hasClickBuff, liveWrinklers } from "../fc_time.js";
+import { goldenCookieLife, liveWrinklers } from "../fc_time.js";
 import { chocolateValue, safeBuy } from "../fc_pay.js";
+import { getNumber } from "../fc_store.js";
+import { updateFrenzyTimes } from "../fc_frenzy_times.js";
 
 let cookieBot = 0;
 
-export function start(config) {
-    const freq = config.has('frequency');
+export function start() {
+    const freq = getNumber('frequency');
     if (freq) {
         cookieBot = setTimeout(() => {
             autoCookie(config);
@@ -22,7 +24,7 @@ export function stop() {
 
 let processing = false;
 
-function autoCookie(config) {
+function autoCookie() {
     // console.log('autocookie called');
     if (!processing && !Game.OnAscend && !Game.AscendTimer) {
         processing = true;
@@ -297,58 +299,7 @@ function autoCookie(config) {
         if (FrozenCookies.autoBlacklistOff) {
             autoBlacklistOff();
         }
-        const currentFrenzy = cpsBonus() * clickBuffBonus();
-        if (currentFrenzy != FrozenCookies.last_gc_state) {
-            if (FrozenCookies.last_gc_state != 1 && currentFrenzy == 1) {
-                logEvent("GC", "Frenzy ended, cookie production x1");
-                if (FrozenCookies.hc_gain) {
-                    logEvent(
-                        "HC",
-                        "Won " +
-                            FrozenCookies.hc_gain +
-                            " heavenly chips during Frenzy. Rate: " +
-                            (FrozenCookies.hc_gain * 1000) /
-                                (Date.now() - FrozenCookies.hc_gain_time) +
-                            " HC/s."
-                    );
-                    FrozenCookies.hc_gain_time = Date.now();
-                    FrozenCookies.hc_gain = 0;
-                }
-            } else {
-                if (FrozenCookies.last_gc_state != 1) {
-                    logEvent(
-                        "GC",
-                        "Previous Frenzy x" + FrozenCookies.last_gc_state + "interrupted."
-                    );
-                } else if (FrozenCookies.hc_gain) {
-                    logEvent(
-                        "HC",
-                        "Won " +
-                            FrozenCookies.hc_gain +
-                            " heavenly chips outside of Frenzy. Rate: " +
-                            (FrozenCookies.hc_gain * 1000) /
-                                (Date.now() - FrozenCookies.hc_gain_time) +
-                            " HC/s."
-                    );
-                    FrozenCookies.hc_gain_time = Date.now();
-                    FrozenCookies.hc_gain = 0;
-                }
-                logEvent(
-                    "GC",
-                    "Starting " +
-                        (hasClickBuff() ? "Clicking " : "") +
-                        "Frenzy x" +
-                        currentFrenzy
-                );
-            }
-            if (FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] == null) {
-                FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] = 0;
-            }
-            FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] +=
-                Date.now() - FrozenCookies.last_gc_time;
-            FrozenCookies.last_gc_state = currentFrenzy;
-            FrozenCookies.last_gc_time = Date.now();
-        }
+        updateFrenzyTimes();
         processing = false;
         if (FrozenCookies.frequency) {
             FrozenCookies.cookieBot = setTimeout(
