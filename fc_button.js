@@ -388,7 +388,8 @@ function buildInternalInfo(menu) {
 }
 
 function buildHarvestingInfo(menu) {
-    if (FrozenCookies.setHarvestBankPlant) {
+    const setHarvestBankPlant = getNumber("setHarvestBankPlant");
+    if (setHarvestBankPlant) {
         subsection = $("<div>").addClass("subsection");
         subsection.append(
             $("<div>").addClass("title").text("Harvesting Information")
@@ -410,7 +411,7 @@ function buildHarvestingInfo(menu) {
             buildListing(
                 "Single " +
                 FrozenCookies.harvestPlant +
-                (FrozenCookies.setHarvestBankPlant < 6
+                (setHarvestBankPlant < 6
                     ? " harvesting"
                     : " exploding") +
                 "",
@@ -427,7 +428,7 @@ function buildHarvestingInfo(menu) {
         subsection.append(
             buildListing(
                 "Full garden " +
-                (FrozenCookies.setHarvestBankPlant < 6
+                (setHarvestBankPlant < 6
                     ? " harvesting"
                     : " exploding") +
                 " (36 plots)",

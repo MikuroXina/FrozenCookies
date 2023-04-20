@@ -11,7 +11,7 @@ import { FCMenu } from "./fc_button.js";
 import { divCps } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
-import { getString, loadFromStorage, set } from "./fc_store.js";
+import { getNumber, getString, has, loadFromStorage, set } from "./fc_store.js";
 import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
@@ -793,8 +793,18 @@ function luckyFrenzyBank() {
     return bank;
 }
 
+const NONE = 0;
+const BAKEBERRY = 1;
+const CHOCOROOT = 2;
+const WHITE_CHOCOROOT = 3;
+const QUEENBEET = 4;
+const DUKETATER = 5;
+const CRUMBSPORE = 6;
+const DOUGHSHROOM = 7;
+
 function harvestBank() {
-    if (!FrozenCookies.setHarvestBankPlant) {
+    const setHarvestBankPlant = getNumber("setHarvestBankPlant");
+    if (setHarvestBankPlant == null || setHarvestBankPlant == NONE) {
         return 0;
     }
 
@@ -843,44 +853,44 @@ function harvestBank() {
         }
     }
 
-    switch (FrozenCookies.setHarvestBankPlant) {
-        case 1:
+    switch (setHarvestBankPlant) {
+        case BAKEBERRY:
             FrozenCookies.harvestPlant = "Bakeberry";
             FrozenCookies.harvestMinutes = 30;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
-        case 2:
+        case CHOCOROOT:
             FrozenCookies.harvestPlant = "Chocoroot";
             FrozenCookies.harvestMinutes = 3;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
-        case 3:
+        case WHITE_CHOCOROOT:
             FrozenCookies.harvestPlant = "White Chocoroot";
             FrozenCookies.harvestMinutes = 3;
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
-        case 4:
+        case QUEENBEET:
             FrozenCookies.harvestPlant = "Queenbeet";
             FrozenCookies.harvestMinutes = 60;
             FrozenCookies.harvestMaxPercent = 0.04;
             break;
 
-        case 5:
+        case DUKETATER:
             FrozenCookies.harvestPlant = "Duketater";
             FrozenCookies.harvestMinutes = 120;
             FrozenCookies.harvestMaxPercent = 0.08;
             break;
 
-        case 6:
+        case CRUMBSPORE:
             FrozenCookies.harvestPlant = "Crumbspore";
             FrozenCookies.harvestMinutes = 1;
             FrozenCookies.harvestMaxPercent = 0.01;
             break;
 
-        case 7:
+        case DOUGHSHROOM:
             FrozenCookies.harvestPlant = "Doughshroom";
             FrozenCookies.harvestMinutes = 5;
             FrozenCookies.harvestMaxPercent = 0.03;
@@ -932,9 +942,9 @@ function bestBank(minEfficiency) {
         })
         .find(function (bank) {
             return (bank.efficiency >= 0 && bank.efficiency <= minEfficiency) ||
-                FrozenCookies.setHarvestBankPlant;
+                setHarvestBankPlant != NONE;
         });
-    if (bankLevel.cost > edifice || FrozenCookies.setHarvestBankPlant) {
+    if (bankLevel.cost > edifice || setHarvestBankPlant != NONE) {
         return bankLevel;
     }
     return {
