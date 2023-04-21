@@ -14,6 +14,7 @@ import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
 import { getNumber, getString, loadFromStorage, set } from "./fc_store.js";
 import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
+import { willAutoSpellSE } from "./feat/auto_spell.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
     // register with the modding API
@@ -932,7 +933,7 @@ function buildingStats(recalculate) {
             // If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
             if (
                 TOWER_GAME &&
-                FrozenCookies.autoSpell == 3 &&
+                willAutoSpellSE() &&
                 Game.Objects["Cortex baker"].amount >= 399
             )
                 buildingBlacklist.push(18);

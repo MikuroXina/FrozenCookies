@@ -1,4 +1,5 @@
 import { getNumber, set } from "./fc_store";
+import { willAutoSpellSE } from "./feat/auto_spell";
 
 function canCastSE() {
     if (TOWER_GAME.magicM >= 80 && Game.Objects["Cortex baker"].amount > 0) {
@@ -182,7 +183,7 @@ function cookieEfficiency(startingPoint, bankAmount) {
 export function bestBank(minEfficiency) {
     const setHarvestBankPlant = getNumber("setHarvestBankPlant");
     const edifice =
-        FrozenCookies.autoSpell == 3 || FrozenCookies.holdSEBank ? edificeBank() : 0;
+        willAutoSpellSE() || FrozenCookies.holdSEBank ? edificeBank() : 0;
     const bankLevel = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
         .sort(function (a, b) {
             return b - a;

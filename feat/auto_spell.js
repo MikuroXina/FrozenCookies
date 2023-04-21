@@ -1,8 +1,9 @@
 import { Beautify } from "../fc_beautify.js";
+import { getNumber } from "../fc_store.js";
 import { cpsBonus } from "../fc_time.js";
 
 export function start() {
-    if (FrozenCookies.autoSpell) {
+    if (getNumber("autoSpell")) {
         FrozenCookies.autoSpellBot = setInterval(autoCast, FrozenCookies.frequency * 10);
     }
 }
@@ -14,8 +15,31 @@ export function stop() {
     }
 }
 
+/*
+"Auto Cast OFF",
+"Auto Cast CONJURE BAKED GOODS",
+"Auto Cast FORCE THE HAND OF FATE",
+"Auto Cast SPONTANEOUS EDIFICE",
+"Auto Cast HAGGLER'S CHARM (cheapest)",
+"Auto Cast FTHOF (Click and Building Specials only)",
+*/
+
+const OFF = 0;
+const CONJURE_BAKED_GOODS = 1;
+const FORCE_THE_HAND_OF_FATE = 2;
+const SPONTANEOUS_EDIFICE = 3;
+const HAGGLERS_CHARM = 4;
+const FTHOF_CLICK_AND_BUILDING_ONLY = 4;
+
+/**
+ * @returns Whether the auto spell feature will use Spontaneous Edifice.
+ */
+export function willAutoSpellSE() {
+    return getNumber("autoSpell") == SPONTANEOUS_EDIFICE;
+}
+
 function autoCast() {
-    if (!TOWER_GAME || FrozenCookies.autoSpell == 0) {
+    if (!TOWER_GAME || getNumber("autoSpell") == OFF) {
         return;
     }
 
@@ -24,7 +48,7 @@ function autoCast() {
         FrozenCookies.auto100ConsistencyCombo == 1 ||
         FrozenCookies.autoSweet == 1
     ) {
-        FrozenCookies.autoSpell = 0;
+        set("autoSpell", OFF);
     }
 
     if (
@@ -79,27 +103,28 @@ function autoCast() {
         return;
     }
 
-    switch (FrozenCookies.autoSpell) {
-        case 1:
+    switch (getNumber("autoSpell")) {
+        case CONJURE_BAKED_GOODS:
             autoCastConjureBakedGoods();
             return;
 
-        case 2:
+        case FORCE_THE_HAND_OF_FATE:
             autoCastForceHandFate();
             return;
 
-        case 3:
+        case SPONTANEOUS_EDIFICE:
             autoCastSpontaneousEdifice();
             return;
 
-        case 4:
+        case HAGGLERS_CHARM:
             autoCastHagglersCharm();
             return;
 
-        case 5:
+        case FTHOF_CLICK_AND_BUILDING_ONLY:
             autoCastForceHandFateClickSpecialsOnly();
             return;
     }
+    throw new Error("unreachable");
 }
 
 function autoCastConjureBakedGoods() {

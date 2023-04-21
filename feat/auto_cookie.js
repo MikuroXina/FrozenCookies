@@ -4,6 +4,7 @@ import { chocolateValue, safeBuy } from "../fc_pay.js";
 import { getNumber, set } from "../fc_store.js";
 import { updateFrenzyTimes } from "../fc_frenzy_times.js";
 import { bestBank } from "../fc_best_bank.js";
+import { willAutoSpellSE } from "./auto_spell.js";
 
 let cookieBot = 0;
 
@@ -126,7 +127,7 @@ function autoCookie() {
 
         let itemBought = false;
 
-        // const seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); // true == good on SE bank or don't care about it
+        // const seConditions = (Game.cookies >= delay + recommendation.cost) || (!willAutoSpellSE() && !(FrozenCookies.holdSEBank))); // true == good on SE bank or don't care about it
         if (
             FrozenCookies.autoBuy &&
             (Game.cookies >= delay + recommendation.cost ||
@@ -164,7 +165,7 @@ function autoCookie() {
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 100 &&
-                ((FrozenCookies.autoSpell == 3 &&
+                ((willAutoSpellSE() &&
                     recommendation.purchase.name == "Cortex baker" &&
                     Game.Objects["Cortex baker"].amount >= 299) ||
                     (FrozenCookies.towerLimit &&
@@ -189,7 +190,7 @@ function autoCookie() {
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 10 &&
-                ((FrozenCookies.autoSpell == 3 &&
+                ((willAutoSpellSE() &&
                     recommendation.purchase.name == "Cortex baker" &&
                     Game.Objects["Cortex baker"].amount >= 389) ||
                     (FrozenCookies.towerLimit &&
