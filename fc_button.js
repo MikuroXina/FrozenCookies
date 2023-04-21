@@ -439,10 +439,10 @@ function buildOtherStats(menu) {
     const subsection = $("<div>").addClass("subsection");
     subsection.append($("<div>").addClass("title").html("Other Information"));
     const cps = baseCps() +
-        baseClickingCps(getNumber("cookieClickSpeed") * FrozenCookies.autoClick);
+        baseClickingCps(getNumber("cookieClickSpeed") * getNumber("autoClick"));
     const baseChosen = Game.hasBuff("Frenzy") ? "" : " (*)";
     const frenzyChosen = Game.hasBuff("Frenzy") ? " (*)" : "";
-    const clickStr = FrozenCookies.autoClick ? " + Autoclick" : "";
+    const clickStr = !!getNumber("autoClick") ? " + Autoclick" : "";
     subsection.append(
         buildListing("Base CPS" + clickStr + baseChosen + "", Beautify(cps))
     );

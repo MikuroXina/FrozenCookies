@@ -633,7 +633,7 @@ function effectiveCps(delay, wrathValue, wrinklerCount) {
     return (
         baseCps() * wrinkler +
         gcPs(cookieValue(delay, wrathValue, wrinklerCount)) +
-        baseClickingCps(getNumber("cookieClickSpeed") * FrozenCookies.autoClick) +
+        baseClickingCps(getNumber("cookieClickSpeed") * getNumber("autoClick")) +
         reindeerCps(wrathValue)
     );
 }
@@ -656,7 +656,7 @@ function bloodProbability(wrathValue) {
 function cookieValue(bankAmount, wrathValue, wrinklerCount) {
     const cps = baseCps();
     const clickCps = baseClickingCps(
-        FrozenCookies.autoClick * getNumber("cookieClickSpeed")
+        getNumber("autoClick") * getNumber("cookieClickSpeed")
     );
     const frenzyCps = FrozenCookies.autoFrenzy
         ? baseClickingCps(FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed)

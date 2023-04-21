@@ -26,7 +26,7 @@ function autoFrenzyClick() {
         clearInterval(FrozenCookies.autoFrenzyBot);
         FrozenCookies.autoFrenzyBot = 0;
         const cookieClickSpeed = getNumber("cookieClickSpeed")
-        if (FrozenCookies.autoClick && cookieClickSpeed) {
+        if (!!getNumber("autoClick") && cookieClickSpeed) {
             FrozenCookies.autoclickBot = setInterval(
                 fcClickCookie,
                 1000 / cookieClickSpeed

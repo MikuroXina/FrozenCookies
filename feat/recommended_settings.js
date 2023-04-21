@@ -19,7 +19,7 @@ export function stop() {
 function recommendedSettingsAction() {
     if (FrozenCookies.recommendedSettings == 1) {
         // clicking options
-        FrozenCookies.autoClick = 1;
+        set("autoClick", 1);
         set("cookieClickSpeed", 250);
         FrozenCookies.autoFrenzy = 1;
         FrozenCookies.frenzyClickSpeed = 1000;
