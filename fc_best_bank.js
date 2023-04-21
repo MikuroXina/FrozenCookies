@@ -36,13 +36,21 @@ const DUKETATER = 5;
 const CRUMBSPORE = 6;
 const DOUGHSHROOM = 7;
 
+export function isPlantingSomething() {
+    return getNumber("setHarvestBankPlant") != 0;
+}
+
+export function isPlantingFungus() {
+    return getNumber("setHarvestBankPlant") >= CRUMBSPORE;
+}
+
 function harvestBank() {
     const setHarvestBankPlant = getNumber("setHarvestBankPlant");
     if (setHarvestBankPlant == null || setHarvestBankPlant == NONE) {
         return 0;
     }
 
-    FrozenCookies.harvestMinutes = 0;
+    set("harvestMinutes", 0);
     FrozenCookies.harvestMaxPercent = 0;
     FrozenCookies.harvestFrenzy = 1;
     FrozenCookies.harvestBuilding = 1;
@@ -90,43 +98,43 @@ function harvestBank() {
     switch (setHarvestBankPlant) {
         case BAKEBERRY:
             set("harvestPlant", "Bakeberry");
-            FrozenCookies.harvestMinutes = 30;
+            set("harvestMinutes", 30);
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
         case CHOCOROOT:
             set("harvestPlant", "Chocoroot");
-            FrozenCookies.harvestMinutes = 3;
+            set("harvestMinutes", 3);
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
         case WHITE_CHOCOROOT:
             set("harvestPlant", "White Chocoroot");
-            FrozenCookies.harvestMinutes = 3;
+            set("harvestMinutes", 3);
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
 
         case QUEENBEET:
             set("harvestPlant", "Queenbeet");
-            FrozenCookies.harvestMinutes = 60;
+            set("harvestMinutes", 60);
             FrozenCookies.harvestMaxPercent = 0.04;
             break;
 
         case DUKETATER:
             set("harvestPlant", "Duketater");
-            FrozenCookies.harvestMinutes = 120;
+            set("harvestMinutes", 120);
             FrozenCookies.harvestMaxPercent = 0.08;
             break;
 
         case CRUMBSPORE:
             set("harvestPlant", "Crumbspore");
-            FrozenCookies.harvestMinutes = 1;
+            set("harvestMinutes", 1);
             FrozenCookies.harvestMaxPercent = 0.01;
             break;
 
         case DOUGHSHROOM:
             set("harvestPlant", "Doughshroom");
-            FrozenCookies.harvestMinutes = 5;
+            set("harvestMinutes", 5);
             FrozenCookies.harvestMaxPercent = 0.03;
             break;
     }
@@ -138,7 +146,7 @@ function harvestBank() {
     return (
         (baseCps() *
             60 *
-            FrozenCookies.harvestMinutes *
+            getNumber("harvestMinutes") *
             FrozenCookies.harvestFrenzy *
             FrozenCookies.harvestBuilding) /
         Math.pow(10, FrozenCookies.maxSpecials) /

@@ -6,7 +6,7 @@ import { cpsBonus, liveWrinklers } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { getNumber, getString, set } from "./fc_store.js";
 import { frenzyTimesByGain } from "./fc_frenzy_times.js";
-import { bestBank } from "./fc_best_bank.js";
+import { bestBank, isPlantingFungus, isPlantingSomething } from "./fc_best_bank.js";
 
 $("#logButton").before(
     $("<div>")
@@ -389,8 +389,7 @@ function buildInternalInfo(menu) {
 }
 
 function buildHarvestingInfo(menu) {
-    const setHarvestBankPlant = getNumber("setHarvestBankPlant");
-    if (setHarvestBankPlant) {
+    if (isPlantingSomething()) {
         subsection = $("<div>").addClass("subsection");
         subsection.append(
             $("<div>").addClass("title").text("Harvesting Information")
@@ -400,7 +399,7 @@ function buildHarvestingInfo(menu) {
             buildListing("Plant to harvest", getString("harvestPlant"))
         );
         subsection.append(
-            buildListing("Minutes of CpS", FrozenCookies.harvestMinutes + " min")
+            buildListing("Minutes of CpS", getString("harvestMinutes") + " min")
         );
         subsection.append(
             buildListing(
@@ -412,14 +411,11 @@ function buildHarvestingInfo(menu) {
             buildListing(
                 "Single " +
                 getString("harvestPlant") +
-                (setHarvestBankPlant < 6
-                    ? " harvesting"
-                    : " exploding") +
-                "",
+                (isPlantingFungus() ? " exploding" : " harvesting"),
                 Beautify(
                     (baseCps() *
                         60 *
-                        FrozenCookies.harvestMinutes *
+                        getNumber("harvestMinutes") *
                         FrozenCookies.harvestFrenzy *
                         FrozenCookies.harvestBuilding) /
                     Math.pow(10, FrozenCookies.maxSpecials)
@@ -429,15 +425,15 @@ function buildHarvestingInfo(menu) {
         subsection.append(
             buildListing(
                 "Full garden " +
-                (setHarvestBankPlant < 6
-                    ? " harvesting"
-                    : " exploding") +
+                (isPlantingFungus()
+                    ? " exploding"
+                    : " harvesting") +
                 " (36 plots)",
                 Beautify(
                     (36 *
                         baseCps() *
                         60 *
-                        FrozenCookies.harvestMinutes *
+                        getNumber("harvestMinutes") *
                         FrozenCookies.harvestFrenzy *
                         FrozenCookies.harvestBuilding) /
                     Math.pow(10, FrozenCookies.maxSpecials)
