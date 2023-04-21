@@ -559,9 +559,10 @@ function buildGoldenCookiesStats(menu) {
 
     const subsection = $("<div>").addClass("subsection");
     subsection.append($("<div>").addClass("title").text("Golden Cookie Information"));
-    const currentCookies = Math.min(Game.cookies, FrozenCookies.targetBank.cost);
+    const targetBankCost = getNumber("targetBank.cost");
+    const currentCookies = Math.min(Game.cookies, targetBankCost);
     const maxCookies = bestBank(Number.POSITIVE_INFINITY).cost;
-    const isTarget = FrozenCookies.targetBank.cost == FrozenCookies.currentBank.cost;
+    const isTarget = targetBankCost == FrozenCookies.currentBank.cost;
     const isMax = currentCookies == maxCookies;
     const targetTxt = isTarget ? "" : " (Building Bank)";
     const maxTxt = isMax ? " (Max)" : "";
@@ -576,7 +577,7 @@ function buildGoldenCookiesStats(menu) {
         subsection.append(
             buildListing(
                 "Target Average Cookie Value",
-                Beautify(cookieValue(FrozenCookies.targetBank.cost))
+                Beautify(cookieValue(targetBankCost))
             )
         );
     }

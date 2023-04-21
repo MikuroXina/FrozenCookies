@@ -185,10 +185,8 @@ function setOverrides(Game) {
         cost: 0,
         efficiency: 0,
     };
-    FrozenCookies.targetBank = {
-        cost: 0,
-        efficiency: 0,
-    };
+    set("targetBank.cost", 0);
+    set("targetBank.efficiency", 0);
     FrozenCookies.disabledPopups = true;
     FrozenCookies.lastGraphDraw = 0;
     FrozenCookies.calculatedCpsByType = {};
