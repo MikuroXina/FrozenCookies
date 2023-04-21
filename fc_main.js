@@ -18,14 +18,13 @@ export function registerMod(mod_id = "frozen_cookies", Game) {
         init: function () {
             Game.registerHook("reincarnate", function () {
                 // called when the player has reincarnated after an ascension
-                if (!FrozenCookies.autoBulk) {
-                    return;
-                }
-                if (FrozenCookies.autoBulk == 1) {
-                    document.getElementById("storeBulk10").click();
-                }
-                if (FrozenCookies.autoBulk == 2) {
-                    document.getElementById("storeBulk100").click();
+                switch (getNumber("autoBulk")) {
+                    case 1:
+                        document.getElementById("storeBulk10").click();
+                        break;
+                    case 2:
+                        document.getElementById("storeBulk100").click();
+                        break;
                 }
             });
             Game.registerHook("draw", updateTimers); // called every draw tick
