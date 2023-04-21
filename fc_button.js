@@ -6,7 +6,7 @@ import { cpsBonus, liveWrinklers } from "./fc_time.js";
 import { timeDisplay } from "./fc_format.js";
 import { getNumber, getString, set } from "./fc_store.js";
 import { frenzyTimesByGain } from "./fc_frenzy_times.js";
-import { bestBank, isPlantingFungus, isPlantingSomething } from "./fc_best_bank.js";
+import { bestBank, harvestCps, isPlantingFungus, isPlantingSomething } from "./fc_best_bank.js";
 
 $("#logButton").before(
     $("<div>")
@@ -413,11 +413,7 @@ function buildHarvestingInfo(menu) {
                 getString("harvestPlant") +
                 (isPlantingFungus() ? " exploding" : " harvesting"),
                 Beautify(
-                    (baseCps() *
-                        60 *
-                        getNumber("harvestMinutes") *
-                        FrozenCookies.harvestFrenzy *
-                        FrozenCookies.harvestBuilding) /
+                    harvestCps() /
                     Math.pow(10, FrozenCookies.maxSpecials)
                 )
             )
@@ -430,12 +426,7 @@ function buildHarvestingInfo(menu) {
                     : " harvesting") +
                 " (36 plots)",
                 Beautify(
-                    (36 *
-                        baseCps() *
-                        60 *
-                        getNumber("harvestMinutes") *
-                        FrozenCookies.harvestFrenzy *
-                        FrozenCookies.harvestBuilding) /
+                    (36 * harvestCps()) /
                     Math.pow(10, FrozenCookies.maxSpecials)
                 )
             )

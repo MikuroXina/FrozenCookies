@@ -44,6 +44,14 @@ export function isPlantingFungus() {
     return getNumber("setHarvestBankPlant") >= CRUMBSPORE;
 }
 
+export function harvestCps() {
+    return baseCps() *
+        60 *
+        getNumber("harvestMinutes") *
+        FrozenCookies.harvestFrenzy *
+        FrozenCookies.harvestBuilding;
+}
+
 function harvestBank() {
     const setHarvestBankPlant = getNumber("setHarvestBankPlant");
     if (setHarvestBankPlant == null || setHarvestBankPlant == NONE) {
@@ -144,11 +152,7 @@ function harvestBank() {
     }
 
     return (
-        (baseCps() *
-            60 *
-            getNumber("harvestMinutes") *
-            FrozenCookies.harvestFrenzy *
-            FrozenCookies.harvestBuilding) /
+        harvestCps() /
         Math.pow(10, FrozenCookies.maxSpecials) /
         getNumber("harvestMaxPercent")
     );
