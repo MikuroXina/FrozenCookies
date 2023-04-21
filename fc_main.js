@@ -1,7 +1,6 @@
 import {
     BLACKLIST,
     COOKIE_SPEC,
-    UPGRADE_PREREQUISITES,
 } from "./cc_upgrade_prerequisites.js";
 import { Beautify } from "./fc_beautify.js";
 import { FCMenu } from "./fc_button.js";
