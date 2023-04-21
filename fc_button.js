@@ -621,7 +621,7 @@ function buildGoldenCookiesStats(menu) {
     subsection.append(
         buildListing("Golden Cookie Clicks", Beautify(Game.goldenClicks))
     );
-    if (FrozenCookies.showMissedCookies == 1) {
+    if (getNumber("showMissedCookies") == 1) {
         subsection.append(
             buildListing(
                 "Missed Golden Cookie Clicks",

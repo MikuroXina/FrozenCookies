@@ -91,7 +91,7 @@ function recommendedSettingsAction() {
         FrozenCookies.FCshortcuts = 1;
         FrozenCookies.simulatedGCPercent = 1;
         // Display options
-        FrozenCookies.showMissedCookies = 0;
+        set("showMissedCookies", 0);
         set("numberDisplay", 1);
         FrozenCookies.fancyui = 1;
         FrozenCookies.logging = 1;
