@@ -48,7 +48,7 @@ export function harvestCps() {
     return baseCps() *
         60 *
         getNumber("harvestMinutes") *
-        FrozenCookies.harvestFrenzy *
+        getNumber("harvestFrenzy") *
         FrozenCookies.harvestBuilding;
 }
 
@@ -60,12 +60,12 @@ function harvestBank() {
 
     set("harvestMinutes", 0);
     set("harvestMaxPercent", 0);
-    FrozenCookies.harvestFrenzy = 1;
+    set("harvestFrenzy", 1);
     FrozenCookies.harvestBuilding = 1;
     set("harvestPlant", "");
 
     if (FrozenCookies.setHarvestBankType == 1 || FrozenCookies.setHarvestBankType == 3) {
-        FrozenCookies.harvestFrenzy = 7;
+        set("harvestFrenzy", 7);
     }
 
     if (FrozenCookies.setHarvestBankType == 2 || FrozenCookies.setHarvestBankType == 3) {
