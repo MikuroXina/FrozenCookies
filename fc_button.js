@@ -494,7 +494,7 @@ function cyclePreference(preferenceName) {
         const newValue = (current + 1) % display.length;
         preferenceButton[0].innerText = display[newValue];
         set(preferenceName, newValue);
-        FrozenCookies.recalculateCaches = true;
+        setNumber("recalculateCaches", 1);
         Game.RefreshStore();
         Game.RebuildUpgrades();
         loadFeatures();

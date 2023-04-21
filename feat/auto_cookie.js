@@ -241,7 +241,7 @@ function autoCookie() {
                 Game.Draw();
                 FrozenCookies.autobuyCount = 0;
             }
-            FrozenCookies.recalculateCaches = true;
+            setNumber("recalculateCaches", 1);
             processing = false;
             itemBought = true;
         }
@@ -318,43 +318,44 @@ function autoCookie() {
 }
 
 function updateCaches() {
-    let recommendation, currentBank, targetBank, currentCookieCPS, currentUpgradeCount;
-    let recalcCount = 0;
+    let recalculateCaches = !!getNumber("recalculateCaches");
+    let retryCount = 0;
     do {
-        recommendation = nextPurchase(FrozenCookies.recalculateCaches);
-        FrozenCookies.recalculateCaches = false;
-        currentBank = bestBank(0);
-        targetBank = bestBank(recommendation.efficiency);
-        currentCookieCPS = gcPs(cookieValue(currentBank.cost));
-        currentUpgradeCount = Game.UpgradesInStore.length;
+        const recommendation = nextPurchase(recalculateCaches);
+        recalculateCaches = false;
+        const currentBank = bestBank(0);
+        const targetBank = bestBank(recommendation.efficiency);
+        const currentCookieCPS = gcPs(cookieValue(currentBank.cost));
+        const currentUpgradeCount = Game.UpgradesInStore.length;
         FrozenCookies.safeGainsCalc();
 
         if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
-            FrozenCookies.recalculateCaches = true;
+            recalculateCaches = true;
             FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
         }
 
         if (FrozenCookies.currentBank.cost != currentBank.cost) {
-            FrozenCookies.recalculateCaches = true;
+            recalculateCaches = true;
             FrozenCookies.currentBank = currentBank;
         }
 
         if (FrozenCookies.targetBank.cost != targetBank.cost) {
-            FrozenCookies.recalculateCaches = true;
+            recalculateCaches = true;
             FrozenCookies.targetBank = targetBank;
         }
 
         if (FrozenCookies.lastCookieCPS != currentCookieCPS) {
-            FrozenCookies.recalculateCaches = true;
+            recalculateCaches = true;
             FrozenCookies.lastCookieCPS = currentCookieCPS;
         }
 
         if (FrozenCookies.lastUpgradeCount != currentUpgradeCount) {
-            FrozenCookies.recalculateCaches = true;
+            recalculateCaches = true;
             FrozenCookies.lastUpgradeCount = currentUpgradeCount;
         }
-        recalcCount += 1;
-    } while (FrozenCookies.recalculateCaches && recalcCount < 10);
+        retryCount += 1;
+    } while (recalculateCaches && retryCount < 10);
+    set("recalculateCaches", 0);
 
     Game.recalculateGains = 1;
     Game.CalculateGains();
