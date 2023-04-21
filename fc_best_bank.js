@@ -55,6 +55,11 @@ export function harvestCps() {
         harvestBuilding;
 }
 
+const HARVEST_DURING_NORMAL = 0;
+const HARVEST_DURING_FRENZY = 1;
+const HARVEST_DURING_BUILDING_SPECIAL = 2;
+const HARVEST_DURING_FRENZY_BUILDING_SPECIAL = 3;
+
 function harvestBank() {
     const setHarvestBankPlant = getNumber("setHarvestBankPlant");
     if (setHarvestBankPlant == null || setHarvestBankPlant == NONE) {
@@ -67,11 +72,12 @@ function harvestBank() {
     harvestBuilding = 1;
     set("harvestPlant", "");
 
-    if (FrozenCookies.setHarvestBankType == 1 || FrozenCookies.setHarvestBankType == 3) {
+    const setHarvestBankType = getNumber("setHarvestBankType");
+    if (setHarvestBankType == HARVEST_DURING_FRENZY || setHarvestBankType == HARVEST_DURING_FRENZY_BUILDING_SPECIAL) {
         harvestFrenzy = 7;
     }
 
-    if (FrozenCookies.setHarvestBankType == 2 || FrozenCookies.setHarvestBankType == 3) {
+    if (setHarvestBankType == HARVEST_DURING_BUILDING_SPECIAL || setHarvestBankType == HARVEST_DURING_FRENZY_BUILDING_SPECIAL) {
         const harvestBuildingArray = [
             Game.Objects["Cursor"].amount,
             Game.Objects["Grandma"].amount,
