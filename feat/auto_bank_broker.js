@@ -1,4 +1,5 @@
 import { Beautify } from "../fc_beautify.js";
+import { nextPurchase } from "../fc_next_purchase.js";
 
 export function start() {
     if (FrozenCookies.autoBroker) {

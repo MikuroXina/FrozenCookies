@@ -1,5 +1,6 @@
 // functionality for the infobox
 
+import { nextPurchase } from "./fc_next_purchase.js";
 import { probabilitySpan } from "./fc_probability.js";
 
 function decodeHtml(html) {

@@ -7,6 +7,7 @@ import { timeDisplay } from "./fc_format.js";
 import { getNumber, getString, set } from "./fc_store.js";
 import { frenzyTimesByGain } from "./fc_frenzy_times.js";
 import { bestBank, harvestCps, isPlantingFungus, isPlantingSomething } from "./fc_best_bank.js";
+import { nextPurchase } from "./fc_next_purchase.js";
 
 $("#logButton").before(
     $("<div>")
