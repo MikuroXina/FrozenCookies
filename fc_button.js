@@ -414,7 +414,7 @@ function buildHarvestingInfo(menu) {
                 (isPlantingFungus() ? " exploding" : " harvesting"),
                 Beautify(
                     harvestCps() /
-                    Math.pow(10, FrozenCookies.maxSpecials)
+                    Math.pow(10, getNumber("maxSpecials"))
                 )
             )
         );
@@ -427,7 +427,7 @@ function buildHarvestingInfo(menu) {
                 " (36 plots)",
                 Beautify(
                     (36 * harvestCps()) /
-                    Math.pow(10, FrozenCookies.maxSpecials)
+                    Math.pow(10, getNumber("maxSpecials"))
                 )
             )
         );

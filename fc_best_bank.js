@@ -77,6 +77,7 @@ function harvestBank() {
         harvestFrenzy = 7;
     }
 
+    const maxSpecials = getNumber("maxSpecials");
     if (setHarvestBankType == HARVEST_DURING_BUILDING_SPECIAL || setHarvestBankType == HARVEST_DURING_FRENZY_BUILDING_SPECIAL) {
         const harvestBuildingArray = [
             Game.Objects["Cursor"].amount,
@@ -103,11 +104,7 @@ function harvestBank() {
             return b - a;
         });
 
-        for (
-            let buildingLoop = 0;
-            buildingLoop < FrozenCookies.maxSpecials;
-            buildingLoop++
-        ) {
+        for (let buildingLoop = 0; buildingLoop < maxSpecials; buildingLoop++) {
             harvestBuilding *= harvestBuildingArray[buildingLoop];
         }
     }
@@ -156,13 +153,13 @@ function harvestBank() {
             break;
     }
 
-    if (!FrozenCookies.maxSpecials) {
-        FrozenCookies.maxSpecials = 1;
+    if (!maxSpecials) {
+        set("maxSpecials", 1);
     }
 
     return (
         harvestCps() /
-        Math.pow(10, FrozenCookies.maxSpecials) /
+        Math.pow(10, getNumber("maxSpecials")) /
         getNumber("harvestMaxPercent")
     );
 }

@@ -86,7 +86,7 @@ function recommendedSettingsAction() {
         FrozenCookies.holdSEBank = 0;
         set("setHarvestBankPlant", 0);
         set("setHarvestBankType", 3);
-        FrozenCookies.maxSpecials = 1;
+        set("maxSpecials", 1);
         // Other options
         FrozenCookies.FCshortcuts = 1;
         FrozenCookies.simulatedGCPercent = 1;

@@ -515,7 +515,7 @@ function saveFCData() {
     saveString.maxHCPercent = getString("maxHCPercent");
     saveString.lastHCTime = getString("lastHCTime");
     saveString.manaMax = FrozenCookies.manaMax;
-    saveString.maxSpecials = FrozenCookies.maxSpecials;
+    saveString.maxSpecials = getString("maxSpecials");
     saveString.cortexMax = FrozenCookies.cortexMax;
     saveString.prevLastHCTime = getString("prevLastHCTime");
     saveString.saveVersion = FrozenCookies.version;
