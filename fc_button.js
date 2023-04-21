@@ -404,7 +404,7 @@ function buildHarvestingInfo(menu) {
         subsection.append(
             buildListing(
                 "Max percent of Bank",
-                FrozenCookies.harvestMaxPercent * 100 + " %"
+                getNumber("harvestMaxPercent") * 100 + " %"
             )
         );
         subsection.append(

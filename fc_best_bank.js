@@ -51,7 +51,7 @@ function harvestBank() {
     }
 
     set("harvestMinutes", 0);
-    FrozenCookies.harvestMaxPercent = 0;
+    set("harvestMaxPercent", 0);
     FrozenCookies.harvestFrenzy = 1;
     FrozenCookies.harvestBuilding = 1;
     set("harvestPlant", "");
@@ -99,43 +99,43 @@ function harvestBank() {
         case BAKEBERRY:
             set("harvestPlant", "Bakeberry");
             set("harvestMinutes", 30);
-            FrozenCookies.harvestMaxPercent = 0.03;
+            set("harvestMaxPercent", 0.03);
             break;
 
         case CHOCOROOT:
             set("harvestPlant", "Chocoroot");
             set("harvestMinutes", 3);
-            FrozenCookies.harvestMaxPercent = 0.03;
+            set("harvestMaxPercent", 0.03);
             break;
 
         case WHITE_CHOCOROOT:
             set("harvestPlant", "White Chocoroot");
             set("harvestMinutes", 3);
-            FrozenCookies.harvestMaxPercent = 0.03;
+            set("harvestMaxPercent", 0.03);
             break;
 
         case QUEENBEET:
             set("harvestPlant", "Queenbeet");
             set("harvestMinutes", 60);
-            FrozenCookies.harvestMaxPercent = 0.04;
+            set("harvestMaxPercent", 0.04);
             break;
 
         case DUKETATER:
             set("harvestPlant", "Duketater");
             set("harvestMinutes", 120);
-            FrozenCookies.harvestMaxPercent = 0.08;
+            set("harvestMaxPercent", 0.08);
             break;
 
         case CRUMBSPORE:
             set("harvestPlant", "Crumbspore");
             set("harvestMinutes", 1);
-            FrozenCookies.harvestMaxPercent = 0.01;
+            set("harvestMaxPercent", 0.01);
             break;
 
         case DOUGHSHROOM:
             set("harvestPlant", "Doughshroom");
             set("harvestMinutes", 5);
-            FrozenCookies.harvestMaxPercent = 0.03;
+            set("harvestMaxPercent", 0.03);
             break;
     }
 
@@ -150,7 +150,7 @@ function harvestBank() {
             FrozenCookies.harvestFrenzy *
             FrozenCookies.harvestBuilding) /
         Math.pow(10, FrozenCookies.maxSpecials) /
-        FrozenCookies.harvestMaxPercent
+        getNumber("harvestMaxPercent")
     );
 }
 
