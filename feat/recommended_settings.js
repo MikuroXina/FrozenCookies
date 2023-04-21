@@ -83,7 +83,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoEaster = 1;
         FrozenCookies.autoHalloween = 1;
         // Bank options
-        FrozenCookies.holdSEBank = 0;
+        set("holdSEBank", 0);
         set("setHarvestBankPlant", 0);
         set("setHarvestBankType", 3);
         set("maxSpecials", 1);

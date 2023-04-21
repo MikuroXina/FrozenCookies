@@ -183,7 +183,7 @@ function cookieEfficiency(startingPoint, bankAmount) {
 export function bestBank(minEfficiency) {
     const setHarvestBankPlant = getNumber("setHarvestBankPlant");
     const edifice =
-        willAutoSpellSE() || FrozenCookies.holdSEBank ? edificeBank() : 0;
+        willAutoSpellSE() || !!getNumber("holdSEBank") ? edificeBank() : 0;
     const bankLevel = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
         .sort(function (a, b) {
             return b - a;
