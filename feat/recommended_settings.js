@@ -93,7 +93,7 @@ function recommendedSettingsAction() {
         // Display options
         set("showMissedCookies", 0);
         set("numberDisplay", 1);
-        FrozenCookies.fancyui = 1;
+        set("fancyui", 1);
         FrozenCookies.logging = 1;
         FrozenCookies.purchaseLog = 0;
         FrozenCookies.fpsModifier = 2;

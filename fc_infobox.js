@@ -2,6 +2,12 @@
 
 import { nextPurchase } from "./fc_next_purchase.js";
 import { probabilitySpan } from "./fc_probability.js";
+import { getNumber } from "./fc_store.js";
+
+const OFF = 0;
+const TEXT_ONLY = 1;
+const WHEEL_ONLY = 2;
+const WHEEL_AND_TEXT = 3;
 
 function decodeHtml(html) {
     // used to convert text with an HTML entity (like "&eacute;") into readable text
@@ -48,7 +54,9 @@ function drawCircles(t_d, x, y) {
     });
     const maxWidth = maxMeasure.width;
     const maxHeight = maxMeasure.height * t_d.length;
-    if (FrozenCookies.fancyui % 2 == 1)
+    const fancyui = getNumber("fancyui");
+    const showText = fancyui == TEXT_ONLY || fancyui == WHEEL_AND_TEXT;
+    if (showText)
         bgCanvas.drawRect({
             fillStyle: "rgba(153, 153, 153, 0.6)",
             x: x + maxRadius * 2 + maxWidth / 2 + 35,
@@ -61,7 +69,7 @@ function drawCircles(t_d, x, y) {
         if (o_draw.overlay) {
             i_c--;
         } else {
-            if (FrozenCookies.fancyui > 1) {
+            if (fancyui > TEXT_ONLY) {
                 bgCanvas.drawArc({
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
@@ -78,7 +86,7 @@ function drawCircles(t_d, x, y) {
                 });
             }
         }
-        if (FrozenCookies.fancyui > 1) {
+        if (fancyui > TEXT_ONLY) {
             bgCanvas.drawArc({
                 strokeStyle: o_draw.c1,
                 x: x + (maxRadius + 5),
@@ -89,7 +97,7 @@ function drawCircles(t_d, x, y) {
                 end: 360 * o_draw.f_percent,
             });
         }
-        if (FrozenCookies.fancyui % 2 == 1 && o_draw.name) {
+        if (showText && o_draw.name) {
             const s_t = o_draw.name + (o_draw.display ? ": " + o_draw.display : "");
             bgCanvas.drawText({
                 fontSize: "12px",
