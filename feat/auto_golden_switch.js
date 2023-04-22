@@ -1,8 +1,9 @@
+import { getNumber } from "../fc_store.js";
 import { hasClickBuff } from "../fc_time.js";
 
 export function start() {
     if (FrozenCookies.autoGS) {
-        FrozenCookies.autoGSBot = setInterval(autoGSBuy, FrozenCookies.frequency);
+        FrozenCookies.autoGSBot = setInterval(autoGSBuy, getNumber("frequency"));
     }
 }
 

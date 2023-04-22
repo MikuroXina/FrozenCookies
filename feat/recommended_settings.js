@@ -1,10 +1,10 @@
-import { set } from "../fc_store";
+import { getNumber, set } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.recommendedSettings) {
         FrozenCookies.recommendedSettingsBot = setInterval(
             recommendedSettingsAction,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

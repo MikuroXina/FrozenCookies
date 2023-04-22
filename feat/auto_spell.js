@@ -4,7 +4,7 @@ import { cpsBonus } from "../fc_time.js";
 
 export function start() {
     if (getNumber("autoSpell")) {
-        FrozenCookies.autoSpellBot = setInterval(autoCast, FrozenCookies.frequency * 10);
+        FrozenCookies.autoSpellBot = setInterval(autoCast, getNumber("frequency") * 10);
     }
 }
 

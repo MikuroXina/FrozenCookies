@@ -1,10 +1,11 @@
+import { getNumber } from "../fc_store.js";
 import { liveWrinklers } from "../fc_time.js";
 
 export function start() {
     if (FrozenCookies.autoHalloween) {
         FrozenCookies.autoHalloweenBot = setInterval(
             autoHalloweenAction,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

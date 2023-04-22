@@ -1,8 +1,9 @@
+import { getNumber } from "../fc_store.js";
 import { cpsBonus, hasClickBuff } from "../fc_time.js";
 
 export function start() {
     if (FrozenCookies.autoLoan) {
-        FrozenCookies.autoLoanBot = setInterval(autoLoanBuy, FrozenCookies.frequency);
+        FrozenCookies.autoLoanBot = setInterval(autoLoanBuy, getNumber("frequency"));
     }
 }
 

@@ -11,7 +11,7 @@ import { delayAmount } from "../fc_value.js";
 let cookieBot = 0;
 
 export function start() {
-    const freq = getNumber('frequency');
+    const freq = getNumber("frequency");
     if (freq) {
         cookieBot = setTimeout(() => {
             autoCookie(config);
@@ -307,14 +307,15 @@ function autoCookie() {
         }
         updateFrenzyTimes();
         processing = false;
-        if (FrozenCookies.frequency) {
+        const frequency = getNumber("frequency");
+        if (frequency) {
             FrozenCookies.cookieBot = setTimeout(
                 autoCookie,
-                itemBought ? 0 : FrozenCookies.frequency
+                itemBought ? 0 : frequency
             );
         }
-    } else if (!processing && FrozenCookies.frequency) {
-        FrozenCookies.cookieBot = setTimeout(autoCookie, FrozenCookies.frequency);
+    } else if (!processing && getNumber("frequency")) {
+        FrozenCookies.cookieBot = setTimeout(autoCookie, getNumber("frequency"));
     }
 }
 

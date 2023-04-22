@@ -1,8 +1,10 @@
+import { getNumber } from "../fc_store.js";
+
 export function start() {
     if (FrozenCookies.autoSweet) {
         FrozenCookies.autoSweetBot = setInterval(
             autoSweetAction,
-            FrozenCookies.frequency * 2
+            getNumber("frequency") * 2
         );
     } else if (autoSweetAction.autobuyyes == 1) {
         FrozenCookies.autoBuy = 1;

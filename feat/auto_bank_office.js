@@ -1,9 +1,10 @@
 import { hasClickBuff } from "../fc_time.js";
 import { safeBuy } from "../fc_pay.js";
+import { getNumber } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.autoBank) {
-        FrozenCookies.autoBankBot = setInterval(autoBankAction, FrozenCookies.frequency);
+        FrozenCookies.autoBankBot = setInterval(autoBankAction, getNumber("frequency"));
     }
 }
 

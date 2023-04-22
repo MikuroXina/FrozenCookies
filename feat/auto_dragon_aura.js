@@ -1,15 +1,17 @@
+import { getNumber } from "../fc_store.js";
+
 export function start() {
     if (FrozenCookies.autoDragonAura0) {
         FrozenCookies.autoDragonAura0Bot = setInterval(
             autoDragonAura0Action,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 
     if (FrozenCookies.autoDragonAura1) {
         FrozenCookies.autoDragonAura1Bot = setInterval(
             autoDragonAura1Action,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

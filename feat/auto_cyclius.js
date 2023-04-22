@@ -1,8 +1,10 @@
+import { getNumber } from "../fc_store.js";
+
 export function start() {
     if (FrozenCookies.autoCyclius) {
         FrozenCookies.autoCycliusBot = setInterval(
             autoCycliusAction,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

@@ -1,10 +1,11 @@
+import { getNumber } from "../fc_store.js";
 import { hasClickBuff } from "../fc_time.js";
 
 export function start() {
     if (FrozenCookies.autoDragon) {
         FrozenCookies.autoDragonBot = setInterval(
             autoDragonAction,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

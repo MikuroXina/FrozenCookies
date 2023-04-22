@@ -1,10 +1,11 @@
+import { getNumber } from "../fc_store.js";
 import { cpsBonus } from "../fc_time.js";
 
 export function start() {
     if (FrozenCookies.autoSugarFrenzy) {
         FrozenCookies.autoSugarFrenzyBot = setInterval(
             autoSugarFrenzyAction,
-            FrozenCookies.frequency * 2
+            getNumber("frequency") * 2
         );
     }
 }

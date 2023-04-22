@@ -1,12 +1,13 @@
 import { Beautify } from "../fc_beautify.js";
 import { nextPurchase } from "../fc_next_purchase.js";
+import { getNumber } from "../fc_store.js";
 import { delayAmount } from "../fc_value.js";
 
 export function start() {
     if (FrozenCookies.autoBroker) {
         FrozenCookies.autoBrokerBot = setInterval(
             autoBrokerAction,
-            FrozenCookies.frequency
+            getNumber("frequency")
         );
     }
 }

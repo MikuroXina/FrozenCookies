@@ -1,11 +1,12 @@
 import { hasClickBuff } from "../fc_time.js";
 import { safeBuy } from "../fc_pay.js";
+import { getNumber } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.autoGodzamok) {
         FrozenCookies.autoGodzamokBot = setInterval(
             autoGodzamokAction,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

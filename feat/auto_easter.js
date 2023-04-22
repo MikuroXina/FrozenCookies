@@ -1,8 +1,10 @@
+import { getNumber } from "../fc_store.js";
+
 export function start() {
     if (FrozenCookies.autoEaster) {
         FrozenCookies.autoEasterBot = setInterval(
             autoEasterAction,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

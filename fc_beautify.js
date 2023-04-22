@@ -1,4 +1,4 @@
-import { getNumber } from "./fc_store";
+import { getNumber } from "./fc_store.js";
 
 export function Beautify(value) {
     const negative = value < 0;

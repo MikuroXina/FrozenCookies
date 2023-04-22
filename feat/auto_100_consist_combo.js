@@ -1,11 +1,12 @@
 import { cpsBonus, goldenCookieLife, hasClickBuff } from "../fc_time.js";
 import { safeBuy } from "../fc_pay.js";
+import { getNumber } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.auto100ConsistencyCombo) {
         FrozenCookies.auto100ConsistencyComboBot = setInterval(
             auto100ConsistencyComboAction,
-            FrozenCookies.frequency * 2
+            getNumber("frequency") * 2
         );
         return;
     }

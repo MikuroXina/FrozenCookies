@@ -1,11 +1,12 @@
 import { cpsBonus } from "../fc_time.js";
 import { safeBuy } from "../fc_pay.js";
+import { getNumber } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.autoFTHOFCombo) {
         FrozenCookies.autoFTHOFComboBot = setInterval(
             autoFTHOFComboAction,
-            FrozenCookies.frequency * 2
+            getNumber("frequency") * 2
         );
     } else if (autoFTHOFComboAction.autobuyyes == 1) {
         FrozenCookies.autoBuy = 1;

@@ -1,11 +1,12 @@
 import { Beautify } from "../fc_beautify.js";
+import { getNumber } from "../fc_store.js";
 import { goldenCookieLife } from "../fc_time.js";
 
 export function start() {
     if (FrozenCookies.autoDragonOrbs) {
         FrozenCookies.autoDragonOrbsBot = setInterval(
             autoDragonOrbsAction,
-            FrozenCookies.frequency * 10
+            getNumber("frequency") * 10,
         );
     }
 }

@@ -1,4 +1,4 @@
-import { getNumber, set } from "./fc_store";
+import { getNumber, set } from "./fc_store.js";
 import { cookieValue } from "./fc_value";
 import { willAutoSpellSE } from "./feat/auto_spell";
 

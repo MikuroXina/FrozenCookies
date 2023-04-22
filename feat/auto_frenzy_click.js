@@ -5,7 +5,7 @@ export function start() {
     if (FrozenCookies.autoFrenzy && FrozenCookies.frenzyClickSpeed) {
         FrozenCookies.frenzyClickBot = setInterval(
             autoFrenzyClick,
-            FrozenCookies.frequency
+            getNumber("frequency"),
         );
     }
 }

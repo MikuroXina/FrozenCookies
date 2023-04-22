@@ -1,22 +1,25 @@
+import { getNumber } from "../fc_store.js";
+
 export function start() {
+    const frequency = getNumber("getNumber");
     if (FrozenCookies.autoWorship0) {
         FrozenCookies.autoWorship0Bot = setInterval(
             autoWorship0Action,
-            FrozenCookies.frequency
+            frequency,
         );
     }
 
     if (FrozenCookies.autoWorship1) {
         FrozenCookies.autoWorship1Bot = setInterval(
             autoWorship1Action,
-            FrozenCookies.frequency
+            frequency,
         );
     }
 
     if (FrozenCookies.autoWorship2) {
         FrozenCookies.autoWorship2Bot = setInterval(
             autoWorship2Action,
-            FrozenCookies.frequency
+            frequency,
         );
     }
 }
