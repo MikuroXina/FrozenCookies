@@ -10,6 +10,7 @@ import { updateTimers } from "./fc_infobox.js";
 import { getNumber, getString, loadFromStorage, set } from "./fc_store.js";
 import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
 import { nextPurchase, recommendationList } from "./fc_next_purchase.js";
+import { META } from "./fc_meta.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
     // register with the modding API
@@ -142,9 +143,9 @@ export function registerMod(mod_id = "frozen_cookies", Game) {
     logEvent(
         "Load",
         "Initial Load of Frozen Cookies v " +
-            FrozenCookies.branch +
+            META.branch +
             "." +
-            FrozenCookies.version +
+            META.version +
             ". (You should only ever see this once.)"
     );
 }

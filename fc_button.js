@@ -562,7 +562,7 @@ function buildGoldenCookiesStats(menu) {
     const targetBankCost = getNumber("targetBank.cost");
     const currentCookies = Math.min(Game.cookies, targetBankCost);
     const maxCookies = bestBank(Number.POSITIVE_INFINITY).cost;
-    const isTarget = targetBankCost == FrozenCookies.currentBank.cost;
+    const isTarget = targetBankCost == getNumber("currentBank.cost");
     const isMax = currentCookies == maxCookies;
     const targetTxt = isTarget ? "" : " (Building Bank)";
     const maxTxt = isMax ? " (Max)" : "";
