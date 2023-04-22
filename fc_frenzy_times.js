@@ -3,7 +3,6 @@ import { getNumber } from "./fc_store.js";
 
 /** @type {Object.<number, number | undefined>} */
 const frenzyTimes = {};
-let lastGoldenCookieState = 0;
 let lastGoldenCookieTime = 0;
 let heavenlyChipsGainTime = 0;
 
@@ -32,6 +31,7 @@ export function frenzyTimesByGain() {
 }
 
 export function updateFrenzyTimes() {
+    const lastGoldenCookieState = getNumber("lastGoldenCookieState");
     const currentFrenzy = cpsBonus() * clickBuffBonus();
     const heavenlyChipsGain = getNumber("heavenlyChipsGain");
     if (currentFrenzy != lastGoldenCookieState) {
@@ -82,7 +82,7 @@ export function updateFrenzyTimes() {
         }
         frenzyTimes[lastGoldenCookieState] +=
             Date.now() - lastGoldenCookieTime;
-        lastGoldenCookieState = currentFrenzy;
+        set("lastGoldenCookieState", currentFrenzy);
         lastGoldenCookieTime = Date.now();
     }
 }
