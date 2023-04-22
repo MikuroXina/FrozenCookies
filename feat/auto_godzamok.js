@@ -37,24 +37,24 @@ function autoGodzamokAction() {
             // Rebuy mines
             if (FrozenCookies.mineLimit) {
                 safeBuy(Game.Objects["Mine"], FrozenCookies.mineMax);
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
                 logEvent("AutoGodzamok", "Bought " + FrozenCookies.mineMax + " mines");
             } else {
                 safeBuy(Game.Objects["Mine"], countMine);
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
                 logEvent("AutoGodzamok", "Bought " + countMine + " mines");
             }
             // Rebuy factories
             if (FrozenCookies.factoryLimit) {
                 safeBuy(Game.Objects["Factory"], FrozenCookies.factoryMax);
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
                 logEvent(
                     "AutoGodzamok",
                     "Bought " + FrozenCookies.factoryMax + " factories"
                 );
             } else {
                 safeBuy(Game.Objects["Factory"], countFactory);
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
                 logEvent("AutoGodzamok", "Bought " + countFactory + " factories");
             }
         }

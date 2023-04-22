@@ -30,7 +30,7 @@ function autoBankAction() {
         const countBankCursor = currentOffice.cost[0];
         l("bankOfficeUpgrade").click();
         safeBuy(Game.Objects["Cursor"], countBankCursor);
-        FrozenCookies.autobuyCount += 1;
+        modify("autobuyCount", (count) => count + 1);
         logEvent("AutoBank", "Upgrade bank level for " + countBankCursor + " cursors");
         Game.recalculateGains = 1;
         Game.upgradesToRebuild = 1;

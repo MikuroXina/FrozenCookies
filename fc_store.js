@@ -61,3 +61,16 @@ export function getNumber(key) {
     const num = Number(config.get(key));
     return Number.isNaN(num) ? undefined : num;
 }
+
+/**
+ * Modifies the contained value with `fn` if it exists, otherwise does nothing.
+ *
+ * @param {string} key
+ * @param {<T>(t: T) => T} fn - Modifier for the contained value.
+ */
+export function modify(key, fn) {
+    const num = getNumber(key);
+    if (num) {
+        set(key, fn(num));
+    }
+}

@@ -166,7 +166,7 @@ function setOverrides(Game) {
     set("frequency", 100);
 
     // Force redraw every 10 purchases
-    FrozenCookies.autobuyCount = 0;
+    set("autobuyCount", 0);
 
     // Set default values for calculations
     FrozenCookies.hc_gain = 0;

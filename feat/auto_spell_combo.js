@@ -278,7 +278,7 @@ function autoFTHOFComboAction() {
             } else {
                 safeBuy(Game.Objects["Wizard tower"], autoFTHOFComboAction.count);
             }
-            FrozenCookies.autobuyCount += 1;
+            modify("autobuyCount", (count) => count + 1);
             // Turn autoBuy back on if it was on before
             if (autoFTHOFComboAction.autobuyyes == 1) {
                 FrozenCookies.autoBuy = 1;

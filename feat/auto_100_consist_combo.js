@@ -1,6 +1,6 @@
 import { cpsBonus, goldenCookieLife, hasClickBuff } from "../fc_time.js";
 import { safeBuy } from "../fc_pay.js";
-import { getNumber } from "../fc_store.js";
+import { getNumber, modify } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.auto100ConsistencyCombo) {
@@ -337,7 +337,7 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
                 );
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
                 auto100ConsistencyComboAction.state = 8;
             }
             return;
@@ -368,7 +368,7 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Wizard tower"].buy(
                     auto100ConsistencyComboAction.countWizard
                 );
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
                 auto100ConsistencyComboAction.state = 11;
             }
 
@@ -433,7 +433,7 @@ function auto100ConsistencyComboAction() {
                 Game.Objects["Time machine"],
                 auto100ConsistencyComboAction.countTimeMach
             );
-            FrozenCookies.autobuyCount += 1;
+            modify("autobuyCount", (count) => count + 1);
             auto100ConsistencyComboAction.state = 16;
             return;
 
@@ -509,7 +509,7 @@ function auto100ConsistencyComboAction() {
                         auto100ConsistencyComboAction.countTimeMach -
                             Game.Objects["Time machine"].amount
                     );
-                    FrozenCookies.autobuyCount += 1;
+                    modify("autobuyCount", (count) => count + 1);
                 }
             }
             if (Game.hasBuff("Devastation") && hasClickBuff()) {
@@ -590,7 +590,7 @@ function auto100ConsistencyComboAction() {
                             Game.Objects["Time machine"].amount
                     );
                 }
-                FrozenCookies.autobuyCount += 1;
+                modify("autobuyCount", (count) => count + 1);
             }
 
             if (!hasClickBuff()) {
@@ -697,7 +697,7 @@ function auto100ConsistencyComboAction() {
                         Game.Objects["Antimatter condenser"].amount
                 );
             }
-            FrozenCookies.autobuyCount += 1;
+            modify("autobuyCount", (count) => count + 1);
             auto100ConsistencyComboAction.state = 20;
             return;
 

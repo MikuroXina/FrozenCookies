@@ -219,7 +219,7 @@ function autoCookie() {
             } else {
                 recommendation.purchase.buy();
             }
-            FrozenCookies.autobuyCount += 1;
+            modify("autobuyCount", (count) => count + 1);
             if (FrozenCookies.trackStats == 5 && recommendation.type == "upgrade") {
                 saveStats();
             } else if (FrozenCookies.trackStats == 6) {
@@ -240,7 +240,7 @@ function autoCookie() {
             disabledPopups = true;
             if (FrozenCookies.autobuyCount >= 10) {
                 Game.Draw();
-                FrozenCookies.autobuyCount = 0;
+                set("autobuyCount", 0);
             }
             setNumber("recalculateCaches", 1);
             processing = false;
