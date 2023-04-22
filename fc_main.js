@@ -164,7 +164,6 @@ function setOverrides(Game) {
     FrozenCookies.loadedData = {};
     loadFCData();
     set("frequency", 100);
-    FrozenCookies.efficiencyWeight = 1.0;
 
     // Becomes 0 almost immediately after user input, so default to 0
     FrozenCookies.timeTravelAmount = 0;

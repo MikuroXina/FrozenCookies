@@ -287,8 +287,7 @@ function buildingStats(recalculate) {
 // Use this for changes to future efficiency calcs
 function purchaseEfficiency(price, deltaCps, _baseDeltaCps, currentCps) {
     if (deltaCps > 0) {
-        return FrozenCookies.efficiencyWeight * divCps(price, currentCps) +
-            divCps(price, deltaCps);
+        return divCps(price, currentCps) + divCps(price, deltaCps);
     }
     return Number.POSITIVE_INFINITY;
 }
