@@ -165,9 +165,6 @@ function setOverrides(Game) {
     loadFCData();
     set("frequency", 100);
 
-    // Becomes 0 almost immediately after user input, so default to 0
-    FrozenCookies.timeTravelAmount = 0;
-
     // Force redraw every 10 purchases
     FrozenCookies.autobuyCount = 0;
 
