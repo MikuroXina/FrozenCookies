@@ -3,7 +3,6 @@ import { getNumber } from "./fc_store.js";
 
 /** @type {Object.<number, number | undefined>} */
 const frenzyTimes = {};
-let lastGoldenCookieTime = 0;
 let heavenlyChipsGainTime = 0;
 
 export function loadFromJson(json) {
@@ -81,8 +80,8 @@ export function updateFrenzyTimes() {
             frenzyTimes[lastGoldenCookieState] = 0;
         }
         frenzyTimes[lastGoldenCookieState] +=
-            Date.now() - lastGoldenCookieTime;
+            Date.now() - getNumber("lastGoldenCookieTime");
         set("lastGoldenCookieState", currentFrenzy);
-        lastGoldenCookieTime = Date.now();
+        set("lastGoldenCookieTime", Date.now());
     }
 }

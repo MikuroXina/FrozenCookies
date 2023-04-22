@@ -173,7 +173,7 @@ function setOverrides(Game) {
     set("lastGoldenCookieState",
         (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus()
     );
-    FrozenCookies.last_gc_time = Date.now();
+    set("lastGoldenCookieTime", Date.now());
     FrozenCookies.lastCPS = Game.cookiesPs;
     FrozenCookies.lastBaseCPS = Game.cookiesPs;
     FrozenCookies.lastCookieCPS = 0;
@@ -473,7 +473,7 @@ function fcReset() {
     Game.oldReset();
     FrozenCookies.last_gc_state =
         (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
-    FrozenCookies.last_gc_time = Date.now();
+    set("lastGoldenCookieTime", Date.now());
     set("lastHCAmount", Game.HowMuchPrestige(
         Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
     ));
