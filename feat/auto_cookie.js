@@ -6,6 +6,7 @@ import { updateFrenzyTimes } from "../fc_frenzy_times.js";
 import { bestBank } from "../fc_best_bank.js";
 import { willAutoSpellSE } from "./auto_spell.js";
 import { nextPurchase } from "../fc_next_purchase.js";
+import { delayAmount } from "../fc_value.js";
 
 let cookieBot = 0;
 

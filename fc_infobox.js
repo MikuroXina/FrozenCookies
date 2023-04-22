@@ -3,6 +3,7 @@
 import { nextPurchase } from "./fc_next_purchase.js";
 import { probabilitySpan } from "./fc_probability.js";
 import { getNumber } from "./fc_store.js";
+import { delayAmount } from "./fc_value.js";
 
 const OFF = 0;
 const TEXT_ONLY = 1;

@@ -1,5 +1,6 @@
 import { Beautify } from "../fc_beautify.js";
 import { nextPurchase } from "../fc_next_purchase.js";
+import { delayAmount } from "../fc_value.js";
 
 export function start() {
     if (FrozenCookies.autoBroker) {

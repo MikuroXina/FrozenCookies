@@ -1,4 +1,5 @@
 import { getNumber, set } from "./fc_store";
+import { cookieValue } from "./fc_value";
 import { willAutoSpellSE } from "./feat/auto_spell";
 
 function canCastSE() {
@@ -180,6 +181,12 @@ function cookieEfficiency(startingPoint, bankAmount) {
     return Number.MAX_VALUE;
 }
 
+/**
+ * Calculates cost and efficiency of the best bank to purchase.
+ *
+ * @param {number} minEfficiency - The minimum efficiency to purchase.
+ * @returns {{ cost: number; efficiency: number; }} Cost and efficiency of the best bank.
+ */
 export function bestBank(minEfficiency) {
     const setHarvestBankPlant = getNumber("setHarvestBankPlant");
     const edifice =
@@ -194,8 +201,8 @@ export function bestBank(minEfficiency) {
                 efficiency: cookieEfficiency(Game.cookies, bank),
             };
         })
-        .find(function (bank) {
-            return (bank.efficiency >= 0 && bank.efficiency <= minEfficiency) ||
+        .find(function ({ efficiency }) {
+            return (efficiency >= 0 && efficiency <= minEfficiency) ||
                 setHarvestBankPlant != NONE;
         });
     if (bankLevel.cost > edifice || setHarvestBankPlant != NONE) {
