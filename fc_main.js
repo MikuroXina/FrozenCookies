@@ -177,11 +177,6 @@ function setOverrides(Game) {
     set("targetBank.cost", 0);
     set("targetBank.efficiency", 0);
     set("enabledPopups", 0);
-    FrozenCookies.lastGraphDraw = 0;
-    FrozenCookies.calculatedCpsByType = {};
-
-    // Allow autoCookie to run
-    FrozenCookies.frenzyClickBot = 0;
 
     // Smart tracking details
     FrozenCookies.smartTrackingBot = 0;
