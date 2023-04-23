@@ -473,7 +473,7 @@ function saveFCData() {
     });
     saveString.frenzyClickSpeed = getString("frenzyClickSpeed");
     saveString.cookieClickSpeed = getString("cookieClickSpeed");
-    saveString.HCAscendAmount = FrozenCookies.HCAscendAmount;
+    saveString.HCAscendAmount = getString("HCAscendAmount");
     saveString.mineMax = FrozenCookies.mineMax;
     saveString.factoryMax = FrozenCookies.factoryMax;
     saveString.minCpSMult = FrozenCookies.minCpSMult;

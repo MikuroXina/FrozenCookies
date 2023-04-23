@@ -38,7 +38,7 @@ function recommendedSettingsAction() {
         FrozenCookies.pastemode = 0;
         // other auto options
         FrozenCookies.autoAscend = 0;
-        FrozenCookies.HCAscendAmount = 0;
+        set("HCAscendAmount", 0);
         setNumber("autoBulk", 2);
         FrozenCookies.autoBuyAll = 1;
         FrozenCookies.autoWrinkler = 1;
