@@ -184,9 +184,6 @@ function setOverrides(Game) {
     FrozenCookies.calculatedCpsByType = {};
 
     // Allow autoCookie to run
-    FrozenCookies.processing = false;
-    FrozenCookies.priceReductionTest = false;
-
     FrozenCookies.cookieBot = 0;
     FrozenCookies.autoclickBot = 0;
     FrozenCookies.autoFrenzyBot = 0;

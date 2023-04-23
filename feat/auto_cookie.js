@@ -9,6 +9,7 @@ import { nextPurchase } from "../fc_next_purchase.js";
 import { delayAmount } from "../fc_value.js";
 
 let cookieBot = 0;
+let processing = false;
 
 export function start() {
     const freq = getNumber("frequency");
@@ -24,9 +25,8 @@ export function stop() {
         clearInterval(cookieBot);
         cookieBot = 0;
     }
+    processing = false;
 }
-
-let processing = false;
 
 function autoCookie() {
     // console.log('autocookie called');
