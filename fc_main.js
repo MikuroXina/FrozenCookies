@@ -184,8 +184,6 @@ function setOverrides(Game) {
     FrozenCookies.calculatedCpsByType = {};
 
     // Allow autoCookie to run
-    FrozenCookies.cookieBot = 0;
-    FrozenCookies.autoclickBot = 0;
     FrozenCookies.autoFrenzyBot = 0;
     FrozenCookies.frenzyClickBot = 0;
 
@@ -756,7 +754,6 @@ async function loadFeatures() {
         await import("./feat/auto_dragon_upgrade.js"),
         await import("./feat/auto_easter.js"),
         await import("./feat/auto_fortune_ticker.js"),
-        await import("./feat/auto_frenzy_click.js"),
         await import("./feat/auto_godzamok.js"),
         await import("./feat/auto_golden_switch.js"),
         await import("./feat/auto_halloween.js"),
