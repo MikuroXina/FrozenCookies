@@ -16,7 +16,7 @@ import { willAutoSpellSE } from "./feat/auto_spell.js";
  */
 export function nextPurchase(recalculate) {
     if (recalculate) {
-        FrozenCookies.showAchievements = false;
+        set("showAchievements", 0);
         const recList = recommendationList(recalculate);
         let purchase = null;
         for (const target of recList) {
@@ -43,7 +43,7 @@ export function nextPurchase(recalculate) {
             FrozenCookies.caches.nextPurchase = defaultPurchase();
             FrozenCookies.caches.nextChainedPurchase = defaultPurchase();
         }
-        FrozenCookies.showAchievements = true;
+        set("showAchievements", 1);
     }
     return FrozenCookies.caches.nextPurchase;
 }
@@ -56,7 +56,7 @@ export function nextPurchase(recalculate) {
  */
 export function recommendationList(recalculate) {
     if (recalculate) {
-        FrozenCookies.showAchievements = false;
+        set("showAchievements", 0);
         FrozenCookies.caches.recommendationList = addScores(
             upgradeStats(recalculate)
                 .concat(buildingStats(recalculate))
@@ -72,7 +72,7 @@ export function recommendationList(recalculate) {
         if (FrozenCookies.pastemode) {
             FrozenCookies.caches.recommendationList.reverse();
         }
-        FrozenCookies.showAchievements = true;
+        set("showAchievements", 1);
     }
     return FrozenCookies.caches.recommendationList;
 }

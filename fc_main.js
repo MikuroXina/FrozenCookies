@@ -185,7 +185,7 @@ function setOverrides(Game) {
     emptyCaches();
 
     // Whether to currently display achievement popups
-    FrozenCookies.showAchievements = true;
+    set("showAchievements", 1);
 
     if (!BLACKLIST[getNumber("blacklist")]) {
         set("blacklist", 0);
@@ -673,7 +673,7 @@ function fcWin(what) {
                         true
                     );
                 }
-                if (FrozenCookies.showAchievements) {
+                if (!!getNumber("showAchievements")) {
                     Game.Notify(
                         "Achievement unlocked",
                         '<div class="title" style="font-size:18px;margin-top:-2px;">' +
