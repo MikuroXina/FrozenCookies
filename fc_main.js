@@ -187,8 +187,8 @@ function setOverrides(Game) {
     // Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;
 
-    if (!BLACKLIST[FrozenCookies.blacklist]) {
-        FrozenCookies.blacklist = 0;
+    if (!BLACKLIST[getNumber("blacklist")]) {
+        set("blacklist", 0);
     }
 
     // Set `App`, on older version of CC it's not set to anything, so default it to `undefined`

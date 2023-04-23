@@ -420,15 +420,15 @@ function shouldPopWrinklers() {
 }
 
 function autoBlacklistOff() {
-    switch (FrozenCookies.blacklist) {
+    switch (getNumber("blacklist")) {
         case 1:
-            FrozenCookies.blacklist = Game.cookiesEarned >= 1000000 ? 0 : 1;
+            set("blacklist", Game.cookiesEarned >= 1000000 ? 0 : 1);
             break;
         case 2:
-            FrozenCookies.blacklist = Game.cookiesEarned >= 1000000000 ? 0 : 2;
+            set("blacklist", Game.cookiesEarned >= 1000000000 ? 0 : 2);
             break;
         case 3:
-            FrozenCookies.blacklist = haveAll("halloween") && haveAll("easter") ? 0 : 3;
+            set("blacklist", haveAll("halloween") && haveAll("easter") ? 0 : 3);
             break;
     }
 }

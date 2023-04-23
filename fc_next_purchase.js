@@ -4,6 +4,7 @@ import {
     RECOMMENDATION_BLACKLIST,
     SEASONS,
 } from "./cc_upgrade_prerequisites.js";
+import { getNumber } from "./fc_store.js";
 import { divCps } from "./fc_time.js";
 import { willAutoSpellSE } from "./feat/auto_spell.js";
 
@@ -113,10 +114,11 @@ function addScores(recommendations) {
 
 function upgradeStats(recalculate) {
     if (recalculate) {
-        if (BLACKLIST[FrozenCookies.blacklist].upgrades === true) {
+        const blacklist = getNumber("blacklist");
+        if (BLACKLIST[blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
         } else {
-            const upgradeBlacklist = BLACKLIST[FrozenCookies.blacklist].upgrades;
+            const upgradeBlacklist = BLACKLIST[blacklist].upgrades;
             const existingAchievements = Object.values(
                 Game.AchievementsById
             ).map(function (item) {
@@ -201,11 +203,12 @@ function upgradeStats(recalculate) {
 
 function buildingStats(recalculate) {
     if (recalculate) {
-        if (BLACKLIST[FrozenCookies.blacklist].buildings === true) {
+        const blacklist = getNumber("blacklist");
+        if (BLACKLIST[blacklist].buildings === true) {
             FrozenCookies.caches.buildings = [];
         } else {
             const buildingBlacklist = Array.from(
-                BLACKLIST[FrozenCookies.blacklist].buildings
+                BLACKLIST[blacklist].buildings
             );
             // If autocasting Spontaneous Edifice, don't buy any Cortex baker after 399
             if (
