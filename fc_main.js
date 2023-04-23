@@ -449,8 +449,10 @@ function fcReset() {
         Game.Upgrades["Chocolate egg"].buy();
     }
     Game.oldReset();
-    FrozenCookies.last_gc_state =
-        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus();
+    set(
+        "lastGoldenCookieState",
+        (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus(),
+    );
     set("lastGoldenCookieTime", Date.now());
     set("lastHCAmount", Game.HowMuchPrestige(
         Game.cookiesEarned + Game.cookiesReset + wrinklerValue()
@@ -458,8 +460,8 @@ function fcReset() {
     set("lastHCTime", Date.now());
     set("maxHCPercent", 0);
     set("prevLastHCTime", Date.now());
-    FrozenCookies.lastCps = 0;
-    FrozenCookies.lastBaseCps = 0;
+    set("lastCps", 0);
+    set("lastBaseCps", 0);
     recommendationList(true);
 }
 
