@@ -184,7 +184,6 @@ function setOverrides(Game) {
     FrozenCookies.calculatedCpsByType = {};
 
     // Allow autoCookie to run
-    FrozenCookies.autoFrenzyBot = 0;
     FrozenCookies.frenzyClickBot = 0;
 
     // Smart tracking details

@@ -1,15 +1,19 @@
 import { getNumber } from "../fc_store.js";
 import { hasClickBuff } from "../fc_time.js";
 
+let autoClickBot = 0;
+let frenzyClickBot = 0;
+let autoFrenzyBot = 0;
+
 export function start() {
     const cookieClickSpeed = getNumber("cookieClickSpeed");
     if (!!getNumber("autoClick") && cookieClickSpeed) {
-        FrozenCookies.autoclickBot = setInterval(
+        autoClickBot = setInterval(
             fcClickCookie,
-            1000 / cookieClickSpeed
+            1000 / cookieClickSpeed,
         );
     }
-    if (FrozenCookies.autoFrenzy && FrozenCookies.frenzyClickSpeed) {
+    if (getNumber("autoFrenzy") && getNumber("frenzyClickSpeed")) {
         FrozenCookies.frenzyClickBot = setInterval(
             autoFrenzyClick,
             getNumber("frequency"),
@@ -18,9 +22,17 @@ export function start() {
 }
 
 export function stop() {
-    if (FrozenCookies.autoclickBot) {
-        clearInterval(FrozenCookies.autoclickBot);
-        FrozenCookies.autoclickBot = 0;
+    if (autoClickBot) {
+        clearInterval(autoClickBot);
+        autoClickBot = 0;
+    }
+    if (frenzyClickBot) {
+        clearInterval(frenzyClickBot);
+        frenzyClickBot = 0;
+    }
+    if (autoFrenzyBot) {
+        clearInterval(autoFrenzyBot);
+        autoFrenzyBot = 0;
     }
 }
 
@@ -31,21 +43,21 @@ function fcClickCookie() {
 }
 
 function autoFrenzyClick() {
-    if (hasClickBuff() && !FrozenCookies.autoFrenzyBot) {
-        if (FrozenCookies.autoclickBot) {
-            clearInterval(FrozenCookies.autoclickBot);
-            FrozenCookies.autoclickBot = 0;
+    if (hasClickBuff() && !autoFrenzyBot) {
+        if (autoClickBot) {
+            clearInterval(autoClickBot);
+            autoClickBot = 0;
         }
-        FrozenCookies.autoFrenzyBot = setInterval(
+        autoFrenzyBot = setInterval(
             fcClickCookie,
-            1000 / FrozenCookies.frenzyClickSpeed
+            1000 / getNumber("frenzyClickSpeed"),
         );
-    } else if (!hasClickBuff() && FrozenCookies.autoFrenzyBot) {
-        clearInterval(FrozenCookies.autoFrenzyBot);
-        FrozenCookies.autoFrenzyBot = 0;
-        const cookieClickSpeed = getNumber("cookieClickSpeed")
+    } else if (!hasClickBuff() && autoFrenzyBot) {
+        clearInterval(autoFrenzyBot);
+        autoFrenzyBot = 0;
+        const cookieClickSpeed = getNumber("cookieClickSpeed");
         if (!!getNumber("autoClick") && cookieClickSpeed) {
-            FrozenCookies.autoclickBot = setInterval(
+            autoClickBot = setInterval(
                 fcClickCookie,
                 1000 / cookieClickSpeed
             );
