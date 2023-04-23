@@ -275,7 +275,7 @@ function loadFCData() {
 }
 
 function emptyCaches() {
-    setNumber("recalculateCaches", 1);
+    set("recalculateCaches", 1);
     FrozenCookies.caches = {};
     FrozenCookies.caches.nextPurchase = {};
     FrozenCookies.caches.recommendationList = [];
