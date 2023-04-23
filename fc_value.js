@@ -14,7 +14,7 @@ export function cookieValue(bankAmount, wrathValue, wrinklerCount) {
         getNumber("autoClick") * getNumber("cookieClickSpeed")
     );
     const frenzyCps = FrozenCookies.autoFrenzy
-        ? baseClickingCps(FrozenCookies.autoFrenzy * FrozenCookies.frenzyClickSpeed)
+        ? baseClickingCps(FrozenCookies.autoFrenzy * getNumber("frenzyClickSpeed"))
         : clickCps;
     const luckyMod = Game.Has("Get lucky") ? 2 : 1;
     wrathValue = wrathValue != null ? wrathValue : Game.elderWrath;

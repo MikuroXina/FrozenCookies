@@ -22,7 +22,7 @@ function recommendedSettingsAction() {
         set("autoClick", 1);
         set("cookieClickSpeed", 250);
         FrozenCookies.autoFrenzy = 1;
-        FrozenCookies.frenzyClickSpeed = 1000;
+        set("frenzyClickSpeed", 1000);
         FrozenCookies.autoGC = 1;
         FrozenCookies.autoReindeer = 1;
         FrozenCookies.autoFortune = 1;
