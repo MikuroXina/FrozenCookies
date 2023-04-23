@@ -352,9 +352,9 @@ function updateCaches() {
             set("lastCookieCPS", currentCookieCPS);
         }
 
-        if (FrozenCookies.lastUpgradeCount != currentUpgradeCount) {
+        if (getNumber("lastUpgradeCount") != currentUpgradeCount) {
             recalculateCaches = true;
-            FrozenCookies.lastUpgradeCount = currentUpgradeCount;
+            set("lastUpgradeCount", currentUpgradeCount);
         }
         retryCount += 1;
     } while (recalculateCaches && retryCount < 10);

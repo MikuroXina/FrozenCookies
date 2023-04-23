@@ -174,7 +174,7 @@ function setOverrides(Game) {
     FrozenCookies.lastCPS = Game.cookiesPs;
     FrozenCookies.lastBaseCPS = Game.cookiesPs;
     set("lastCookieCPS", 0);
-    FrozenCookies.lastUpgradeCount = 0;
+    set("lastUpgradeCount", 0);
     FrozenCookies.currentBank = {
         cost: 0,
         efficiency: 0,
