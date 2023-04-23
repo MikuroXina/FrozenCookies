@@ -1,7 +1,4 @@
-import {
-    BLACKLIST,
-    COOKIE_SPEC,
-} from "./cc_upgrade_prerequisites.js";
+import { BLACKLIST } from "./cc_upgrade_prerequisites.js";
 import { Beautify } from "./fc_beautify.js";
 import { FCMenu } from "./fc_button.js";
 import { bestBank } from "./fc_best_bank.js";
