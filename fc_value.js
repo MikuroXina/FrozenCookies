@@ -92,10 +92,10 @@ function baseCps() {
         }
     }
     if (buffMod === 0) {
-        return FrozenCookies.lastBaseCPS;
+        return getNumber("lastBaseCps");
     }
     const baseCPS = Game.cookiesPs / buffMod;
-    FrozenCookies.lastBaseCPS = baseCPS;
+    set("lastBaseCps", baseCPS);
     return baseCPS;
 }
 

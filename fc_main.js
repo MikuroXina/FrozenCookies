@@ -169,7 +169,7 @@ function setOverrides(Game) {
     );
     set("lastGoldenCookieTime", Date.now());
     set("lastCps", Game.cookiesPs);
-    FrozenCookies.lastBaseCPS = Game.cookiesPs;
+    set("lastBaseCps", Game.cookiesPs);
     set("lastCookieCPS", 0);
     set("lastUpgradeCount", 0);
     set("currentBank.cost", 0);
