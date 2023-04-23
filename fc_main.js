@@ -168,7 +168,7 @@ function setOverrides(Game) {
         (Game.hasBuff("Frenzy") ? Game.buffs["Frenzy"].multCpS : 1) * clickBuffBonus()
     );
     set("lastGoldenCookieTime", Date.now());
-    FrozenCookies.lastCPS = Game.cookiesPs;
+    set("lastCps", Game.cookiesPs);
     FrozenCookies.lastBaseCPS = Game.cookiesPs;
     set("lastCookieCPS", 0);
     set("lastUpgradeCount", 0);

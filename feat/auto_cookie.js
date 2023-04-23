@@ -331,9 +331,9 @@ function updateCaches() {
         const currentUpgradeCount = Game.UpgradesInStore.length;
         FrozenCookies.safeGainsCalc();
 
-        if (FrozenCookies.lastCPS != FrozenCookies.calculatedCps) {
+        if (getNumber("lastCps") != FrozenCookies.calculatedCps) {
             recalculateCaches = true;
-            FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
+            setNumber("lastCps", FrozenCookies.calculatedCps);
         }
 
         if (getNumber("currentBank.cost") != currentBank.cost) {
