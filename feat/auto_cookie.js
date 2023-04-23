@@ -336,9 +336,10 @@ function updateCaches() {
             FrozenCookies.lastCPS = FrozenCookies.calculatedCps;
         }
 
-        if (FrozenCookies.currentBank.cost != currentBank.cost) {
+        if (getNumber("currentBank.cost") != currentBank.cost) {
             recalculateCaches = true;
-            FrozenCookies.currentBank = currentBank;
+            set("currentBank.cost", currentBank.cost);
+            set("currentBank.efficiency", currentBank.efficiency);
         }
 
         if (getNumber("targetBank.cost") != targetBank.cost) {

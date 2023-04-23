@@ -175,10 +175,8 @@ function setOverrides(Game) {
     FrozenCookies.lastBaseCPS = Game.cookiesPs;
     set("lastCookieCPS", 0);
     set("lastUpgradeCount", 0);
-    FrozenCookies.currentBank = {
-        cost: 0,
-        efficiency: 0,
-    };
+    set("currentBank.cost", 0);
+    set("currentBank.efficiency", 0);
     set("targetBank.cost", 0);
     set("targetBank.efficiency", 0);
     FrozenCookies.disabledPopups = true;
