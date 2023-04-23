@@ -242,7 +242,7 @@ function autoCookie() {
                 Game.Draw();
                 set("autobuyCount", 0);
             }
-            setNumber("recalculateCaches", 1);
+            set("recalculateCaches", 1);
             processing = false;
             itemBought = true;
         }
