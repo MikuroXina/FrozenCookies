@@ -474,7 +474,7 @@ function saveFCData() {
     saveString.frenzyClickSpeed = getString("frenzyClickSpeed");
     saveString.cookieClickSpeed = getString("cookieClickSpeed");
     saveString.HCAscendAmount = getString("HCAscendAmount");
-    saveString.mineMax = FrozenCookies.mineMax;
+    saveString.mineMax = getString("mineMax");
     saveString.factoryMax = FrozenCookies.factoryMax;
     saveString.minCpSMult = FrozenCookies.minCpSMult;
     saveString.minLoanMult = FrozenCookies.minLoanMult;

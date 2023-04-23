@@ -32,7 +32,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoBlacklistOff = 0;
         set("blacklist", 0);
         FrozenCookies.mineLimit = 1;
-        FrozenCookies.mineMax = 500;
+        set("mineMax", 500);
         FrozenCookies.factoryLimit = 1;
         FrozenCookies.factoryMax = 500;
         FrozenCookies.pastemode = 0;

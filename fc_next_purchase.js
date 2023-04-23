@@ -228,7 +228,7 @@ function buildingStats(recalculate) {
             // Stop buying Mines if at set limit
             if (
                 FrozenCookies.mineLimit &&
-                Game.Objects["Mine"].amount >= FrozenCookies.mineMax
+                Game.Objects["Mine"].amount >= getNumber("mineMax")
             )
                 buildingBlacklist.push(3);
             // Stop buying Factories if at set limit

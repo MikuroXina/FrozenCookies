@@ -175,7 +175,7 @@ function autoCookie() {
                         TOWER_GAME.magic >= FrozenCookies.manaMax - 10) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 100) ||
+                        Game.Objects["Mine"].amount >= getNumber("mineMax") - 100) ||
                     (FrozenCookies.factoryLimit &&
                         recommendation.purchase.name == "Factory" &&
                         Game.Objects["Factory"].amount >=
@@ -200,7 +200,7 @@ function autoCookie() {
                         TOWER_GAME.magic >= FrozenCookies.manaMax - 2) ||
                     (FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= FrozenCookies.mineMax - 10) ||
+                        Game.Objects["Mine"].amount >= getNumber("mineMax") - 10) ||
                     (FrozenCookies.factoryLimit &&
                         recommendation.purchase.name == "Factory" &&
                         Game.Objects["Factory"].amount >=
