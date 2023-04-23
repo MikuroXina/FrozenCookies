@@ -1,4 +1,5 @@
 import { pushStats, viewStatGraphs } from "../fc_preferences.js";
+import { getNumber, set } from "../fc_store.js";
 
 /**
  * 10s minimum reporting between purchases with "smart tracking" on
@@ -63,7 +64,7 @@ function saveStats(fromGraph) {
 function smartTrackingStats(delay) {
     saveStats();
     if (FrozenCookies.trackStats == 6) {
-        if (FrozenCookies.delayPurchaseCount == 0) {
+        if (getNumber("delayPurchaseCount") == 0) {
             delay *= 1.5;
         } else if (delay > MIN_DELAY) {
             delay /= 2;
@@ -71,7 +72,7 @@ function smartTrackingStats(delay) {
         smartTrackingBot = setTimeout(function () {
             smartTrackingStats(delay);
         }, delay);
-        FrozenCookies.delayPurchaseCount = 0;
+        set("delayPurchaseCount", 0);
         return;
     }
     smartTrackingBot = 0;

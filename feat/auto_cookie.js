@@ -1,7 +1,7 @@
 import { Beautify } from "../fc_beautify.js";
 import { goldenCookieLife, liveWrinklers } from "../fc_time.js";
 import { chocolateValue, safeBuy } from "../fc_pay.js";
-import { getNumber, set } from "../fc_store.js";
+import { getNumber, modify, set } from "../fc_store.js";
 import { updateFrenzyTimes } from "../fc_frenzy_times.js";
 import { bestBank } from "../fc_best_bank.js";
 import { willAutoSpellSE } from "./auto_spell.js";
@@ -223,7 +223,7 @@ function autoCookie() {
             if (FrozenCookies.trackStats == 5 && recommendation.type == "upgrade") {
                 saveStats();
             } else if (FrozenCookies.trackStats == 6) {
-                FrozenCookies.delayPurchaseCount += 1;
+                modify("delayPurchaseCount", (count) => count + 1);
             }
             if (FrozenCookies.purchaseLog == 1) {
                 logEvent(

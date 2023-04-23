@@ -179,7 +179,7 @@ function setOverrides(Game) {
     set("enabledPopups", 0);
 
     // Smart tracking details
-    FrozenCookies.delayPurchaseCount = 0;
+    set("delayPurchaseCount", 0);
 
     // Caching
     emptyCaches();
