@@ -179,7 +179,6 @@ function setOverrides(Game) {
     set("enabledPopups", 0);
 
     // Smart tracking details
-    FrozenCookies.minDelay = 1000 * 10; // 10s minimum reporting between purchases with "smart tracking" on
     FrozenCookies.delayPurchaseCount = 0;
 
     // Caching

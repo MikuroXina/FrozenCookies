@@ -1,5 +1,10 @@
 import { pushStats, viewStatGraphs } from "../fc_preferences.js";
 
+/**
+ * 10s minimum reporting between purchases with "smart tracking" on
+ */
+const MIN_DELAY = 1000 * 10;
+
 let smartTrackingBot = 0;
 
 export function start() {
@@ -10,8 +15,8 @@ export function start() {
         );
     } else if (FrozenCookies.trackStats == 6 && !smartTrackingBot) {
         smartTrackingBot = setTimeout(function () {
-            smartTrackingStats(FrozenCookies.minDelay * 8);
-        }, FrozenCookies.minDelay);
+            smartTrackingStats(MIN_DELAY * 8);
+        }, MIN_DELAY);
     }
 }
 
@@ -58,12 +63,11 @@ function saveStats(fromGraph) {
 function smartTrackingStats(delay) {
     saveStats();
     if (FrozenCookies.trackStats == 6) {
-        delay /=
-            FrozenCookies.delayPurchaseCount == 0
-                ? 1 / 1.5
-                : delay > FrozenCookies.minDelay
-                ? 2
-                : 1;
+        if (FrozenCookies.delayPurchaseCount == 0) {
+            delay *= 1.5;
+        } else if (delay > MIN_DELAY) {
+            delay /= 2;
+        }
         smartTrackingBot = setTimeout(function () {
             smartTrackingStats(delay);
         }, delay);
