@@ -220,9 +220,9 @@ function autoCookie() {
                 recommendation.purchase.buy();
             }
             modify("autobuyCount", (count) => count + 1);
-            if (FrozenCookies.trackStats == 5 && recommendation.type == "upgrade") {
+            if (getNumber("trackStats") == 5 && recommendation.type == "upgrade") {
                 saveStats();
-            } else if (FrozenCookies.trackStats == 6) {
+            } else if (getNumber("trackStats") == 6) {
                 modify("delayPurchaseCount", (count) => count + 1);
             }
             if (FrozenCookies.purchaseLog == 1) {

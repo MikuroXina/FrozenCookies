@@ -9,12 +9,13 @@ const MIN_DELAY = 1000 * 10;
 let smartTrackingBot = 0;
 
 export function start() {
-    if (statSpeed(FrozenCookies.trackStats) > 0) {
+    const trackStats = getNumber("trackStats");
+    if (statSpeed(trackStats) > 0) {
         FrozenCookies.statBot = setInterval(
             saveStats,
-            statSpeed(FrozenCookies.trackStats)
+            statSpeed(trackStats)
         );
-    } else if (FrozenCookies.trackStats == 6 && !smartTrackingBot) {
+    } else if (trackStats == 6 && !smartTrackingBot) {
         smartTrackingBot = setTimeout(function () {
             smartTrackingStats(MIN_DELAY * 8);
         }, MIN_DELAY);
@@ -22,7 +23,7 @@ export function start() {
 }
 
 function statSpeed() {
-    switch (FrozenCookies.trackStats) {
+    switch (getNumber("trackStats")) {
         case 1: // 60s
             return 1000 * 60;
         case 2: // 30m
@@ -63,7 +64,7 @@ function saveStats(fromGraph) {
 
 function smartTrackingStats(delay) {
     saveStats();
-    if (FrozenCookies.trackStats == 6) {
+    if (getNumber("trackStats") == 6) {
         if (getNumber("delayPurchaseCount") == 0) {
             delay *= 1.5;
         } else if (delay > MIN_DELAY) {

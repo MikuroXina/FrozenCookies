@@ -97,7 +97,7 @@ function recommendedSettingsAction() {
         FrozenCookies.logging = 1;
         FrozenCookies.purchaseLog = 0;
         FrozenCookies.fpsModifier = 2;
-        FrozenCookies.trackStats = 0;
+        setNumber("trackStats", 0);
         logEvent("recommendedSettings", "Set all options to recommended values");
         FrozenCookies.recommendedSettings = 0;
         Game.toSave = true;
