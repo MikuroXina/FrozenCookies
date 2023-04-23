@@ -167,24 +167,34 @@ function autoCookie() {
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 100 &&
-                ((willAutoSpellSE() &&
-                    recommendation.purchase.name == "Cortex baker" &&
-                    Game.Objects["Cortex baker"].amount >= 299) ||
-                    (FrozenCookies.towerLimit &&
+                (
+                    (
+                        willAutoSpellSE() &&
+                        recommendation.purchase.name == "Cortex baker" &&
+                        Game.Objects["Cortex baker"].amount >= 299
+                    ) ||
+                    (
+                        FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        TOWER_GAME.magic >= FrozenCookies.manaMax - 10) ||
-                    (FrozenCookies.mineLimit &&
+                        TOWER_GAME.magic >= FrozenCookies.manaMax - 10
+                    ) ||
+                    (
+                        FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= getNumber("mineMax") - 100) ||
-                    (FrozenCookies.factoryLimit &&
+                        Game.Objects["Mine"].amount >= getNumber("mineMax") - 100
+                    ) ||
+                    (
+                        FrozenCookies.factoryLimit &&
                         recommendation.purchase.name == "Factory" &&
-                        Game.Objects["Factory"].amount >=
-                            FrozenCookies.factoryMax - 100) ||
-                    (FrozenCookies.autoDragonOrbs &&
+                        Game.Objects["Factory"].amount >= getNumber("factoryMax") - 100
+                    ) ||
+                    (
+                        FrozenCookies.autoDragonOrbs &&
                         FrozenCookies.cortexLimit &&
                         recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >=
-                            FrozenCookies.cortexMax - 100))
+                        Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax - 100
+                    )
+                )
             ) {
                 document.getElementById("storeBulk10").click();
                 safeBuy(recommendation.purchase);
@@ -192,24 +202,34 @@ function autoCookie() {
             } else if (
                 recommendation.type == "building" &&
                 Game.buyBulk == 10 &&
-                ((willAutoSpellSE() &&
-                    recommendation.purchase.name == "Cortex baker" &&
-                    Game.Objects["Cortex baker"].amount >= 389) ||
-                    (FrozenCookies.towerLimit &&
+                (
+                    (
+                        willAutoSpellSE() &&
+                        recommendation.purchase.name == "Cortex baker" &&
+                        Game.Objects["Cortex baker"].amount >= 389
+                    ) ||
+                    (
+                        FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        TOWER_GAME.magic >= FrozenCookies.manaMax - 2) ||
-                    (FrozenCookies.mineLimit &&
+                        TOWER_GAME.magic >= FrozenCookies.manaMax - 2
+                    ) ||
+                    (
+                        FrozenCookies.mineLimit &&
                         recommendation.purchase.name == "Mine" &&
-                        Game.Objects["Mine"].amount >= getNumber("mineMax") - 10) ||
-                    (FrozenCookies.factoryLimit &&
+                        Game.Objects["Mine"].amount >= getNumber("mineMax") - 10
+                    ) ||
+                    (
+                        FrozenCookies.factoryLimit &&
                         recommendation.purchase.name == "Factory" &&
-                        Game.Objects["Factory"].amount >=
-                            FrozenCookies.factoryMax - 10) ||
-                    (FrozenCookies.autoDragonOrbs &&
+                        Game.Objects["Factory"].amount >= getNumber("factoryMax") - 10
+                    ) ||
+                    (
+                        FrozenCookies.autoDragonOrbs &&
                         FrozenCookies.cortexLimit &&
                         recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >=
-                            FrozenCookies.cortexMax - 10))
+                        Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax - 10
+                    )
+                )
             ) {
                 document.getElementById("storeBulk1").click();
                 safeBuy(recommendation.purchase);

@@ -234,7 +234,7 @@ function buildingStats(recalculate) {
             // Stop buying Factories if at set limit
             if (
                 FrozenCookies.factoryLimit &&
-                Game.Objects["Factory"].amount >= FrozenCookies.factoryMax
+                Game.Objects["Factory"].amount >= getNumber("factoryMax")
             )
                 buildingBlacklist.push(4);
             // Stop buying Cortex bakers if at set limit

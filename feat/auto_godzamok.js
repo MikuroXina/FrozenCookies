@@ -47,11 +47,12 @@ function autoGodzamokAction() {
             }
             // Rebuy factories
             if (FrozenCookies.factoryLimit) {
-                safeBuy(Game.Objects["Factory"], FrozenCookies.factoryMax);
+                const factoryMax = getNumber("factoryMax");
+                safeBuy(Game.Objects["Factory"], factoryMax);
                 modify("autobuyCount", (count) => count + 1);
                 logEvent(
                     "AutoGodzamok",
-                    "Bought " + FrozenCookies.factoryMax + " factories"
+                    "Bought " + factoryMax + " factories",
                 );
             } else {
                 safeBuy(Game.Objects["Factory"], countFactory);

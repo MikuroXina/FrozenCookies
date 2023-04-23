@@ -34,7 +34,7 @@ function recommendedSettingsAction() {
         FrozenCookies.mineLimit = 1;
         set("mineMax", 500);
         FrozenCookies.factoryLimit = 1;
-        FrozenCookies.factoryMax = 500;
+        set("factoryMax", 500);
         FrozenCookies.pastemode = 0;
         // other auto options
         FrozenCookies.autoAscend = 0;
