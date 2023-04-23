@@ -134,9 +134,7 @@ export function registerMod(mod_id = "frozen_cookies", Game) {
 
     // If Frozen Cookies was loaded and there was previous Frozen Cookies data in the game save, the "load" hook ran so the setOverrides function was called and things got initialized.
     // However, if there wasn't previous Frozen Cookies data in the game save, the "load" hook wouldn't have been called. So, we have to manually call setOverrides here to start Frozen Cookies.
-    if (!FrozenCookies.loadedData) {
-        setOverrides(Game);
-    }
+    setOverrides(Game);
     logEvent(
         "Load",
         "Initial Load of Frozen Cookies v " +
@@ -152,13 +150,12 @@ const BANK_GAME = Game.Objects["Bank"].minigame;
 const TEMPLE_GAME = Game.Objects["Temple"].minigame;
 const TOWER_GAME = Game.Objects["Wizard tower"].minigame;
 
+/**
+ * Loads settings and initializes variables
+ *
+ * @param {any} Game
+ */
 function setOverrides(Game) {
-    // load settings and initialize variables
-    // If gameSaveData wasn't passed to this function, it means that there was nothing for this mod in the game save when the mod was loaded
-    // In that case, set the "loadedData" var to an empty object. When the loadFCData() function runs and finds no data from the game save,
-    // it pulls data from local storage or sets default values
-
-    FrozenCookies.loadedData = {};
     loadFCData();
     set("frequency", 100);
 
@@ -280,9 +277,8 @@ function loadFCData() {
     loadFromLocalStorage("lastHCTime", 0);
     loadFromLocalStorage("prevLastHCTime", 0);
     loadFromLocalStorage("maxHCPercent", 0);
-    if (Object.keys(FrozenCookies.loadedData).length > 0) {
-        logEvent("Load", "Restored Frozen Cookies settings from previous save");
-    }
+
+    logEvent("Load", "Restored Frozen Cookies settings from previous save");
 }
 
 function emptyCaches() {
