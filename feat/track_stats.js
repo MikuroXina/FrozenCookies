@@ -1,13 +1,15 @@
 import { pushStats, viewStatGraphs } from "../fc_preferences.js";
 
+let smartTrackingBot = 0;
+
 export function start() {
     if (statSpeed(FrozenCookies.trackStats) > 0) {
         FrozenCookies.statBot = setInterval(
             saveStats,
             statSpeed(FrozenCookies.trackStats)
         );
-    } else if (FrozenCookies.trackStats == 6 && !FrozenCookies.smartTrackingBot) {
-        FrozenCookies.smartTrackingBot = setTimeout(function () {
+    } else if (FrozenCookies.trackStats == 6 && !smartTrackingBot) {
+        smartTrackingBot = setTimeout(function () {
             smartTrackingStats(FrozenCookies.minDelay * 8);
         }, FrozenCookies.minDelay);
     }
@@ -62,9 +64,11 @@ function smartTrackingStats(delay) {
                 : delay > FrozenCookies.minDelay
                 ? 2
                 : 1;
-        FrozenCookies.smartTrackingBot = setTimeout(function () {
+        smartTrackingBot = setTimeout(function () {
             smartTrackingStats(delay);
         }, delay);
         FrozenCookies.delayPurchaseCount = 0;
+        return;
     }
+    smartTrackingBot = 0;
 }
