@@ -470,8 +470,8 @@ function saveFCData() {
     _.keys(PREFERENCES).forEach(function (preference) {
         saveString[preference] = FrozenCookies[preference];
     });
-    saveString.frenzyClickSpeed = FrozenCookies.frenzyClickSpeed;
-    saveString.cookieClickSpeed = getNumber("cookieClickSpeed");
+    saveString.frenzyClickSpeed = getString("frenzyClickSpeed");
+    saveString.cookieClickSpeed = getString("cookieClickSpeed");
     saveString.HCAscendAmount = FrozenCookies.HCAscendAmount;
     saveString.mineMax = FrozenCookies.mineMax;
     saveString.factoryMax = FrozenCookies.factoryMax;
