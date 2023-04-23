@@ -179,7 +179,7 @@ function setOverrides(Game) {
     set("currentBank.efficiency", 0);
     set("targetBank.cost", 0);
     set("targetBank.efficiency", 0);
-    FrozenCookies.disabledPopups = true;
+    set("enabledPopups", 0);
     FrozenCookies.lastGraphDraw = 0;
     FrozenCookies.calculatedCpsByType = {};
 
@@ -681,7 +681,7 @@ function fcWin(what) {
                 // here gets repeatedly called seeming to indicate that the achievements.won value is 1, even though the achievement isn't
                 // being unlocked. This also means that placing a function to log the achievement spams out messages. Are the Achievement.won
                 // values being turned off before the game checks again? There must be some reason Game.Win is replaced with fcWin
-                if (!FrozenCookies.disabledPopups) {
+                if (!!getNumber("enabledPopups")) {
                     logEvent(
                         "Achievement",
                         "Achievement unlocked :<br>" +

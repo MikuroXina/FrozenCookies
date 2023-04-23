@@ -141,7 +141,7 @@ function autoCookie() {
             recommendation.time = Date.now() - Game.startDate;
             //      full_history.push(recommendation);  // Probably leaky, maybe laggy?
             recommendation.purchase.clickFunction = null;
-            disabledPopups = false;
+            set("enabledPopups", 1);
             //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
             if (
                 Math.floor(Game.HowMuchPrestige(Game.cookiesReset + Game.cookiesEarned)) -
@@ -237,7 +237,7 @@ function autoCookie() {
                         " CPS."
                 );
             }
-            disabledPopups = true;
+            set("enabledPopups", 0);
             if (FrozenCookies.autobuyCount >= 10) {
                 Game.Draw();
                 set("autobuyCount", 0);
