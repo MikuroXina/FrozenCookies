@@ -8,6 +8,7 @@ import { getNumber, getString, loadFromStorage, set } from "./fc_store.js";
 import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
 import { nextPurchase, recommendationList } from "./fc_next_purchase.js";
 import { META } from "./fc_meta.js";
+import { PREFERENCES } from "./fc_preferences.js";
 
 export function registerMod(mod_id = "frozen_cookies", Game) {
     // register with the modding API
