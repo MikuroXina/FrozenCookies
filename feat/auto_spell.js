@@ -95,7 +95,7 @@ function autoCast() {
             Math.floor(
                 TOWER_GAME.spellsById[4].costMin + TOWER_GAME.spellsById[4].costPercent * TOWER_GAME.magicM
             ) &&
-        cpsBonus() >= FrozenCookies.minCpSMult &&
+        cpsBonus() >= getNumber("minCpSMult") &&
         (nextSpellName(0) == "Clot" || nextSpellName(0) == "Ruin Cookies")
     ) {
         TOWER_GAME.castSpell(TOWER_GAME.spellsById[4]);
@@ -163,7 +163,7 @@ function autoCastForceHandFate() {
         return;
     }
 
-    if (cpsBonus() < FrozenCookies.minCpSMult) {
+    if (cpsBonus() < getNumber("minCpSMult")) {
         return;
     }
     if (!Game.hasBuff("Dragonflight") && nextSpellName(0) == "Lucky") {
@@ -329,7 +329,7 @@ function autoCastForceHandFateClickSpecialsOnly() {
         );
     }
 
-    if (cpsBonus() < FrozenCookies.minCpSMult) {
+    if (cpsBonus() < getNumber("minCpSMult")) {
         return;
     }
 

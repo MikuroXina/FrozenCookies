@@ -62,7 +62,7 @@ function recommendedSettingsAction() {
         FrozenCookies.towerLimit = 1;
         FrozenCookies.manaMax = 37;
         set("autoSpell", 2);
-        FrozenCookies.minCpSMult = 7;
+        set("minCpSMult", 7);
         FrozenCookies.autoFTHOFCombo = 0;
         FrozenCookies.auto100ConsistencyCombo = 0;
         FrozenCookies.autoSugarFrenzy = 0;

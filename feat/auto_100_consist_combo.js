@@ -194,22 +194,28 @@ function auto100ConsistencyComboAction() {
 
         case 1: // Start combo
             if (
-                ((FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
-                    (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)) &&
-                cpsBonus() >= FrozenCookies.minCpSMult &&
-                (((Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
-                    Game.hasBuff("Dragon Harvest") &&
-                    Game.hasBuff("Frenzy") &&
-                    Game.hasBuff("Dragon Harvest").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1 &&
-                    Game.hasBuff("Frenzy").time / 30 >=
-                        Math.ceil(13 * BuffTimeFactor()) - 1) ||
-                    (!Game.hasAura("Reaper of Fields") &&
+                (
+                    (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
+                    (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
+                ) &&
+                cpsBonus() >= getNumber("minCpSMult") &&
+                (
+                    (
+                        (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
+                        Game.hasBuff("Dragon Harvest") &&
+                        Game.hasBuff("Frenzy") &&
+                        Game.hasBuff("Dragon Harvest").time / 30 >= Math.ceil(13 * BuffTimeFactor()) - 1 &&
+                        Game.hasBuff("Frenzy").time / 30 >= Math.ceil(13 * BuffTimeFactor()) - 1
+                    ) ||
+                    (
+                        !Game.hasAura("Reaper of Fields") &&
                         (Game.hasBuff("Dragon Harvest") || Game.hasBuff("Frenzy")) &&
-                        (Game.hasBuff("Dragon Harvest").time / 30 >=
-                            Math.ceil(13 * BuffTimeFactor()) - 1 ||
-                            Game.hasBuff("Frenzy").time / 30 >=
-                                Math.ceil(13 * BuffTimeFactor()) - 1))) &&
+                        (
+                            Game.hasBuff("Dragon Harvest").time / 30 >= Math.ceil(13 * BuffTimeFactor()) - 1 ||
+                            Game.hasBuff("Frenzy").time / 30 >= Math.ceil(13 * BuffTimeFactor()) - 1
+                        )
+                    )
+                ) &&
                 BuildingSpecialBuff() == 1 &&
                 BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
             ) {

@@ -177,7 +177,7 @@ function autoFTHOFComboAction() {
                     (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
                     (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
                 ) &&
-                cpsBonus() >= FrozenCookies.minCpSMult &&
+                cpsBonus() >= getNumber("minCpSMult") &&
                 (
                     (
                         (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&
@@ -219,7 +219,7 @@ function autoFTHOFComboAction() {
                     (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
                     (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)
                 ) &&
-                cpsBonus() >= FrozenCookies.minCpSMult &&
+                cpsBonus() >= getNumber("minCpSMult") &&
                 (
                     (
                         (Game.hasAura("Reaper of Fields") || Game.hasAura("Reality Bending")) &&

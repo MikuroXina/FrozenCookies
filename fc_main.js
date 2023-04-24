@@ -476,7 +476,7 @@ function saveFCData() {
     saveString.HCAscendAmount = getString("HCAscendAmount");
     saveString.mineMax = getString("mineMax");
     saveString.factoryMax = getString("factoryMax");
-    saveString.minCpSMult = FrozenCookies.minCpSMult;
+    saveString.minCpSMult = getString("minCpSMult");
     saveString.minLoanMult = FrozenCookies.minLoanMult;
     saveString.minASFMult = FrozenCookies.minASFMult;
     saveString.frenzyTimes = saveAsJson();
