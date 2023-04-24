@@ -66,7 +66,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoFTHOFCombo = 0;
         FrozenCookies.auto100ConsistencyCombo = 0;
         FrozenCookies.autoSugarFrenzy = 0;
-        FrozenCookies.minASFMult = 7777;
+        set("minASFMult", 7777);
         FrozenCookies.autoSweet = 0;
         // Dragon options
         FrozenCookies.autoDragon = 1;
