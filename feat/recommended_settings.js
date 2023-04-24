@@ -51,7 +51,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoBank = 1;
         FrozenCookies.autoBroker = 1;
         FrozenCookies.autoLoan = 1;
-        FrozenCookies.minLoanMult = 777;
+        set("minLoanMult", 777);
         // Pantheon options
         FrozenCookies.autoWorshipToggle = 1;
         FrozenCookies.autoWorship0 = 2; // Godzamok

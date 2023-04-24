@@ -25,10 +25,14 @@ function autoSugarFrenzyAction() {
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
         auto100ConsistencyComboAction.state == 2 &&
-        ((!Game.hasBuff("Loan 1 (interest)") &&
-            !Game.hasBuff("Loan 2 (interest)") &&
-            !Game.hasBuff("Loan 3 (interest)")) ||
-            !FrozenCookies.minLoanMult)
+        (
+            (
+                !Game.hasBuff("Loan 1 (interest)") &&
+                !Game.hasBuff("Loan 2 (interest)") &&
+                !Game.hasBuff("Loan 3 (interest)")
+            ) ||
+            !getNumber("minLoanMult")
+        )
     ) {
         Game.UpgradesById["452"].buy();
         Game.ConfirmPrompt();
@@ -42,10 +46,14 @@ function autoSugarFrenzyAction() {
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
         (autoFTHOFComboAction.state == 3 || auto100ConsistencyComboAction.state == 2) &&
-        ((!Game.hasBuff("Loan 1 (interest)") &&
-            !Game.hasBuff("Loan 2 (interest)") &&
-            !Game.hasBuff("Loan 3 (interest)")) ||
-            !FrozenCookies.minLoanMult)
+        (
+            (
+                !Game.hasBuff("Loan 1 (interest)") &&
+                !Game.hasBuff("Loan 2 (interest)") &&
+                !Game.hasBuff("Loan 3 (interest)")
+            ) ||
+            !getNumber("minLoanMult")
+        )
     ) {
         Game.UpgradesById["452"].buy();
         Game.ConfirmPrompt();

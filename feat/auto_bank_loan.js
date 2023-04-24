@@ -19,7 +19,7 @@ function autoLoanBuy() {
         return;
     }
 
-    if (hasClickBuff() && cpsBonus() >= FrozenCookies.minLoanMult) {
+    if (hasClickBuff() && cpsBonus() >= getNumber("minLoanMult")) {
         if (BANK_GAME.officeLevel >= 2) {
             BANK_GAME.takeLoan(1);
         }

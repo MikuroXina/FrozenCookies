@@ -477,7 +477,7 @@ function saveFCData() {
     saveString.mineMax = getString("mineMax");
     saveString.factoryMax = getString("factoryMax");
     saveString.minCpSMult = getString("minCpSMult");
-    saveString.minLoanMult = FrozenCookies.minLoanMult;
+    saveString.minLoanMult = getString("minLoanMult");
     saveString.minASFMult = FrozenCookies.minASFMult;
     saveString.frenzyTimes = saveAsJson();
     //  saveString.nonFrenzyTime = FrozenCookies.non_gc_time;
