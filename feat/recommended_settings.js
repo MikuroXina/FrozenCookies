@@ -33,7 +33,7 @@ function recommendedSettingsAction() {
         set("blacklist", 0);
         set("mineLimit", 1);
         set("mineMax", 500);
-        FrozenCookies.factoryLimit = 1;
+        set("factoryLimit", 1);
         set("factoryMax", 500);
         set("pastemode", 0);
         // other auto options

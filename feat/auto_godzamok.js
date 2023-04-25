@@ -46,7 +46,7 @@ function autoGodzamokAction() {
                 logEvent("AutoGodzamok", "Bought " + countMine + " mines");
             }
             // Rebuy factories
-            if (FrozenCookies.factoryLimit) {
+            if (getNumber("factoryLimit")) {
                 const factoryMax = getNumber("factoryMax");
                 safeBuy(Game.Objects["Factory"], factoryMax);
                 modify("autobuyCount", (count) => count + 1);

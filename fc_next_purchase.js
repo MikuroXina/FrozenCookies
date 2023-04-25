@@ -232,7 +232,7 @@ function buildingStats(recalculate) {
                 buildingBlacklist.push(3);
             // Stop buying Factories if at set limit
             if (
-                FrozenCookies.factoryLimit &&
+                getNumber("factoryLimit") &&
                 Game.Objects["Factory"].amount >= getNumber("factoryMax")
             )
                 buildingBlacklist.push(4);

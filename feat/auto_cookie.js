@@ -184,7 +184,7 @@ function autoCookie() {
                         Game.Objects["Mine"].amount >= getNumber("mineMax") - 100
                     ) ||
                     (
-                        FrozenCookies.factoryLimit &&
+                        getNumber("factoryLimit") &&
                         recommendation.purchase.name == "Factory" &&
                         Game.Objects["Factory"].amount >= getNumber("factoryMax") - 100
                     ) ||
@@ -219,7 +219,7 @@ function autoCookie() {
                         Game.Objects["Mine"].amount >= getNumber("mineMax") - 10
                     ) ||
                     (
-                        FrozenCookies.factoryLimit &&
+                        getNumber("factoryLimit") &&
                         recommendation.purchase.name == "Factory" &&
                         Game.Objects["Factory"].amount >= getNumber("factoryMax") - 10
                     ) ||
