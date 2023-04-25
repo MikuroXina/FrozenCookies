@@ -267,7 +267,7 @@ function autoCookie() {
             itemBought = true;
         }
 
-        if (FrozenCookies.autoAscend && !Game.OnAscend && !Game.AscendTimer) {
+        if (getNumber("autoAscend") && !Game.OnAscend && !Game.AscendTimer) {
             const currPrestige = Game.prestige;
             const resetPrestige = Game.HowMuchPrestige(
                 Game.cookiesReset +

@@ -37,7 +37,7 @@ function recommendedSettingsAction() {
         set("factoryMax", 500);
         set("pastemode", 0);
         // other auto options
-        FrozenCookies.autoAscend = 0;
+        set("autoAscend", 0);
         set("HCAscendAmount", 0);
         set("autoBulk", 2);
         FrozenCookies.autoBuyAll = 1;
