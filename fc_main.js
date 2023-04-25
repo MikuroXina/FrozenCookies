@@ -408,37 +408,40 @@ function getBuildingSpread() {
 // Press 's' to do a manual save
 // Press 'w' to display a wrinkler-info window
 document.addEventListener("keydown", function (event) {
-    if (!Game.promptOn && FrozenCookies.FCshortcuts) {
-        if (event.key == "a") {
+    if (Game.promptOn || !FrozenCookies.FCshortcuts) {
+        return;
+    }
+    switch (event.key) {
+        case "a":
             Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
             toggle("autoBuy");
-        }
-        if (event.key == "b") {
+            break;
+        case "b":
             copyToClipboard(getBuildingSpread());
-        }
-        if (event.key == "c") {
+            break;
+        case "c":
             Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
             toggle("autoGC");
-        }
-        if (event.key == "e") {
+            break;
+        case "e":
             copyToClipboard(Game.WriteSave(true));
-        }
-        if (event.key == "r") {
+            break;
+        case "r":
             Game.Reset();
-        }
-        if (event.key == "s") {
+            break;
+        case "s":
             Game.WriteSave();
-        }
-        if (event.key == "w") {
+            break;
+        case "w":
             Game.Notify(
                 "Wrinkler Info",
                 "Popping all wrinklers will give you " +
                     Beautify(wrinklerValue()) +
                     ' cookies. <input type="button" value="Click here to pop all wrinklers" onclick="Game.CollectWrinklers()"></input>',
                 [19, 8],
-                7
+                7,
             );
-        }
+            break;
     }
 });
 
