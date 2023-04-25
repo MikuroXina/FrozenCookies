@@ -1,7 +1,7 @@
 import { getNumber } from "../fc_store.js";
 
 export function start() {
-    if (FrozenCookies.autoFortune) {
+    if (getNumber("autoFortune")) {
         FrozenCookies.autoFortuneBot = setInterval(
             autoTicker,
             getNumber("frequency") * 10
