@@ -20,7 +20,7 @@ export function stop() {
 function autoSugarFrenzyAction() {
     if (
         FrozenCookies.autoSugarFrenzy == 1 &&
-        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) || Game.lumps > 100) &&
+        ((!getNumber("sugarBakingGuard") && Game.lumps > 0) || Game.lumps > 100) &&
         cpsBonus() >= getNumber("minASFMult") &&
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
@@ -41,7 +41,7 @@ function autoSugarFrenzyAction() {
 
     if (
         FrozenCookies.autoSugarFrenzy == 2 &&
-        ((!FrozenCookies.sugarBakingGuard && Game.lumps > 0) || Game.lumps > 100) &&
+        ((!getNumber("sugarBakingGuard") && Game.lumps > 0) || Game.lumps > 100) &&
         cpsBonus() >= getNumber("minASFMult") &&
         Game.UpgradesById["450"].unlocked == 1 && // Check to see if Sugar craving prestige upgrade has been purchased
         Game.UpgradesById["452"].bought == 0 && // Check to see if sugar frenzy has already been bought this ascension
