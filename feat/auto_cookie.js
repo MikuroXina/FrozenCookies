@@ -322,7 +322,7 @@ function autoCookie() {
                 }
             }
         }
-        if (FrozenCookies.autoBlacklistOff) {
+        if (getNumber("autoBlacklistOff")) {
             autoBlacklistOff();
         }
         updateFrenzyTimes();
