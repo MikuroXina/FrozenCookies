@@ -9,7 +9,7 @@ export function start() {
             getNumber("frequency") * 2
         );
     } else if (autoFTHOFComboAction.autobuyyes == 1) {
-        FrozenCookies.autoBuy = 1;
+        set("autoBuy", 1);
         autoFTHOFComboAction.autobuyyes = 0;
     }
 }
@@ -66,7 +66,7 @@ function autoFTHOFComboAction() {
             !nextSpellName(1) == "Click Frenzy")
     ) {
         if (autoFTHOFComboAction.autobuyyes == 1) {
-            FrozenCookies.autoBuy = 1;
+            set("autoBuy", 1);
             autoFTHOFComboAction.autobuyyes = 0;
         }
         autoFTHOFComboAction.state = IDLE;
@@ -250,9 +250,9 @@ function autoFTHOFComboAction() {
             return;
         case OFF_AUTO_BUY_NOT_SELL:
             // Turn off autoBuy and make sure we're not in sell mode
-            if (FrozenCookies.autoBuy == 1) {
+            if (!!getNumber("autoBuy")) {
                 autoFTHOFComboAction.autobuyyes = 1;
-                FrozenCookies.autoBuy = 0;
+                set("autoBuy", 0);
             } else {
                 autoFTHOFComboAction.autobuyyes = 0;
             }
@@ -281,7 +281,7 @@ function autoFTHOFComboAction() {
             modify("autobuyCount", (count) => count + 1);
             // Turn autoBuy back on if it was on before
             if (autoFTHOFComboAction.autobuyyes == 1) {
-                FrozenCookies.autoBuy = 1;
+                set("autoBuy", 1);
                 autoFTHOFComboAction.autobuyyes = 0;
             }
             autoFTHOFComboAction.count = 0;

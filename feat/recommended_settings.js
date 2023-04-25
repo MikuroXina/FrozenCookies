@@ -27,7 +27,7 @@ function recommendedSettingsAction() {
         set("autoReindeer", 1);
         set("autoFortune", 1);
         // autobuy options
-        FrozenCookies.autoBuy = 1;
+        set("autoBuy", 1);
         FrozenCookies.otherUpgrades = 1;
         FrozenCookies.autoBlacklistOff = 0;
         set("blacklist", 0);

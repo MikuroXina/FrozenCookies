@@ -7,7 +7,7 @@ export function start() {
             getNumber("frequency") * 2
         );
     } else if (autoSweetAction.autobuyyes == 1) {
-        FrozenCookies.autoBuy = 1;
+        set("autoBuy", 1);
         autoSweetAction.autobuyyes = 0;
     }
 }
@@ -19,9 +19,9 @@ function autoSweetAction() {
         return;
     }
 
-    if (FrozenCookies.autoBuy == 1) {
+    if (!!getNumber("autoBuy")) {
         autoSweetAction.autobuyyes = 1;
-        FrozenCookies.autoBuy = 0;
+        set("autoBuy", 0);
     } else {
         autoSweetAction.autobuyyes = 0;
     }
@@ -86,7 +86,7 @@ function autoSweetAction() {
                             set("manaMax", autoSweetAction.manaPrev);
                         }
                         if (autoSweetAction.autobuyyes == 1) {
-                            FrozenCookies.autoBuy = 1;
+                            set("autoBuy", 1);
                             autoSweetAction.autobuyyes = 0;
                         }
                         FrozenCookies.autoSweet = 0;

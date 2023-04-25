@@ -11,7 +11,7 @@ export function start() {
         return;
     }
     if (auto100ConsistencyComboAction.autobuyyes == 1) {
-        FrozenCookies.autoBuy = 1;
+        set("autoBuy", 1);
         auto100ConsistencyComboAction.autobuyyes = 0;
     }
     if (auto100ConsistencyComboAction.autogcyes == 1) {
@@ -118,7 +118,7 @@ function auto100ConsistencyComboAction() {
                 (!FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM - 1)))
     ) {
         if (auto100ConsistencyComboAction.autobuyyes == 1) {
-            FrozenCookies.autoBuy = 1;
+            set("autoBuy", 1);
             auto100ConsistencyComboAction.autobuyyes = 0;
         }
         if (auto100ConsistencyComboAction.autogcyes == 1) {
@@ -220,9 +220,9 @@ function auto100ConsistencyComboAction() {
                 BuildingBuffTime() >= Math.ceil(13 * BuffTimeFactor())
             ) {
                 // Turn off autoBuy
-                if (FrozenCookies.autoBuy == 1) {
+                if (getNumber("autoBuy") == 1) {
                     auto100ConsistencyComboAction.autobuyyes = 1;
-                    FrozenCookies.autoBuy = 0;
+                    set("autoBuy", 0);
                 } else {
                     auto100ConsistencyComboAction.autobuyyes = 0;
                 }
@@ -709,7 +709,7 @@ function auto100ConsistencyComboAction() {
 
         case 20: // Turning things back on
             if (auto100ConsistencyComboAction.autobuyyes == 1) {
-                FrozenCookies.autoBuy = 1;
+                set("autoBuy", 1);
                 auto100ConsistencyComboAction.autobuyyes = 0;
             }
             if (auto100ConsistencyComboAction.autogodyes == 1) {

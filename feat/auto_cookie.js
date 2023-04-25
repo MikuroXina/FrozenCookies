@@ -131,7 +131,7 @@ function autoCookie() {
 
         // const seConditions = (Game.cookies >= delay + recommendation.cost) || (!willAutoSpellSE() && !(FrozenCookies.holdSEBank))); // true == good on SE bank or don't care about it
         if (
-            FrozenCookies.autoBuy &&
+            getNumber("autoBuy") &&
             (Game.cookies >= delay + recommendation.cost ||
                 recommendation.purchase.name == "Elder Pledge") &&
             (getNumber("pastemode") || isFinite(nextChainedPurchase().efficiency))
