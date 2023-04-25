@@ -70,7 +70,7 @@ export function recommendationList(recalculate) {
                         : a.cost - b.cost
                 )
         );
-        if (FrozenCookies.pastemode) {
+        if (getNumber("pastemode")) {
             FrozenCookies.caches.recommendationList.reverse();
         }
         set("showAchievements", 1);
