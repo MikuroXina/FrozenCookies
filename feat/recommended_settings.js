@@ -44,7 +44,7 @@ function recommendedSettingsAction() {
         set("autoWrinkler", 1);
         set("shinyPop", 0);
         set("autoSL", 2);
-        FrozenCookies.dragonsCurve = 2;
+        set("dragonsCurve", 2);
         FrozenCookies.sugarBakingGuard = 1;
         FrozenCookies.autoGS = 1;
         FrozenCookies.autoGodzamok = 1;

@@ -63,7 +63,7 @@ function autoCookie() {
             if (
                 Date.now() - started >= ripeAge &&
                 Game.dragonLevel >= 21 &&
-                FrozenCookies.dragonsCurve
+                getNumber("dragonsCurve")
             ) {
                 autoDragonsCurve();
             } else if (Date.now() - started >= ripeAge) {
@@ -458,6 +458,7 @@ function autoRigidel() {
     const started = Game.lumpT;
     const ripeAge = Math.ceil(Game.lumpRipeAge);
     const orderLvl = Game.hasGod("order") ? Game.hasGod("order") : 0;
+    const dragonsCurve = getNumber("dragonsCurve");
     switch (orderLvl) {
         case 0: // Rigidel isn't in a slot
             if (TEMPLE_GAME.swaps < 2 || (TEMPLE_GAME.swaps == 1 && TEMPLE_GAME.slot[0] == -1)) {
@@ -471,7 +472,7 @@ function autoRigidel() {
                 rigiSell(); // Meet the %10 condition
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
+                    if (Game.dragonLevel >= 21 && dragonsCurve) {
                         autoDragonsCurve();
                     } else {
                         Game.clickLump();
@@ -488,7 +489,7 @@ function autoRigidel() {
                 rigiSell();
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
+                    if (Game.dragonLevel >= 21 && dragonsCurve) {
                         autoDragonsCurve();
                     } else {
                         Game.clickLump();
@@ -501,7 +502,7 @@ function autoRigidel() {
                 rigiSell();
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
+                    if (Game.dragonLevel >= 21 && dragonsCurve) {
                         autoDragonsCurve();
                     } else {
                         Game.clickLump();
@@ -514,7 +515,7 @@ function autoRigidel() {
                 rigiSell();
                 Game.computeLumpTimes();
                 if (Date.now() - started >= ripeAge) {
-                    if (Game.dragonLevel >= 21 && FrozenCookies.dragonsCurve) {
+                    if (Game.dragonLevel >= 21 && dragonsCurve) {
                         autoDragonsCurve();
                     } else {
                         Game.clickLump();
@@ -527,7 +528,7 @@ function autoRigidel() {
 
 function autoDragonsCurve() {
     // Swap dragon auras to try for unusual lumps
-    if (Game.dragonLevel < 21 || FrozenCookies.dragonsCurve < 1) {
+    if (Game.dragonLevel < 21 || getNumber("dragonsCurve") < 1) {
         return;
     }
 
@@ -555,7 +556,7 @@ function autoDragonsCurve() {
     }
 
     if (
-        FrozenCookies.dragonsCurve == 2 &&
+        getNumber("dragonsCurve") == 2 &&
         Game.dragonLevel > 25 &&
         !Game.hasAura("Reality Bending")
     ) {
