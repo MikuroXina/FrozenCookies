@@ -176,7 +176,7 @@ function autoCookie() {
                     (
                         FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        TOWER_GAME.magic >= FrozenCookies.manaMax - 10
+                        TOWER_GAME.magic >= getNumber("manaMax") - 10
                     ) ||
                     (
                         FrozenCookies.mineLimit &&
@@ -211,7 +211,7 @@ function autoCookie() {
                     (
                         FrozenCookies.towerLimit &&
                         recommendation.purchase.name == "Wizard tower" &&
-                        TOWER_GAME.magic >= FrozenCookies.manaMax - 2
+                        TOWER_GAME.magic >= getNumber("manaMax") - 2
                     ) ||
                     (
                         FrozenCookies.mineLimit &&

@@ -221,7 +221,7 @@ function buildingStats(recalculate) {
             if (
                 TOWER_GAME &&
                 FrozenCookies.towerLimit &&
-                TOWER_GAME.magicM >= FrozenCookies.manaMax
+                TOWER_GAME.magicM >= getNumber("manaMax")
             ) {
                 buildingBlacklist.push(7);
             }

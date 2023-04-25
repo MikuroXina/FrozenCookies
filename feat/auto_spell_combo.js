@@ -265,13 +265,13 @@ function autoFTHOFComboAction() {
             logEvent("autoFTHOFCombo", "Double cast Force the Hand of Fate");
             if (
                 FrozenCookies.towerLimit &&
-                FrozenCookies.manaMax <= 100 &&
+                getNumber("manaMax") <= 100 &&
                 autoFTHOFComboAction.count <= 497
             ) {
                 safeBuy(Game.Objects["Wizard tower"], autoFTHOFComboAction.count);
             } else if (
                 FrozenCookies.towerLimit &&
-                FrozenCookies.manaMax <= 100 &&
+                getNumber("manaMax") <= 100 &&
                 SugarLevel == 10
             ) {
                 safeBuy(Game.Objects["Wizard tower"], 486);

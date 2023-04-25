@@ -1,4 +1,4 @@
-import { getNumber } from "../fc_store.js";
+import { getNumber, set } from "../fc_store.js";
 
 export function start() {
     if (FrozenCookies.autoSweet) {
@@ -64,8 +64,8 @@ function autoSweetAction() {
                 return;
             case 1:
                 if (FrozenCookies.towerLimit) {
-                    autoSweetAction.manaPrev = FrozenCookies.manaMax;
-                    FrozenCookies.manaMax = 37;
+                    autoSweetAction.manaPrev = getNumber("manaMax");
+                    set("manaMax", 37);
                 }
                 if (
                     (FrozenCookies.towerLimit && TOWER_GAME.magic >= TOWER_GAME.magicM) ||
@@ -83,7 +83,7 @@ function autoSweetAction() {
                         autoSweetAction.state = 0;
                         logEvent("autoSweet", "Sugar Lump Get! Disabling Auto Sweet");
                         if (autoSweetAction.manaPrev != -1) {
-                            FrozenCookies.manaMax = autoSweetAction.manaPrev;
+                            set("manaMax", autoSweetAction.manaPrev);
                         }
                         if (autoSweetAction.autobuyyes == 1) {
                             FrozenCookies.autoBuy = 1;

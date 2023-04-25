@@ -60,7 +60,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoCyclius = 0;
         // Spell options
         FrozenCookies.towerLimit = 1;
-        FrozenCookies.manaMax = 37;
+        set("manaMax", 37);
         set("autoSpell", 2);
         set("minCpSMult", 7);
         FrozenCookies.autoFTHOFCombo = 0;
