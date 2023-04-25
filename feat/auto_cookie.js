@@ -192,7 +192,7 @@ function autoCookie() {
                         FrozenCookies.autoDragonOrbs &&
                         FrozenCookies.cortexLimit &&
                         recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax - 100
+                        Game.Objects["Cortex baker"].amount >= getNumber("cortexMax") - 100
                     )
                 )
             ) {
@@ -227,7 +227,7 @@ function autoCookie() {
                         FrozenCookies.autoDragonOrbs &&
                         FrozenCookies.cortexLimit &&
                         recommendation.purchase.name == "Cortex baker" &&
-                        Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax - 10
+                        Game.Objects["Cortex baker"].amount >= getNumber("cortexMax") - 10
                     )
                 )
             ) {

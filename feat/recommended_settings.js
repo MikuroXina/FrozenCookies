@@ -76,7 +76,7 @@ function recommendedSettingsAction() {
         FrozenCookies.autoDragonAura1 = 15; // Radiant Appetite
         FrozenCookies.autoDragonOrbs = 0;
         FrozenCookies.cortexLimit = 0;
-        FrozenCookies.cortexMax = 200;
+        set("cortexMax", 200);
         // Season options
         FrozenCookies.defaultSeason = 1;
         FrozenCookies.freeSeason = 1;

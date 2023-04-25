@@ -240,7 +240,7 @@ function buildingStats(recalculate) {
             if (
                 FrozenCookies.autoDragonOrbs &&
                 FrozenCookies.cortexLimit &&
-                Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax
+                Game.Objects["Cortex baker"].amount >= getNumber("cortexMax")
             )
                 buildingBlacklist.push(18);
             FrozenCookies.caches.buildings = Game.ObjectsById.map((current) => {

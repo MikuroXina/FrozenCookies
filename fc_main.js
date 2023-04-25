@@ -380,7 +380,7 @@ function saveFCData() {
     saveString.lastHCTime = getString("lastHCTime");
     saveString.manaMax = getString("manaMax");
     saveString.maxSpecials = getString("maxSpecials");
-    saveString.cortexMax = FrozenCookies.cortexMax;
+    saveString.cortexMax = getString("cortexMax");
     saveString.prevLastHCTime = getString("prevLastHCTime");
     saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
