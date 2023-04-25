@@ -313,7 +313,7 @@ function isAvailable(upgrade, upgradeBlacklist) {
     }
 
     // Don't pledge if we want to protect Shiny Wrinklers
-    if (upgrade.id == 74 && FrozenCookies.shinyPop == 1) {
+    if (upgrade.id == 74 && getNumber("shinyPop") == 1) {
         return false;
     }
 

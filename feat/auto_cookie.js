@@ -76,7 +76,7 @@ function autoCookie() {
         if (getNumber("autoWrinkler") == 1) {
             let popCount = 0;
             const popList = shouldPopWrinklers();
-            if (FrozenCookies.shinyPop == 1) {
+            if (getNumber("shinyPop") == 1) {
                 for (const w of _.filter(Game.wrinklers, (w) =>
                     _.contains(popList, w.id)
                 )) {
@@ -104,7 +104,7 @@ function autoCookie() {
         if (getNumber("autoWrinkler") == 2) {
             let popCount = 0;
             const popList = Game.wrinklers;
-            if (FrozenCookies.shinyPop == 1) {
+            if (getNumber("shinyPop") == 1) {
                 for (const w of popList) {
                     if (w.close == true && w.type !== 1) {
                         w.hp = 0;
