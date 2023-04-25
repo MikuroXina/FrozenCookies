@@ -315,7 +315,7 @@ function autoCookie() {
                 }
             }
         }
-        if (reindeerLife() > 0 && FrozenCookies.autoReindeer) {
+        if (reindeerLife() > 0 && getNumber("autoReindeer")) {
             for (const i in Game.shimmers) {
                 if (Game.shimmers[i].type == "reindeer") {
                     Game.shimmers[i].pop();

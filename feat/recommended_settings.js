@@ -24,7 +24,7 @@ function recommendedSettingsAction() {
         set("autoFrenzy", 1);
         set("frenzyClickSpeed", 1000);
         set("autoGC", 1);
-        FrozenCookies.autoReindeer = 1;
+        set("autoReindeer", 1);
         FrozenCookies.autoFortune = 1;
         // autobuy options
         FrozenCookies.autoBuy = 1;
