@@ -148,7 +148,7 @@ function autoCookie() {
                     Math.floor(Game.HowMuchPrestige(Game.cookiesReset)) <
                     1 &&
                 Game.Has("Inspired checklist") &&
-                FrozenCookies.autoBuyAll &&
+                getNumber("autoBuyAll") &&
                 nextPurchase().type == "upgrade" &&
                 Game.cookies >= nextPurchase().cost &&
                 nextPurchase().purchase.name != "Bingo center/Research facility" &&

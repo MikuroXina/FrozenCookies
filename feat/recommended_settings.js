@@ -40,7 +40,7 @@ function recommendedSettingsAction() {
         set("autoAscend", 0);
         set("HCAscendAmount", 0);
         set("autoBulk", 2);
-        FrozenCookies.autoBuyAll = 1;
+        set("autoBuyAll", 1);
         FrozenCookies.autoWrinkler = 1;
         FrozenCookies.shinyPop = 0;
         FrozenCookies.autoSL = 2;
