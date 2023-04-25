@@ -88,7 +88,7 @@ function recommendedSettingsAction() {
         set("setHarvestBankType", 3);
         set("maxSpecials", 1);
         // Other options
-        FrozenCookies.FCshortcuts = 1;
+        set("FCshortcuts", 1);
         FrozenCookies.simulatedGCPercent = 1;
         // Display options
         set("showMissedCookies", 0);

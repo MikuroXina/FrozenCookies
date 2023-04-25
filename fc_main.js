@@ -405,7 +405,7 @@ function getBuildingSpread() {
 // Press 's' to do a manual save
 // Press 'w' to display a wrinkler-info window
 document.addEventListener("keydown", (event) => {
-    if (Game.promptOn || !FrozenCookies.FCshortcuts) {
+    if (Game.promptOn || !getNumber("FCshortcuts")) {
         return;
     }
     switch (event.key) {
