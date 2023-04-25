@@ -1,7 +1,7 @@
 import { getNumber } from "../fc_store.js";
 
 export function start() {
-    if (FrozenCookies.otherUpgrades) {
+    if (getNumber("otherUpgrades")) {
         FrozenCookies.otherUpgradesBot = setInterval(
             buyOtherUpgrades,
             getNumber("frequency"),
