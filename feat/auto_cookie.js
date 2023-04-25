@@ -308,7 +308,7 @@ function autoCookie() {
         }
 
         // This apparently *has* to stay here, or else fast purchases will multi-click it.
-        if (goldenCookieLife() && FrozenCookies.autoGC) {
+        if (goldenCookieLife() && getNumber("autoGC")) {
             for (const i in Game.shimmers) {
                 if (Game.shimmers[i].type == "golden") {
                     Game.shimmers[i].pop();

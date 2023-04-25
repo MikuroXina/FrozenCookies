@@ -15,7 +15,7 @@ export function start() {
         auto100ConsistencyComboAction.autobuyyes = 0;
     }
     if (auto100ConsistencyComboAction.autogcyes == 1) {
-        FrozenCookies.autoGC = 1;
+        set("autoGC", 1);
         auto100ConsistencyComboAction.autogcyes = 0;
     }
     if (auto100ConsistencyComboAction.autogodyes == 1) {
@@ -122,7 +122,7 @@ function auto100ConsistencyComboAction() {
             auto100ConsistencyComboAction.autobuyyes = 0;
         }
         if (auto100ConsistencyComboAction.autogcyes == 1) {
-            FrozenCookies.autoGC = 1;
+            set("autoGC", 1);
             auto100ConsistencyComboAction.autogcyes = 0;
         }
         if (auto100ConsistencyComboAction.autogsyes == 1) {
@@ -246,9 +246,9 @@ function auto100ConsistencyComboAction() {
             return;
 
         case 2: // Turn off auto click golden cookie
-            if (FrozenCookies.autoGC > 0) {
+            if (!!getNumber("autoGC")) {
                 auto100ConsistencyComboAction.autogcyes = 1;
-                FrozenCookies.autoGC = 0;
+                set("autoGC", 0);
             } else {
                 auto100ConsistencyComboAction.autogcyes = 0;
             }
@@ -614,7 +614,7 @@ function auto100ConsistencyComboAction() {
                     Game.Upgrades["Golden switch [on]"].buy();
                 }
                 if (auto100ConsistencyComboAction.autogcyes == 1) {
-                    FrozenCookies.autoGC = 1;
+                    set("autoGC", 1);
                     auto100ConsistencyComboAction.autogcyes = 0;
                 }
                 if (auto100ConsistencyComboAction.autogsyes == 1) {
