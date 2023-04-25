@@ -74,3 +74,16 @@ export function modify(key, fn) {
         set(key, fn(num));
     }
 }
+
+/**
+ * Toggles the numeric boolean value for entry of the key.
+ *
+ * @param {string} key
+ */
+export function toggle(key) {
+    if (!getNumber(key)) {
+        set(key, 1);
+    } else {
+        set(key, 0);
+    }
+}

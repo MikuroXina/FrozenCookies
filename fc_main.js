@@ -4,7 +4,7 @@ import { FCMenu } from "./fc_button.js";
 import { bestBank } from "./fc_best_bank.js";
 import { timeDisplay } from "./fc_format.js";
 import { updateTimers } from "./fc_infobox.js";
-import { getNumber, getString, loadFromStorage, set } from "./fc_store.js";
+import { getNumber, getString, loadFromStorage, set, toggle } from "./fc_store.js";
 import { loadFromJson, saveAsJson } from "./fc_frenzy_times.js";
 import { nextPurchase, recommendationList } from "./fc_next_purchase.js";
 import { META } from "./fc_meta.js";
@@ -411,14 +411,14 @@ document.addEventListener("keydown", function (event) {
     if (!Game.promptOn && FrozenCookies.FCshortcuts) {
         if (event.key == "a") {
             Game.Toggle("autoBuy", "autobuyButton", "Autobuy OFF", "Autobuy ON");
-            toggleFrozen("autoBuy");
+            toggle("autoBuy");
         }
         if (event.key == "b") {
             copyToClipboard(getBuildingSpread());
         }
         if (event.key == "c") {
             Game.Toggle("autoGC", "autogcButton", "Autoclick GC OFF", "Autoclick GC ON");
-            toggleFrozen("autoGC");
+            toggle("autoGC");
         }
         if (event.key == "e") {
             copyToClipboard(Game.WriteSave(true));
@@ -441,15 +441,6 @@ document.addEventListener("keydown", function (event) {
         }
     }
 });
-
-function toggleFrozen(setting) {
-    if (!FrozenCookies[setting]) {
-        FrozenCookies[setting] = 1;
-    } else {
-        FrozenCookies[setting] = 0;
-    }
-    loadFeatures();
-}
 
 function clickBuffBonus() {
     let ret = 1;
