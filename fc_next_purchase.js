@@ -4,6 +4,7 @@ import {
     RECOMMENDATION_BLACKLIST,
     SEASONS,
 } from "./cc_upgrade_prerequisites.js";
+import { cumulativeSantaCost } from "./fc_pay.js";
 import { getNumber } from "./fc_store.js";
 import { divCps } from "./fc_time.js";
 import { willAutoSpellSE } from "./feat/auto_spell.js";
