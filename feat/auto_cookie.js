@@ -57,7 +57,7 @@ function autoCookie() {
         updateCaches();
         const recommendation = nextPurchase();
         const delay = delayAmount();
-        if (FrozenCookies.autoSL) {
+        if (!!getNumber("autoSL")) {
             const started = Game.lumpT;
             const ripeAge = Math.ceil(Game.lumpRipeAge);
             if (
@@ -70,7 +70,7 @@ function autoCookie() {
                 Game.clickLump();
             }
         }
-        if (FrozenCookies.autoSL == 2) {
+        if (getNumber("autoSL") == 2) {
             autoRigidel();
         }
         if (getNumber("autoWrinkler") == 1) {

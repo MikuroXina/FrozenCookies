@@ -43,7 +43,7 @@ function recommendedSettingsAction() {
         set("autoBuyAll", 1);
         set("autoWrinkler", 1);
         set("shinyPop", 0);
-        FrozenCookies.autoSL = 2;
+        set("autoSL", 2);
         FrozenCookies.dragonsCurve = 2;
         FrozenCookies.sugarBakingGuard = 1;
         FrozenCookies.autoGS = 1;
