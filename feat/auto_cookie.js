@@ -73,7 +73,7 @@ function autoCookie() {
         if (FrozenCookies.autoSL == 2) {
             autoRigidel();
         }
-        if (FrozenCookies.autoWrinkler == 1) {
+        if (getNumber("autoWrinkler") == 1) {
             let popCount = 0;
             const popList = shouldPopWrinklers();
             if (FrozenCookies.shinyPop == 1) {
@@ -101,7 +101,7 @@ function autoCookie() {
                 }
             }
         }
-        if (FrozenCookies.autoWrinkler == 2) {
+        if (getNumber("autoWrinkler") == 2) {
             let popCount = 0;
             const popList = Game.wrinklers;
             if (FrozenCookies.shinyPop == 1) {

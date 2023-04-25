@@ -41,7 +41,7 @@ function recommendedSettingsAction() {
         set("HCAscendAmount", 0);
         set("autoBulk", 2);
         set("autoBuyAll", 1);
-        FrozenCookies.autoWrinkler = 1;
+        set("autoWrinkler", 1);
         FrozenCookies.shinyPop = 0;
         FrozenCookies.autoSL = 2;
         FrozenCookies.dragonsCurve = 2;
