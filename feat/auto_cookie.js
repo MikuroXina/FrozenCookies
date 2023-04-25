@@ -77,25 +77,25 @@ function autoCookie() {
             let popCount = 0;
             const popList = shouldPopWrinklers();
             if (FrozenCookies.shinyPop == 1) {
-                _.filter(Game.wrinklers, function (w) {
-                    return _.contains(popList, w.id);
-                }).forEach(function (w) {
+                for (const w of _.filter(Game.wrinklers, (w) =>
+                    _.contains(popList, w.id)
+                )) {
                     if (w.type !== 1) {
                         // do not pop Shiny Wrinkler
                         w.hp = 0;
                         popCount += 1;
                     }
-                });
+                }
                 if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
                 }
             } else {
-                _.filter(Game.wrinklers, function (w) {
-                    return _.contains(popList, w.id);
-                }).forEach(function (w) {
+                for (const w of _.filter(Game.wrinklers, (w) =>
+                    _.contains(popList, w.id)
+                )) {
                     w.hp = 0;
                     popCount += 1;
-                });
+                }
                 if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
                 }
@@ -105,22 +105,22 @@ function autoCookie() {
             let popCount = 0;
             const popList = Game.wrinklers;
             if (FrozenCookies.shinyPop == 1) {
-                popList.forEach(function (w) {
+                for (const w of popList) {
                     if (w.close == true && w.type !== 1) {
                         w.hp = 0;
                         popCount += 1;
                     }
-                });
+                }
                 if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
                 }
             } else {
-                popList.forEach(function (w) {
+                for (const w of popList) {
                     if (w.close == true) {
                         w.hp = 0;
                         popCount += 1;
                     }
-                });
+                }
                 if (popCount > 0) {
                     logEvent("Wrinkler", "Popped " + popCount + " wrinklers.");
                 }
@@ -279,7 +279,7 @@ function autoCookie() {
             if (resetPrestige - currPrestige >= ascendChips && ascendChips > 0) {
                 Game.ClosePrompt();
                 Game.Ascend(1);
-                setTimeout(function () {
+                setTimeout(() => {
                     Game.ClosePrompt();
                     Game.Reincarnate(1);
                 }, 10000);
@@ -402,20 +402,16 @@ function shouldPopWrinklers() {
             (Game.season == "halloween" || Game.season == "easter") &&
             !haveAll(Game.season)
         ) {
-            toPop = living.map(function (w) {
-                return w.id;
-            });
+            toPop = living.map(({ id }) => id);
         } else {
             const delay = delayAmount();
             const wrinklerList = Game.wrinklers;
             const nextRecNeeded = nextPurchase().cost + delay - Game.cookies;
             const nextRecCps = nextPurchase().delta_cps;
             const wrinklersNeeded = wrinklerList
-                .sort(function (w1, w2) {
-                    return w1.sucked < w2.sucked;
-                })
+                .sort((w1, w2) => w1.sucked < w2.sucked)
                 .reduce(
-                    function (current, w) {
+                    (current, w) => {
                         const futureWrinklers = living.length - (current.ids.length + 1);
                         if (
                             current.total < nextRecNeeded &&
@@ -431,7 +427,7 @@ function shouldPopWrinklers() {
                     {
                         total: 0,
                         ids: [],
-                    }
+                    },
                 );
             toPop = wrinklersNeeded.total > nextRecNeeded ? wrinklersNeeded.ids : toPop;
         }
@@ -582,7 +578,7 @@ function rigiSell() {
     if (toSell == 0) {
         return;
     }
-    const cheapest = Game.ObjectsById.reduce(function (acc, curr) {
+    const cheapest = Game.ObjectsById.reduce((acc, curr) => {
         if (!acc || curr.price < acc.price) {
             return curr;
         }

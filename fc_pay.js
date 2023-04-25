@@ -28,17 +28,17 @@ export function chocolateValue(bankAmount, earthShatter) {
             }
         }
     }
-    const buildingCosts = Game.ObjectsById.reduce(function (s, b) {
-        return (
-            s +
+    const buildingCosts = Game.ObjectsById.reduce((sum, { basePrice, amount, free }) =>
+        (
+            sum +
             cumulativeBuildingCost(
-                b.basePrice,
+                basePrice,
                 1,
-                (b == highestBuilding ? b.amount : b.amount + 1) - b.free
+                (b == highestBuilding ? amount : amount + 1) - free
             ) *
             sellRatio
-        );
-    }, 0);
+        )
+    , 0);
     return 0.05 * (wrinklerValue() + bankAmount + buildingCosts);
 }
 

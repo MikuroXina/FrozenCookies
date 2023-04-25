@@ -53,7 +53,7 @@ function autoSweetAction() {
             logEvent("autoSweet", 'No "Sweet" detected, ascending');
             Game.ClosePrompt();
             Game.Ascend(1);
-            setTimeout(function () {
+            setTimeout(() => {
                 Game.ClosePrompt();
                 Game.Reincarnate(1);
             }, 10000);

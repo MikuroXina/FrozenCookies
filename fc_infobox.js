@@ -25,9 +25,7 @@ function drawCircles(t_d, x, y) {
     const maxRadius =
         10 +
         10 *
-            t_d.reduce(function (sum, item) {
-                return item.overlay ? sum : sum + 1;
-            }, 0);
+            t_d.reduce((sum, item) => item.overlay ? sum : sum + 1, 0);
     const heightOffset = maxRadius + 5 - (15 * (t_d.length - 1)) / 2;
     let i_c = 0;
     let i_tc = 0;
@@ -40,12 +38,10 @@ function drawCircles(t_d, x, y) {
         "rgba(255, 255, 255, 1)",
     ]);
     const maxText = _.max(
-        t_d.map(function (o) {
-            return o.name ? o.name + (o.display ? ": " + o.display : "") : "";
-        }),
-        function (str) {
-            return str.length;
-        }
+        t_d.map((o) =>
+            o.name ? o.name + (o.display ? ": " + o.display : "") : ""
+        ),
+        (str) => str.length,
     );
     const maxMeasure = bgCanvas.measureText({
         fontSize: "12px",

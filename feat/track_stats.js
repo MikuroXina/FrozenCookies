@@ -16,7 +16,7 @@ export function start() {
             statSpeed(trackStats)
         );
     } else if (trackStats == 6 && !smartTrackingBot) {
-        smartTrackingBot = setTimeout(function () {
+        smartTrackingBot = setTimeout(() => {
             smartTrackingStats(MIN_DELAY * 8);
         }, MIN_DELAY);
     }
@@ -70,7 +70,7 @@ function smartTrackingStats(delay) {
         } else if (delay > MIN_DELAY) {
             delay /= 2;
         }
-        smartTrackingBot = setTimeout(function () {
+        smartTrackingBot = setTimeout(() => {
             smartTrackingStats(delay);
         }, delay);
         set("delayPurchaseCount", 0);

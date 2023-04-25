@@ -16,11 +16,11 @@ function generateProbabilities(upgradeMult, minBase, maxMult) {
 }
 
 const CUMULATIVE_PROBABILITIES = {
-    golden: [1, 0.95, 0.5, 0.475, 0.25, 0.2375].reduce(function (r, x) {
+    golden: [1, 0.95, 0.5, 0.475, 0.25, 0.2375].reduce((r, x) => {
         r[x] = generateProbabilities(x, 5 * 60 * Game.fps, 3);
         return r;
     }, {}),
-    reindeer: [1, 0.5].reduce(function (r, x) {
+    reindeer: [1, 0.5].reduce((r, x) => {
         r[x] = generateProbabilities(x, 3 * 60 * Game.fps, 2);
         return r;
     }, {}),

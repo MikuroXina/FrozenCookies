@@ -28,9 +28,9 @@ export function nextPurchase(recalculate) {
             ) {
                 const unfinishedTypes = new Set(unfinished.map(({ type }) => type));
                 const unfinishedIds = new Set(unfinished.map(({ id }) => id));
-                purchase = recList.find(function (a) {
-                    return unfinishedTypes.has(a.type) && unfinishedIds.has(a.id);
-                });
+                purchase = recList.find(({ type, id }) =>
+                    unfinishedTypes.has(type) && unfinishedIds.has(id)
+                );
             } else {
                 purchase = target;
             }
@@ -62,13 +62,13 @@ export function recommendationList(recalculate) {
             upgradeStats(recalculate)
                 .concat(buildingStats(recalculate))
                 .concat(santaStats())
-                .sort(function (a, b) {
-                    return a.efficiency != b.efficiency
+                .sort((a, b) =>
+                    a.efficiency != b.efficiency
                         ? a.efficiency - b.efficiency
                         : a.delta_cps != b.delta_cps
                         ? b.delta_cps - a.delta_cps
-                        : a.cost - b.cost;
-                })
+                        : a.cost - b.cost
+                )
         );
         if (FrozenCookies.pastemode) {
             FrozenCookies.caches.recommendationList.reverse();
@@ -79,12 +79,12 @@ export function recommendationList(recalculate) {
 }
 
 function addScores(recommendations) {
-    const filteredList = recommendations.filter(function (a) {
-        return (
+    const filteredList = recommendations.filter((a) =>
+        (
             a.efficiency < Number.POSITIVE_INFINITY &&
             a.efficiency > Number.NEGATIVE_INFINITY
-        );
-    });
+        )
+    );
     if (filteredList.length == 0) {
         for (let i = 0; recommendations.length; ++i) {
             recommendations[i].efficiencyScore = 0;
@@ -94,7 +94,7 @@ function addScores(recommendations) {
     const minValue = Math.log(recommendations[0].efficiency);
     const maxValue = Math.log(recommendations[filteredList.length - 1].efficiency);
     const spread = maxValue - minValue;
-    return recommendations.map(function (purchaseRec) {
+    return recommendations.map((purchaseRec) => {
         if (
             purchaseRec.efficiency < Number.POSITIVE_INFINITY &&
             purchaseRec.efficiency > Number.NEGATIVE_INFINITY
@@ -122,9 +122,7 @@ function upgradeStats(recalculate) {
             const upgradeBlacklist = BLACKLIST[blacklist].upgrades;
             const existingAchievements = Object.values(
                 Game.AchievementsById
-            ).map(function (item) {
-                return item.won;
-            });
+            ).map(({ won }) => won);
 
             const needToCalculate = new Set(Object.values(Game.UpgradesById).map(({ id }) => id));
             for (const { id: cachedId } of FrozenCookies.caches.upgrades) {
@@ -136,14 +134,14 @@ function upgradeStats(recalculate) {
             }
 
             FrozenCookies.caches.upgrades = Object.values(Game.UpgradesById)
-                .filter(function (current) {
-                    return (
+                .filter((current) =>
+                    (
                         !current.bought
                         && isAvailable(current, upgradeBlacklist)
                         && needToCalculate.has(current.id)
-                    );
-                })
-                .map(function (current) {
+                    )
+                )
+                .map((current) => {
                     const currentBank = bestBank(0).cost;
                     const cost = upgradePrereqCost(current);
                     const baseCpsOrig = baseCps();
@@ -194,9 +192,9 @@ function upgradeStats(recalculate) {
                 for (let index = 0; index < achievementsLen; ++index) {
                     Game.AchievementsById[index].won = existingAchievements[index];
                 }
-                Game.AchievementsOwned = existingAchievements.filter(function (won, index) {
-                    return won && Game.AchievementsById[index].pool != "shadow";
-                }).length;
+                Game.AchievementsOwned = existingAchievements.filter((won, index) =>
+                        won && Game.AchievementsById[index].pool != "shadow"
+                ).length;
         }
     }
     return FrozenCookies.caches.upgrades;
@@ -245,20 +243,15 @@ function buildingStats(recalculate) {
                 Game.Objects["Cortex baker"].amount >= FrozenCookies.cortexMax
             )
                 buildingBlacklist.push(18);
-            FrozenCookies.caches.buildings = Game.ObjectsById.map(function (
-                current
-            ) {
+            FrozenCookies.caches.buildings = Game.ObjectsById.map((current) => {
                 if (_.contains(buildingBlacklist, current.id)) {
                     return null;
                 }
                 const currentBank = bestBank(0).cost;
                 const baseCpsOrig = baseCps();
                 const cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank));
-                const existingAchievements = Object.values(Game.AchievementsById).map(
-                    function (item) {
-                        return item.won;
-                    }
-                );
+                const existingAchievements =
+                    Object.values(Game.AchievementsById).map(({ won }) => won);
                 buildingToggle(current);
                 const baseCpsNew = baseCps();
                 const cpsNew = effectiveCps(currentBank);
@@ -280,9 +273,7 @@ function buildingStats(recalculate) {
                     purchase: current,
                     type: "building",
                 };
-            }).filter(function (a) {
-                return a;
-            });
+            }).filter((a) => !!a);
         }
     }
     return FrozenCookies.caches.buildings;
@@ -366,17 +357,17 @@ function isAvailable(upgrade, upgradeBlacklist) {
         return false;
     }
     if (
-        _.find(needed, function (a) {
-            return a.type == "wrinklers";
-        }) != null &&
+        _.find(needed, ({ type }) =>
+            type == "wrinklers"
+        ) != null &&
         needed
     ) {
         return false;
     }
     if (
-        _.find(needed, function (a) {
-            return a.type == "santa";
-        }) != null &&
+        _.find(needed, ({ type }) =>
+            type == "santa"
+        ) != null &&
         "christmas" != Game.season &&
         !Game.UpgradesById[181].unlocked &&
         !Game.prestige
@@ -412,7 +403,7 @@ function santaStats() {
                       Game.santaLevels[(Game.santaLevel + 1) % Game.santaLevels.length] +
                       ")",
                   buy: buySanta,
-                  getCost: function () {
+                  getCost() {
                       return cumulativeSantaCost(1);
                   },
               },
@@ -431,8 +422,8 @@ function defaultPurchase() {
         purchase: {
             id: 0,
             name: "No valid purchases!",
-            buy: function () {},
-            getCost: function () {
+            buy() {},
+            getCost() {
                 return Infinity;
             },
         },
@@ -440,32 +431,32 @@ function defaultPurchase() {
 }
 
 function haveAll(holiday) {
-    return _.every(HOLIDAY_COOKIES[holiday], function (id) {
-        return Game.UpgradesById[id].unlocked;
-    });
+    return _.every(HOLIDAY_COOKIES[holiday], (id) =>
+        Game.UpgradesById[id].unlocked
+    );
 }
 
 function checkPrices(currentUpgrade) {
     if (FrozenCookies.caches.recommendationList.length == 0) {
         return 0;
     }
-    let nextRec = FrozenCookies.caches.recommendationList.filter(function (i) {
-        return i.id != currentUpgrade.id;
-    })[0];
+    let nextRec = FrozenCookies.caches.recommendationList.filter(({ id }) =>
+        id != currentUpgrade.id
+    )[0];
     const nextPrereq =
         nextRec.type == "upgrade" ? unfinishedUpgradePrereqs(nextRec.purchase) : null;
     if (nextPrereq == null) {
         return 0;
     }
-    const havingCosts = nextPrereq.filter(function (u) {
-        return u.cost != null;
-    });
+    const havingCosts = nextPrereq.filter((u) =>
+        u.cost != null
+    );
     if (havingCosts.length > 0) {
-        nextRec = FrozenCookies.caches.recommendationList.find(function (a) {
-            return nextPrereq.some(function (b) {
-                return b.id == a.id && b.type == a.type;
-            });
-        });
+        nextRec = FrozenCookies.caches.recommendationList.find((a) =>
+            nextPrereq.some((b) =>
+                b.id == a.id && b.type == a.type
+            )
+        );
     }
     if (nextRec.cost == null) {
         return 0;
@@ -483,7 +474,7 @@ function upgradePrereqCost(upgrade, full) {
     if (!prereqs) {
         return cost;
     }
-    cost += prereqs.buildings.reduce(function (sum, item, index) {
+    cost += prereqs.buildings.reduce((sum, item, index) => {
         const building = Game.ObjectsById[index];
         if (item && full) {
             sum += cumulativeBuildingCost(building.basePrice, 0, item);
@@ -492,7 +483,7 @@ function upgradePrereqCost(upgrade, full) {
         }
         return sum;
     }, 0);
-    cost += prereqs.upgrades.reduce(function (sum, item) {
+    cost += prereqs.upgrades.reduce((sum, item) => {
         const reqUpgrade = Game.UpgradesById[item];
         if (!upgrade.bought || full) {
             sum += upgradePrereqCost(reqUpgrade, full);
@@ -512,7 +503,7 @@ function unfinishedUpgradePrereqs(upgrade) {
         return null;
     }
     const needed = [];
-    prereqs.buildings.forEach(function (a, b) {
+    prereqs.buildings.forEach((a, b) => {
         if (a && Game.ObjectsById[b].amount < a) {
             needed.push({
                 type: "building",
@@ -520,30 +511,30 @@ function unfinishedUpgradePrereqs(upgrade) {
             });
         }
     });
-    prereqs.upgrades.forEach(function (a) {
-        if (!Game.UpgradesById[a].bought) {
-            const recursiveUpgrade = Game.UpgradesById[a];
+    for (const upgradeId of prereqs.upgrades) {
+        if (!Game.UpgradesById[upgradeId].bought) {
+            const recursiveUpgrade = Game.UpgradesById[upgradeId];
             const recursivePrereqs = unfinishedUpgradePrereqs(recursiveUpgrade);
             if (recursiveUpgrade.unlocked) {
                 needed.push({
                     type: "upgrade",
-                    id: a,
+                    id: upgradeId,
                 });
             } else if (!recursivePrereqs) {
                 // Research is being done.
             } else {
-                recursivePrereqs.forEach(function (a) {
+                recursivePrereqs.forEach((a) => {
                     if (
-                        !needed.some(function (b) {
-                            return b.id == a.id && b.type == a.type;
-                        })
+                        !needed.some((b) =>
+                            b.id == a.id && b.type == a.type
+                        )
                     ) {
                         needed.push(a);
                     }
                 });
             }
         }
-    });
+    }
     if (prereqs.santa) {
         needed.push({
             type: "santa",
@@ -565,7 +556,7 @@ function upgradeToggle(upgrade) {
         const prereqs = UPGRADE_PREREQUISITES[upgrade.id];
         if (prereqs) {
             reverseFunctions.prereqBuildings = [];
-            prereqs.buildings.forEach(function (requiredBuildings, buildingId) {
+            prereqs.buildings.forEach((requiredBuildings, buildingId) => {
                 const building = Game.ObjectsById[buildingId];
                 if (requiredBuildings && building.amount < requiredBuildings) {
                     const difference = requiredBuildings - building.amount;
@@ -580,7 +571,7 @@ function upgradeToggle(upgrade) {
             });
             reverseFunctions.prereqUpgrades = [];
             if (prereqs.upgrades.length > 0) {
-                prereqs.upgrades.forEach(function (id) {
+                prereqs.upgrades.forEach((id) => {
                     const upgrade = Game.UpgradesById[id];
                     if (!upgrade.bought) {
                         reverseFunctions.prereqUpgrades.push({
@@ -600,18 +591,18 @@ function upgradeToggle(upgrade) {
 
 function upgradeToggleReverse(upgrade, reverseFunctions) {
     if (reverseFunctions.prereqBuildings) {
-        reverseFunctions.prereqBuildings.forEach(function (b) {
+        for (const b of reverseFunctions.prereqBuildings) {
             const building = Game.ObjectsById[b.id];
             building.amount -= b.amount;
             building.bought -= b.amount;
             Game.BuildingsOwned -= b.amount;
-        });
+        }
     }
     if (reverseFunctions.prereqUpgrades) {
-        reverseFunctions.prereqUpgrades.forEach(function (u) {
+        for (const u of reverseFunctions.prereqUpgrades) {
             const upgrade = Game.UpgradesById[u.id];
             upgradeToggleReverse(upgrade, u.reverseFunctions);
-        });
+        }
     }
     upgrade.bought = 0;
     Game.UpgradesOwned -= 1;
@@ -628,7 +619,7 @@ function buildingToggle(building, achievements) {
         building.bought -= 1;
         Game.BuildingsOwned -= 1;
         Game.AchievementsOwned = 0;
-        achievements.forEach(function (won, index) {
+        achievements.forEach((won, index) => {
             const achievement = Game.AchievementsById[index];
             achievement.won = won;
             if (won && achievement.pool != "shadow") {
@@ -684,10 +675,8 @@ function buyFunctionToggle(upgrade) {
             .replace("++", "+=1")
             .replace("--", "-=1")
             .split(";")
-            .map(function (a) {
-                return a.trim();
-            })
-            .filter(function (a) {
+            .map((a) => a.trim())
+            .filter((a) => {
                 for (const ignoreFunction of IGNORE_FUNCTIONS) {
                     if (a === "") {
                         break;
@@ -701,7 +690,7 @@ function buyFunctionToggle(upgrade) {
             return null;
         }
 
-        const reversedFunctions = buyFunctions.map(function (a) {
+        const reversedFunctions = buyFunctions.map((a) => {
             const achievementMatch = /Game\.Win\('(.*)'\)/.exec(a);
             if (a.indexOf("+=") > -1) {
                 return a.replace("+=", "-=");
@@ -729,15 +718,15 @@ function buyFunctionToggle(upgrade) {
                 (isString ? "'" : "")
             );
         });
-        buyFunctions.forEach(function (f) {
-            eval(f);
-        });
+        for (const buyFunction of buyFunctions) {
+            eval(buyFunction);
+        }
         return reversedFunctions;
     }
     if (upgrade.length) {
-        upgrade.forEach(function (f) {
-            eval(f);
-        });
+        for (const func of upgrade) {
+            eval(func);
+        }
     }
     return null;
 }

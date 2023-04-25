@@ -830,13 +830,13 @@ export function viewStatGraphs() {
         $.jqplot(
             "statGraphs",
             transpose(
-                trackedStats.map(function (s) {
-                    return [
-                        [s.time / 1000, s.baseCps],
-                        [s.time / 1000, s.effectiveCps],
-                        [s.time / 1000, s.hc],
-                    ];
-                })
+                trackedStats.map(({ time, baseCps, effectiveCps, hc }) =>
+                    [
+                        [time / 1000, baseCps],
+                        [time / 1000, effectiveCps],
+                        [time / 1000, hc],
+                    ]
+                )
             ), //
             {
                 legend: {
@@ -850,7 +850,7 @@ export function viewStatGraphs() {
                             angle: -30,
                             fontSize: "10pt",
                             showGridline: false,
-                            formatter: function (_ah, ai) {
+                            formatter(_ah, ai) {
                                 return timeDisplay(ai);
                             },
                         },
@@ -860,7 +860,7 @@ export function viewStatGraphs() {
                         renderer: $.jqplot.LogAxisRenderer,
                         tickDistribution: "even",
                         tickOptions: {
-                            formatter: function (_ah, ai) {
+                            formatter(_ah, ai) {
                                 return Beautify(ai);
                             },
                         },
@@ -869,7 +869,7 @@ export function viewStatGraphs() {
                         padMin: 0,
                         tickOptions: {
                             showGridline: false,
-                            formatter: function (_ah, ai) {
+                            formatter(_ah, ai) {
                                 return Beautify(ai);
                             },
                         },
@@ -896,10 +896,8 @@ export function viewStatGraphs() {
     }
 }
 
-function transpose(a) {
-    return Object.keys(a[0]).map(function (c) {
-        return a.map(function (r) {
-            return r[c];
-        });
-    });
+function transpose(matrix) {
+    return Object.keys(matrix[0]).map((column) =>
+        matrix.map((row) => row[column])
+    );
 }

@@ -58,7 +58,7 @@ function buildListing(label, name) {
  * Builds a menu which displays stats and preferences.
  */
 export function FCMenu() {
-    Game.UpdateMenu = function () {
+    Game.UpdateMenu = () => {
         if (Game.onMenu !== "fc_menu") {
             return Game.oldUpdateMenu();
         }
@@ -524,9 +524,7 @@ function buildPreferences(menu) {
             );
             listing.append(
                 $("<label>").text(
-                    hint.replace(/\$\{(.+)\}/g, function (_s, id) {
-                        return getString(id);
-                    })
+                    hint.replace(/\$\{(.+)\}/g, (_s, id) => getString(id))
                 )
             );
             if (extras) {
@@ -542,9 +540,7 @@ function buildPreferences(menu) {
             listing.append(
                 $("<br>"),
                 $("<label>").text(
-                    hint.replace(/\$\{(.+)\}/g, function (_s, id) {
-                        return FrozenCookies[id];
-                    })
+                    hint.replace(/\$\{(.+)\}/g, (_s, id) => FrozenCookies[id])
                 )
             );
             subsection.append(listing);

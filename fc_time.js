@@ -68,11 +68,11 @@ export function goldenCookieLife() {
 }
 
 export function liveWrinklers() {
-    return _.select(Game.wrinklers, function (w) {
-        return w.sucked > 0.5 && w.phase > 0;
-    }).sort(function (w1, w2) {
-        return w1.sucked < w2.sucked;
-    });
+    return _.select(Game.wrinklers, ({ sucked, phase }) =>
+        sucked > 0.5 && phase > 0
+    ).sort((w1, w2) =>
+        w1.sucked < w2.sucked
+    );
 }
 
 export function hasClickBuff() {

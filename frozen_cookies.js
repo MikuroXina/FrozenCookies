@@ -37,7 +37,7 @@ const SCRIPTS = [
     baseUrl + "/fc_spellpredict.js",
 ];
 
-let loadInterval = setInterval(function () {
+let loadInterval = setInterval(() => {
     if (Game && Game.ready) {
         clearInterval(loadInterval);
         loadInterval = 0;
@@ -80,7 +80,7 @@ function fcInit() {
         "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     );
     jquery.setAttribute("crossorigin", "anonymous");
-    jquery.onload = function () {
+    jquery.onload = () => {
         void loadScripts();
     };
     document.head.appendChild(jquery);

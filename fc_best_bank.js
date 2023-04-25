@@ -102,9 +102,7 @@ function harvestBank() {
             Game.Objects["Idleverse"].amount,
             Game.Objects["Cortex baker"].amount,
         ];
-        harvestBuildingArray.sort(function (a, b) {
-            return b - a;
-        });
+        harvestBuildingArray.sort((a, b) => b - a);
 
         for (let buildingLoop = 0; buildingLoop < maxSpecials; buildingLoop++) {
             harvestBuilding *= harvestBuildingArray[buildingLoop];
@@ -192,19 +190,17 @@ export function bestBank(minEfficiency) {
     const edifice =
         willAutoSpellSE() || !!getNumber("holdSEBank") ? edificeBank() : 0;
     const bankLevel = [0, luckyBank(), luckyFrenzyBank(), harvestBank()]
-        .sort(function (a, b) {
-            return b - a;
-        })
-        .map(function (bank) {
-            return {
-                cost: bank,
-                efficiency: cookieEfficiency(Game.cookies, bank),
-            };
-        })
-        .find(function ({ efficiency }) {
-            return (efficiency >= 0 && efficiency <= minEfficiency) ||
-                setHarvestBankPlant != NONE;
-        });
+        .sort((a, b) => b - a)
+        .map((bank) => ({
+            cost: bank,
+            efficiency: cookieEfficiency(Game.cookies, bank),
+        }))
+        .find(({ efficiency }) =>
+            (
+                efficiency >= 0 &&
+                efficiency <= minEfficiency
+            ) || setHarvestBankPlant != NONE
+        );
     if (bankLevel.cost > edifice || setHarvestBankPlant != NONE) {
         return bankLevel;
     }

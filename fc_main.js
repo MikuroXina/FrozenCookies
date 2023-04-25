@@ -13,8 +13,8 @@ import { PREFERENCES } from "./fc_preferences.js";
 export function registerMod(mod_id = "frozen_cookies", Game) {
     // register with the modding API
     Game.registerMod(mod_id, {
-        init: function () {
-            Game.registerHook("reincarnate", function () {
+        init() {
+            Game.registerHook("reincarnate", () => {
                 // called when the player has reincarnated after an ascension
                 switch (getNumber("autoBulk")) {
                     case 1:
@@ -26,7 +26,7 @@ export function registerMod(mod_id = "frozen_cookies", Game) {
                 }
             });
             Game.registerHook("draw", updateTimers); // called every draw tick
-            Game.registerHook("ticker", function () {
+            Game.registerHook("ticker", () => {
                 // called when determining news ticker text (about every ten seconds); should return an array of possible choices to add
                 if (
                     Game.cookiesEarned >= 1000 &&
@@ -100,7 +100,7 @@ export function registerMod(mod_id = "frozen_cookies", Game) {
                     ];
                 }
             });
-            Game.registerHook("reset", function (hard) {
+            Game.registerHook("reset", (hard) => {
                 // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
                 if (hard) {
                     emptyCaches();
@@ -197,8 +197,7 @@ function setOverrides(Game) {
         window.App = undefined;
     }
 
-    Beautify = fcBeautify;
-    Game.sayTime = function (time) {
+    Game.sayTime = (time) => {
         return timeDisplay(time / Game.fps);
     };
     if (typeof Game.tooltip.oldDraw != "function") {
@@ -291,12 +290,12 @@ function beautifyUpgradesAndAchievements() {
     }
 
     const numre = /\d\d?\d?(?:,\d\d\d)*/;
-    Object.values(Game.AchievementsById).forEach(function (ach) {
+    Object.values(Game.AchievementsById).forEach((ach) => {
         ach.desc = ach.desc.replace(numre, beautifyFn);
     });
 
     // These might not have any numbers in them, but just in case...
-    Object.values(Game.UpgradesById).forEach(function (upg) {
+    Object.values(Game.UpgradesById).forEach((upg) => {
         upg.desc = upg.desc.replace(numre, beautifyFn);
     });
 }
@@ -333,14 +332,14 @@ function fcReset() {
         Game.specialTab = "dragon";
         Game.SetDragonAura(5, 0);
         Game.ConfirmPrompt();
-        Game.ObjectsById.forEach(function (b) {
-            b.sell(-1);
-        });
+        for (const building of Game.ObjectsById) {
+            building.sell(-1);
+        }
         Game.Upgrades["Chocolate egg"].buy();
     } else if (Game.HasUnlocked("Chocolate egg") && !Game.Has("Chocolate egg")) {
-        Game.ObjectsById.forEach(function (b) {
-            b.sell(-1);
-        });
+        for (const building of Game.ObjectsById) {
+            building.sell(-1);
+        }
         Game.Upgrades["Chocolate egg"].buy();
     }
     Game.oldReset();
@@ -362,9 +361,9 @@ function fcReset() {
 
 function saveFCData() {
     const saveString = {};
-    _.keys(PREFERENCES).forEach(function (preference) {
+    for (const preference of Object.keys(PREFERENCES)) {
         saveString[preference] = FrozenCookies[preference];
-    });
+    }
     saveString.frenzyClickSpeed = getString("frenzyClickSpeed");
     saveString.cookieClickSpeed = getString("cookieClickSpeed");
     saveString.HCAscendAmount = getString("HCAscendAmount");
@@ -394,9 +393,7 @@ function copyToClipboard(text) {
 }
 
 function getBuildingSpread() {
-    return Game.ObjectsById.map(function (a) {
-        return a.amount;
-    }).join("/");
+    return Game.ObjectsById.map((building) => building.amount).join("/");
 }
 
 // todo: add bind for autoascend
@@ -407,7 +404,7 @@ function getBuildingSpread() {
 // Press 'r' to pop up the reset window
 // Press 's' to do a manual save
 // Press 'w' to display a wrinkler-info window
-document.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", (event) => {
     if (Game.promptOn || !FrozenCookies.FCshortcuts) {
         return;
     }
@@ -460,9 +457,10 @@ function clickBuffBonus() {
 }
 
 function wrinklerValue() {
-    return Game.wrinklers.reduce(function (s, w) {
-        return s + popValue(w);
-    }, 0);
+    return Game.wrinklers.reduce(
+        (sum, wrinkler) => sum + popValue(wrinkler),
+        0,
+    );
 }
 
 function nextChainedPurchase(recalculate) {
