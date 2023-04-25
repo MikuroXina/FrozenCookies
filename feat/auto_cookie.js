@@ -179,7 +179,7 @@ function autoCookie() {
                         TOWER_GAME.magic >= getNumber("manaMax") - 10
                     ) ||
                     (
-                        FrozenCookies.mineLimit &&
+                        getNumber("mineLimit") &&
                         recommendation.purchase.name == "Mine" &&
                         Game.Objects["Mine"].amount >= getNumber("mineMax") - 100
                     ) ||
@@ -214,7 +214,7 @@ function autoCookie() {
                         TOWER_GAME.magic >= getNumber("manaMax") - 2
                     ) ||
                     (
-                        FrozenCookies.mineLimit &&
+                        getNumber("mineLimit") &&
                         recommendation.purchase.name == "Mine" &&
                         Game.Objects["Mine"].amount >= getNumber("mineMax") - 10
                     ) ||

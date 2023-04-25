@@ -31,7 +31,7 @@ function recommendedSettingsAction() {
         set("otherUpgrades", 1);
         set("autoBlacklistOff", 0);
         set("blacklist", 0);
-        FrozenCookies.mineLimit = 1;
+        set("mineLimit", 1);
         set("mineMax", 500);
         FrozenCookies.factoryLimit = 1;
         set("factoryMax", 500);

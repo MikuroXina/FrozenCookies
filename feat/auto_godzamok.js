@@ -35,7 +35,7 @@ function autoGodzamokAction() {
             Game.Objects["Mine"].sell(countMine);
             Game.Objects["Factory"].sell(countFactory);
             // Rebuy mines
-            if (FrozenCookies.mineLimit) {
+            if (getNumber("mineLimit")) {
                 const mineMax = getNumber("mineMax");
                 safeBuy(Game.Objects["Mine"], mineMax);
                 modify("autobuyCount", (count) => count + 1);
