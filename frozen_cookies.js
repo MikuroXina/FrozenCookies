@@ -20,11 +20,11 @@ const baseUrl =
 
 requestIdleCallback(() => {
     if (Game && Game.ready) {
-        void fcInit();
+        fcInit();
     }
 });
 
-async function fcInit() {
+function fcInit() {
     Game.registerMod("@mikuroxina/frozen_cookies", {
         load() {
             startBots();
