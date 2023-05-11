@@ -20,7 +20,7 @@ requestIdleCallback(() => {
 
 function fcInit() {
     Game.registerMod("@mikuroxina/frozen_cookies", {
-        load() {
+        init() {
             startBots();
         },
     });
