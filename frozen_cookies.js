@@ -12,13 +12,17 @@ if (Game.version > COMPAT_VERSION) {
     );
 }
 
-requestIdleCallback(() => {
-    if (Game && Game.ready) {
-        fcInit();
-    }
-});
+let handler = requestIdleCallback(triggerInit);
 
-function fcInit() {
+function triggerInit() {
+    if (Game && Game.ready) {
+        init();
+    } else {
+        handler = requestIdleCallback(triggerInit);
+    }
+}
+
+function init() {
     Game.registerMod("@mikuroxina/frozen_cookies", {
         init() {
             startBots();
