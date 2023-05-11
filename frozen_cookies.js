@@ -12,12 +12,6 @@ if (Game.version > COMPAT_VERSION) {
     );
 }
 
-const scriptElement =
-    document.getElementById("frozenCookieScript") ?? document.getElementById("modscript_frozen_cookies");
-const baseUrl =
-    scriptElement?.getAttribute("src").replace(/\/frozen_cookies\.js$/, "") ??
-    "https://mikuroxina.github.io/FrozenCookies/";
-
 requestIdleCallback(() => {
     if (Game && Game.ready) {
         fcInit();
