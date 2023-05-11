@@ -18,13 +18,11 @@ const baseUrl =
     scriptElement?.getAttribute("src").replace(/\/frozen_cookies\.js$/, "") ??
     "https://mikuroxina.github.io/FrozenCookies/";
 
-let loadInterval = setInterval(() => {
+requestIdleCallback(() => {
     if (Game && Game.ready) {
-        clearInterval(loadInterval);
-        loadInterval = 0;
         void fcInit();
     }
-}, 1000);
+});
 
 async function fcInit() {
     Game.registerMod("@mikuroxina/frozen_cookies", {
